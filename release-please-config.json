@@ -12,7 +12,7 @@
 		".": {
 			"release-type": "php",
 			"extra-files": [
-				"src/SumUp/Version.php",
+				"src/Version.php",
 				{
 					"type": "json",
 					"path": "composer.json",

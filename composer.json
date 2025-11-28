@@ -20,6 +20,11 @@
 			"homepage": "https://github.com/sumup"
 		}
 	],
+	"config": {
+		"platform": {
+			"php": "8.3.0"
+		}
+	},
 	"scripts": {
 		"cs": "php-cs-fixer fix --dry-run --diff",
 		"test": "phpunit"
@@ -29,14 +34,15 @@
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "3.89.2",
-		"phpunit/phpunit": "^9.6"
+		"phpunit/phpunit": "^9.6",
+		"phpdocumentor/phpdocumentor": "^3.9"
 	},
 	"suggest": {
 		"guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
 	},
 	"autoload": {
 		"psr-4": {
-			"SumUp\\": "src/SumUp/"
+			"SumUp\\": "src/"
 		}
 	},
 	"autoload-dev": {

@@ -34,6 +34,28 @@ jobs:
       - name: Lint
         run: make fmtcheck
 
+  docs:
+    name: Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.31.0
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Generate docs
+        run: make docs
+
+      - name: Ensure docs are up to date
+        run: git diff --exit-code -- docs
+
   tests:
     name: Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
