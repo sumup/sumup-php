@@ -82,5 +82,7 @@ $sumup = new \SumUp\SumUp([
 You can always initialize a service with an access token that is different from the one you already have from your `SumUp\SumUp` instance.
 
 ```php
-$checkoutService = $sumup->getCheckoutService('ACCESS-TOKEN-INSTANCE');
+$checkoutService = $sumup->getService('checkouts', $accessTokenInstance);
 ```
+
+Where `$accessTokenInstance` is an instance of `\SumUp\Authentication\AccessToken`.

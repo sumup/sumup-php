@@ -83,11 +83,11 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
 
         $error = curl_error($ch);
         if ($error) {
-            curl_close($ch);
+            $this->closeHandle($ch);
             throw new SumUpConnectionException($error, $code);
         }
 
-        curl_close($ch);
+        $this->closeHandle($ch);
         return new Response($code, $this->parseBody($response));
     }
 
@@ -126,5 +126,17 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
             return $jsonBody;
         }
         return $response;
+    }
+
+    /**
+     * Close the cURL handle when running on PHP versions where it is required.
+     *
+     * @param resource|\CurlHandle $handle
+     */
+    private function closeHandle($handle)
+    {
+        if (PHP_VERSION_ID < 80000 && is_resource($handle)) {
+            curl_close($handle);
+        }
     }
 }

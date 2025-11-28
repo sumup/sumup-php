@@ -17,9 +17,9 @@ try {
     echo 'SumUp SDK error: ' . $e->getMessage();
 }
 try {
-    $checkoutService = $sumup->getCheckoutService();
-    $checkoutResponse = $checkoutService->create(/* pass here the required arguments */);
-//  use the variable $checkoutResponse
+    $checkoutService = $sumup->checkouts;
+    $checkout = $checkoutService->create(/* pass here the required arguments */);
+//  use the variable $checkout
 } catch(\SumUp\Exceptions\SumUpSDKException $e) {
     echo 'SumUp SDK error: ' . $e->getMessage();
 }
@@ -72,45 +72,16 @@ public function getAuthorizationService(\SumUp\Application\ApplicationConfigurat
 
 Returns an instance of `\SumUp\Services\Authorization`.
 
-### getCheckoutService()
+### Service access
+
+All generated services are exposed as read-only properties via `__get`. For example:
 
 ```php
-public function getCheckoutService(\SumUp\Application\ApplicationConfigurationInterface $config = null): \SumUp\Services\Checkouts
+$checkoutService = $sumup->checkouts;
+$merchantService = $sumup->merchants;
 ```
 
-Returns an instance of `\SumUp\Services\Checkouts`.
-
-### getCustomerService()
-
-```php
-public function getCustomerService(\SumUp\Application\ApplicationConfigurationInterface $config = null): \SumUp\Services\Customers
-```
-
-Returns an instance of `\SumUp\Services\Customers`.
-
-### getTransactionService()
-
-```php
-public function getTransactionService(\SumUp\Application\ApplicationConfigurationInterface $config = null): \SumUp\Services\Transactions
-```
-
-Returns an instance of `\SumUp\Services\Transactions`.
-
-### getMerchantService()
-
-```php
-public function getMerchantService(\SumUp\Application\ApplicationConfigurationInterface $config = null): \SumUp\Services\Merchant
-```
-
-Returns an instance of `\SumUp\Services\Merchant`.
-
-### getPayoutService()
-
-```php
-public function getPayoutService(\SumUp\Application\ApplicationConfigurationInterface $config = null): \SumUp\Services\Payouts
-```
-
-Returns an instance of `\SumUp\Services\Payouts`.
+Consult the `\SumUp\SumUp` PHPDoc block for the complete list of available services.
 
 ### getCustomService()
 

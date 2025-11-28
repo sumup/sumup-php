@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Customers
@@ -44,7 +45,7 @@ class Customers implements SumUpService
      *
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Customers\Customer
      */
     public function create($body = null)
     {
@@ -55,7 +56,11 @@ class Customers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
+        ]);
     }
 
     /**
@@ -64,7 +69,7 @@ class Customers implements SumUpService
      * @param string $customerId Unique ID of the saved customer resource.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function deactivatePaymentInstrument($customerId, $token)
     {
@@ -72,7 +77,11 @@ class Customers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '204' => ['type' => 'void'],
+        ]);
     }
 
     /**
@@ -80,7 +89,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Customers\Customer
      */
     public function get($customerId)
     {
@@ -88,7 +97,11 @@ class Customers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
+        ]);
     }
 
     /**
@@ -96,7 +109,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Customers\PaymentInstrumentResponse[]
      */
     public function listPaymentInstruments($customerId)
     {
@@ -104,7 +117,11 @@ class Customers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Customers\PaymentInstrumentResponse::class]],
+        ]);
     }
 
     /**
@@ -113,7 +130,7 @@ class Customers implements SumUpService
      * @param string $customerId Unique ID of the saved customer resource.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Customers\Customer
      */
     public function update($customerId, $body = null)
     {
@@ -124,6 +141,10 @@ class Customers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
+        ]);
     }
 }

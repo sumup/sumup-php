@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Memberships
@@ -44,7 +45,7 @@ class Memberships implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function list($queryParams = [])
     {
@@ -58,6 +59,10 @@ class Memberships implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 }

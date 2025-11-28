@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Transactions
@@ -45,7 +46,7 @@ class Transactions implements SumUpService
      * @param string $merchantCode
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Transactions\TransactionFull
      */
     public function get($merchantCode, $queryParams = [])
     {
@@ -59,7 +60,11 @@ class Transactions implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Transactions\TransactionFull::class],
+        ]);
     }
 
     /**
@@ -67,7 +72,7 @@ class Transactions implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Transactions\TransactionFull
      *
      * @deprecated
      */
@@ -83,7 +88,11 @@ class Transactions implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Transactions\TransactionFull::class],
+        ]);
     }
 
     /**
@@ -92,7 +101,7 @@ class Transactions implements SumUpService
      * @param string $merchantCode
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function list($merchantCode, $queryParams = [])
     {
@@ -106,7 +115,11 @@ class Transactions implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -114,7 +127,7 @@ class Transactions implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      *
      * @deprecated
      */
@@ -130,7 +143,11 @@ class Transactions implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -139,7 +156,7 @@ class Transactions implements SumUpService
      * @param string $txnId Unique ID of the transaction.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function refund($txnId, $body = null)
     {
@@ -150,6 +167,10 @@ class Transactions implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '204' => ['type' => 'void'],
+        ]);
     }
 }

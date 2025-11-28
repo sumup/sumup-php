@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Members
@@ -45,7 +46,7 @@ class Members implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Members\Member
      */
     public function create($merchantCode, $body = null)
     {
@@ -56,7 +57,11 @@ class Members implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Members\Member::class],
+        ]);
     }
 
     /**
@@ -65,7 +70,7 @@ class Members implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param string $memberId The ID of the member to retrieve.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function delete($merchantCode, $memberId)
     {
@@ -73,7 +78,11 @@ class Members implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'void'],
+        ]);
     }
 
     /**
@@ -82,7 +91,7 @@ class Members implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param string $memberId The ID of the member to retrieve.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Members\Member
      */
     public function get($merchantCode, $memberId)
     {
@@ -90,7 +99,11 @@ class Members implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Members\Member::class],
+        ]);
     }
 
     /**
@@ -99,7 +112,7 @@ class Members implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function list($merchantCode, $queryParams = [])
     {
@@ -113,7 +126,11 @@ class Members implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -123,7 +140,7 @@ class Members implements SumUpService
      * @param string $memberId The ID of the member to retrieve.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Members\Member
      */
     public function update($merchantCode, $memberId, $body = null)
     {
@@ -134,6 +151,10 @@ class Members implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Members\Member::class],
+        ]);
     }
 }

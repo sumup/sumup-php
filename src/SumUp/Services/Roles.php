@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Roles
@@ -45,7 +46,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Roles\Role
      */
     public function create($merchantCode, $body = null)
     {
@@ -56,7 +57,11 @@ class Roles implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
+        ]);
     }
 
     /**
@@ -65,7 +70,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param string $roleId The ID of the role to retrieve.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function delete($merchantCode, $roleId)
     {
@@ -73,7 +78,11 @@ class Roles implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'void'],
+        ]);
     }
 
     /**
@@ -82,7 +91,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Merchant code.
      * @param string $roleId The ID of the role to retrieve.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Roles\Role
      */
     public function get($merchantCode, $roleId)
     {
@@ -90,7 +99,11 @@ class Roles implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
+        ]);
     }
 
     /**
@@ -98,7 +111,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Merchant code.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function list($merchantCode)
     {
@@ -106,7 +119,11 @@ class Roles implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -116,7 +133,7 @@ class Roles implements SumUpService
      * @param string $roleId The ID of the role to retrieve.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Roles\Role
      */
     public function update($merchantCode, $roleId, $body = null)
     {
@@ -127,6 +144,10 @@ class Roles implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PATCH', $path, $payload, $headers);
+        $response = $this->client->send('PATCH', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
+        ]);
     }
 }

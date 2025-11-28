@@ -19,33 +19,24 @@ type phpProperty struct {
 }
 
 func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace string) []phpProperty {
-	spec := schema.Schema()
-	if spec == nil || spec.Properties == nil {
+	propertySpecs := g.collectSchemaPropertyEntries(schema)
+	if len(propertySpecs) == 0 {
 		return nil
 	}
 
-	required := make(map[string]struct{}, len(spec.Required))
-	for _, name := range spec.Required {
-		required[name] = struct{}{}
-	}
-
-	props := make([]phpProperty, 0, spec.Properties.Len())
-	for propName, propSchema := range spec.Properties.FromOldest() {
+	props := make([]phpProperty, 0, len(propertySpecs))
+	for _, spec := range propertySpecs {
 		prop := phpProperty{
-			Name:           phpPropertyName(propName),
-			SerializedName: propName,
-			Optional:       true,
-		}
-		if _, ok := required[propName]; ok {
-			prop.Optional = false
+			Name:           phpPropertyName(spec.Name),
+			SerializedName: spec.Name,
+			Optional:       !spec.Required,
 		}
 
-		if propSchema != nil && propSchema.Schema() != nil {
-			prop.Description = propSchema.Schema().Description
+		if spec.Schema != nil && spec.Schema.Schema() != nil {
+			prop.Description = spec.Schema.Schema().Description
 		}
 
-		prop.Type, prop.DocType = g.resolvePHPType(propSchema, currentNamespace)
-
+		prop.Type, prop.DocType = g.resolvePHPType(spec.Schema, currentNamespace)
 		props = append(props, prop)
 	}
 
@@ -93,6 +84,72 @@ var phpReservedWords = map[string]bool{
 	"parent":    true,
 	"trait":     true,
 	"namespace": true,
+}
+
+type schemaPropertyEntry struct {
+	Name     string
+	Schema   *base.SchemaProxy
+	Required bool
+}
+
+func (g *Generator) collectSchemaPropertyEntries(schema *base.SchemaProxy) []schemaPropertyEntry {
+	props := make([]schemaPropertyEntry, 0)
+	if schema == nil {
+		return props
+	}
+
+	seen := make(map[string]int)
+	g.walkSchemaPropertyEntries(schema, make(map[*base.SchemaProxy]struct{}), seen, &props)
+
+	return props
+}
+
+func (g *Generator) walkSchemaPropertyEntries(schema *base.SchemaProxy, stack map[*base.SchemaProxy]struct{}, seen map[string]int, props *[]schemaPropertyEntry) {
+	if schema == nil {
+		return
+	}
+
+	if _, ok := stack[schema]; ok {
+		return
+	}
+	stack[schema] = struct{}{}
+	defer delete(stack, schema)
+
+	spec := schema.Schema()
+	if spec == nil {
+		return
+	}
+
+	required := make(map[string]struct{}, len(spec.Required))
+	for _, name := range spec.Required {
+		required[name] = struct{}{}
+	}
+
+	if spec.Properties != nil {
+		for propName, propSchema := range spec.Properties.FromOldest() {
+			entry := schemaPropertyEntry{
+				Name:   propName,
+				Schema: propSchema,
+			}
+			if _, ok := required[propName]; ok {
+				entry.Required = true
+			}
+
+			if idx, ok := seen[propName]; ok {
+				if entry.Required && !(*props)[idx].Required {
+					(*props)[idx].Required = true
+				}
+				continue
+			}
+
+			seen[propName] = len(*props)
+			*props = append(*props, entry)
+		}
+	}
+
+	for _, composite := range spec.AllOf {
+		g.walkSchemaPropertyEntries(composite, stack, seen, props)
+	}
 }
 
 func (g *Generator) renderProperty(prop phpProperty) string {

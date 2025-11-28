@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Checkouts
@@ -44,7 +45,7 @@ class Checkouts implements SumUpService
      *
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Checkouts\Checkout
      */
     public function create($body = null)
     {
@@ -55,7 +56,11 @@ class Checkouts implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Checkouts\Checkout::class],
+        ]);
     }
 
     /**
@@ -63,7 +68,7 @@ class Checkouts implements SumUpService
      *
      * @param string $id Unique ID of the checkout resource.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Checkouts\Checkout
      */
     public function deactivate($id)
     {
@@ -71,7 +76,11 @@ class Checkouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Checkouts\Checkout::class],
+        ]);
     }
 
     /**
@@ -79,7 +88,7 @@ class Checkouts implements SumUpService
      *
      * @param string $id Unique ID of the checkout resource.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Checkouts\CheckoutSuccess
      */
     public function get($id)
     {
@@ -87,7 +96,11 @@ class Checkouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Checkouts\CheckoutSuccess::class],
+        ]);
     }
 
     /**
@@ -95,7 +108,7 @@ class Checkouts implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Checkouts\CheckoutSuccess[]
      */
     public function list($queryParams = [])
     {
@@ -109,7 +122,11 @@ class Checkouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Checkouts\CheckoutSuccess::class]],
+        ]);
     }
 
     /**
@@ -118,7 +135,7 @@ class Checkouts implements SumUpService
      * @param string $merchantCode The SumUp merchant code.
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function listAvailablePaymentMethods($merchantCode, $queryParams = [])
     {
@@ -132,7 +149,11 @@ class Checkouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -141,7 +162,7 @@ class Checkouts implements SumUpService
      * @param string $id Unique ID of the checkout resource.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Checkouts\CheckoutSuccess|\SumUp\Checkouts\CheckoutAccepted
      */
     public function process($id, $body = null)
     {
@@ -152,6 +173,11 @@ class Checkouts implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Checkouts\CheckoutSuccess::class],
+            '202' => ['type' => 'class', 'class' => \SumUp\Checkouts\CheckoutAccepted::class],
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Readers
@@ -45,7 +46,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Unique identifier of the merchant account.
      * @param string $id The unique identifier of the reader.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function deleteReader($merchantCode, $id)
     {
@@ -53,7 +54,11 @@ class Readers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'void'],
+        ]);
     }
 
     /**
@@ -62,7 +67,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Unique identifier of the merchant account.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Readers\Reader
      */
     public function create($merchantCode, $body = null)
     {
@@ -73,7 +78,11 @@ class Readers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
+        ]);
     }
 
     /**
@@ -83,7 +92,7 @@ class Readers implements SumUpService
      * @param string $readerId The unique identifier of the Reader
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Readers\CreateReaderCheckoutResponse
      */
     public function createCheckout($merchantCode, $readerId, $body = null)
     {
@@ -94,7 +103,11 @@ class Readers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '201' => ['type' => 'class', 'class' => \SumUp\Readers\CreateReaderCheckoutResponse::class],
+        ]);
     }
 
     /**
@@ -103,7 +116,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Unique identifier of the merchant account.
      * @param string $id The unique identifier of the reader.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Readers\Reader
      */
     public function get($merchantCode, $id)
     {
@@ -111,7 +124,11 @@ class Readers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
+        ]);
     }
 
     /**
@@ -119,7 +136,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Unique identifier of the merchant account.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return array
      */
     public function list($merchantCode)
     {
@@ -127,7 +144,11 @@ class Readers implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'object'],
+        ]);
     }
 
     /**
@@ -137,7 +158,7 @@ class Readers implements SumUpService
      * @param string $readerId The unique identifier of the Reader
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return null
      */
     public function terminateCheckout($merchantCode, $readerId, $body = null)
     {
@@ -148,7 +169,11 @@ class Readers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '202' => ['type' => 'void'],
+        ]);
     }
 
     /**
@@ -158,7 +183,7 @@ class Readers implements SumUpService
      * @param string $id The unique identifier of the reader.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Readers\Reader
      */
     public function update($merchantCode, $id, $body = null)
     {
@@ -169,6 +194,10 @@ class Readers implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PATCH', $path, $payload, $headers);
+        $response = $this->client->send('PATCH', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
+        ]);
     }
 }

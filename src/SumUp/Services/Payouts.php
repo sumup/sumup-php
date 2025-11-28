@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Payouts
@@ -45,7 +46,7 @@ class Payouts implements SumUpService
      * @param string $merchantCode
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Payouts\FinancialPayouts
      */
     public function list($merchantCode, $queryParams = [])
     {
@@ -59,7 +60,11 @@ class Payouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Payouts\FinancialPayouts::class],
+        ]);
     }
 
     /**
@@ -67,7 +72,7 @@ class Payouts implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Payouts\FinancialPayouts
      *
      * @deprecated
      */
@@ -83,6 +88,10 @@ class Payouts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Payouts\FinancialPayouts::class],
+        ]);
     }
 }

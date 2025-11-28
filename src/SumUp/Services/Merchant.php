@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Merchant
@@ -44,7 +45,7 @@ class Merchant implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchant\MerchantAccount
      *
      * @deprecated
      */
@@ -60,14 +61,18 @@ class Merchant implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchant\MerchantAccount::class],
+        ]);
     }
 
     /**
      * Retrieve DBA
      *
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchant\DoingBusinessAsLegacy
      *
      * @deprecated
      */
@@ -77,14 +82,18 @@ class Merchant implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchant\DoingBusinessAsLegacy::class],
+        ]);
     }
 
     /**
      * Retrieve a merchant profile
      *
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchant\MerchantProfileLegacy
      *
      * @deprecated
      */
@@ -94,14 +103,18 @@ class Merchant implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchant\MerchantProfileLegacy::class],
+        ]);
     }
 
     /**
      * Retrieve a personal profile
      *
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchant\PersonalProfileLegacy
      *
      * @deprecated
      */
@@ -111,6 +124,10 @@ class Merchant implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchant\PersonalProfileLegacy::class],
+        ]);
     }
 }

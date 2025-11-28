@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Merchants
@@ -45,7 +46,7 @@ class Merchants implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchants\Merchant
      */
     public function get($merchantCode, $queryParams = [])
     {
@@ -59,7 +60,11 @@ class Merchants implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\Merchant::class],
+        ]);
     }
 
     /**
@@ -69,7 +74,7 @@ class Merchants implements SumUpService
      * @param string $personId Person ID
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchants\Person
      */
     public function getPerson($merchantCode, $personId, $queryParams = [])
     {
@@ -83,7 +88,11 @@ class Merchants implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\Person::class],
+        ]);
     }
 
     /**
@@ -92,7 +101,7 @@ class Merchants implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Merchants\ListPersonsResponseBody
      */
     public function listPersons($merchantCode, $queryParams = [])
     {
@@ -106,6 +115,10 @@ class Merchants implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\ListPersonsResponseBody::class],
+        ]);
     }
 }

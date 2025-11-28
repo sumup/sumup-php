@@ -31,11 +31,15 @@ try {
         'app_secret' => 'YOUR-CLIENT-SECRET',
         'code'       => 'YOUR-AUTHORIZATION-CODE'
     ]);
-    $checkoutService = $sumup->getCheckoutService();
     $merchantCode = 'YOUR-MERCHANT-CODE';
-    $checkoutResponse = $checkoutService->create($amount, $currency, $checkoutRef, $merchantCode);
-    $checkoutId = $checkoutResponse->getBody()->id;
-//  pass the $chekoutId to the front-end to be processed
+    $checkout = $sumup->checkouts->create([
+        'amount' => $amount,
+        'currency' => $currency,
+        'checkout_reference' => $checkoutRef,
+        'merchant_code' => $merchantCode,
+    ]);
+    $checkoutId = $checkout->id;
+    //  pass the $chekoutId to the front-end to be processed
 } catch (\SumUp\Exceptions\SumUpAuthenticationException $e) {
     echo 'Authentication error: ' . $e->getMessage();
 } catch (\SumUp\Exceptions\SumUpResponseException $e) {

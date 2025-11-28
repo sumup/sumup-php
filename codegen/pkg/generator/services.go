@@ -62,7 +62,8 @@ func (g *Generator) writeServiceFile(tagKey string, operations []*operation) err
 	buf.WriteString("namespace SumUp\\Services;\n\n")
 	buf.WriteString("use SumUp\\Authentication\\AccessToken;\n")
 	buf.WriteString("use SumUp\\HttpClients\\SumUpHttpClientInterface;\n")
-	buf.WriteString("use SumUp\\Utils\\Headers;\n\n")
+	buf.WriteString("use SumUp\\Utils\\Headers;\n")
+	buf.WriteString("use SumUp\\Utils\\ResponseDecoder;\n\n")
 	fmt.Fprintf(&buf, "/**\n * Class %s\n *\n * @package SumUp\\Services\n */\n", className)
 	fmt.Fprintf(&buf, "class %s implements SumUpService\n{\n", className)
 	buf.WriteString("    /**\n")
@@ -146,7 +147,7 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 	}
 
 	buf.WriteString("     *\n")
-	buf.WriteString("     * @return \\SumUp\\HttpClients\\Response\n")
+	fmt.Fprintf(&buf, "     * @return %s\n", renderOperationReturnDoc(op))
 
 	if op.Deprecated {
 		buf.WriteString("     *\n")
@@ -192,8 +193,132 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 	}
 
 	buf.WriteString("        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));\n\n")
-	fmt.Fprintf(&buf, "        return $this->client->send('%s', $path, $payload, $headers);\n", strings.ToUpper(op.Method))
+	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers);\n\n", strings.ToUpper(op.Method))
+	if descriptor := renderOperationResponseDescriptor(op); descriptor != "" {
+		fmt.Fprintf(&buf, "        return ResponseDecoder::decode($response, %s);\n", descriptor)
+	} else {
+		buf.WriteString("        return ResponseDecoder::decode($response);\n")
+	}
 	buf.WriteString("    }\n")
+
+	return buf.String()
+}
+
+func renderResponseTypeDescriptor(rt *responseType) string {
+	if rt == nil {
+		return "['type' => 'mixed']"
+	}
+
+	switch rt.Kind {
+	case responseTypeClass:
+		return fmt.Sprintf("['type' => 'class', 'class' => %s::class]", formatClassReference(rt.ClassName))
+	case responseTypeArray:
+		if rt.ArrayItems != nil {
+			return fmt.Sprintf("['type' => 'array', 'items' => %s]", renderResponseTypeDescriptor(rt.ArrayItems))
+		}
+		return "['type' => 'array']"
+	case responseTypeScalar:
+		return fmt.Sprintf("['type' => 'scalar', 'scalar' => '%s']", rt.ScalarType)
+	case responseTypeObject:
+		return "['type' => 'object']"
+	case responseTypeVoid:
+		return "['type' => 'void']"
+	case responseTypeMixed:
+		return "['type' => 'mixed']"
+	default:
+		return "['type' => 'mixed']"
+	}
+}
+
+func formatClassReference(name string) string {
+	if name == "" {
+		return "self"
+	}
+
+	if strings.HasPrefix(name, "\\") {
+		return name
+	}
+
+	return name
+}
+
+func renderOperationReturnDoc(op *operation) string {
+	if op == nil || len(op.Responses) == 0 {
+		return "\\SumUp\\HttpClients\\Response"
+	}
+
+	docTypes := make([]string, 0, len(op.Responses))
+	seen := make(map[string]struct{})
+
+	for _, resp := range op.Responses {
+		if resp == nil || resp.Type == nil {
+			continue
+		}
+		doc := renderResponseDocType(resp.Type)
+		if doc == "" {
+			continue
+		}
+		if _, ok := seen[doc]; ok {
+			continue
+		}
+		seen[doc] = struct{}{}
+		docTypes = append(docTypes, doc)
+	}
+
+	if len(docTypes) == 0 {
+		return "\\SumUp\\HttpClients\\Response"
+	}
+
+	return strings.Join(docTypes, "|")
+}
+
+func renderResponseDocType(rt *responseType) string {
+	if rt == nil {
+		return ""
+	}
+
+	switch rt.Kind {
+	case responseTypeClass:
+		return formatClassReference(rt.ClassName)
+	case responseTypeArray:
+		itemDoc := "mixed"
+		if rt.ArrayItems != nil {
+			doc := renderResponseDocType(rt.ArrayItems)
+			if doc != "" {
+				itemDoc = doc
+			}
+		}
+		return itemDoc + "[]"
+	case responseTypeScalar:
+		if rt.ScalarType != "" {
+			return rt.ScalarType
+		}
+		return "mixed"
+	case responseTypeObject:
+		return "array"
+	case responseTypeVoid:
+		return "null"
+	case responseTypeMixed:
+		return "mixed"
+	default:
+		return "mixed"
+	}
+}
+
+func renderOperationResponseDescriptor(op *operation) string {
+	if op == nil || len(op.Responses) == 0 {
+		return ""
+	}
+
+	var buf strings.Builder
+	buf.WriteString("[\n")
+	for _, resp := range op.Responses {
+		if resp == nil || resp.Type == nil {
+			continue
+		}
+		fmt.Fprintf(&buf, "            '%s' => %s,\n", resp.StatusCode, renderResponseTypeDescriptor(resp.Type))
+	}
+	buf.WriteString("        ]")
 
 	return buf.String()
 }

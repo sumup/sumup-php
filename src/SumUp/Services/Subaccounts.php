@@ -5,6 +5,7 @@ namespace SumUp\Services;
 use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
+use SumUp\Utils\ResponseDecoder;
 
 /**
  * Class Subaccounts
@@ -44,7 +45,7 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Subaccounts\Operator
      *
      * @deprecated
      */
@@ -54,7 +55,11 @@ class Subaccounts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
+        ]);
     }
 
     /**
@@ -62,7 +67,7 @@ class Subaccounts implements SumUpService
      *
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Subaccounts\Operator
      *
      * @deprecated
      */
@@ -75,7 +80,11 @@ class Subaccounts implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
+        ]);
     }
 
     /**
@@ -83,7 +92,7 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Subaccounts\Operator
      *
      * @deprecated
      */
@@ -93,7 +102,11 @@ class Subaccounts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
+        ]);
     }
 
     /**
@@ -101,7 +114,7 @@ class Subaccounts implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Subaccounts\Operator[]
      *
      * @deprecated
      */
@@ -117,7 +130,11 @@ class Subaccounts implements SumUpService
         $payload = [];
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class]],
+        ]);
     }
 
     /**
@@ -126,7 +143,7 @@ class Subaccounts implements SumUpService
      * @param string $operatorId The unique identifier for the operator.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\HttpClients\Response
+     * @return \SumUp\Subaccounts\Operator
      *
      * @deprecated
      */
@@ -139,6 +156,10 @@ class Subaccounts implements SumUpService
         }
         $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
 
-        return $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
+        ]);
     }
 }
