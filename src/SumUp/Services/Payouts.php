@@ -46,7 +46,7 @@ class Payouts implements SumUpService
      * @param string $merchantCode
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\Payouts\FinancialPayouts
+     * @return array[]
      */
     public function list($merchantCode, $queryParams = [])
     {
@@ -63,7 +63,7 @@ class Payouts implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Payouts\FinancialPayouts::class],
+            '200' => ['type' => 'array', 'items' => ['type' => 'object']],
         ]);
     }
 
@@ -72,7 +72,7 @@ class Payouts implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\Payouts\FinancialPayouts
+     * @return array[]
      *
      * @deprecated
      */
@@ -91,7 +91,7 @@ class Payouts implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Payouts\FinancialPayouts::class],
+            '200' => ['type' => 'array', 'items' => ['type' => 'object']],
         ]);
     }
 }

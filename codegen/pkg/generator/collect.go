@@ -81,8 +81,10 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 			targetTag = tagNames[0]
 		}
 
-		result[targetTag] = append(result[targetTag], info.schema)
-		namespaceBySchema[schemaName] = g.namespaceForTag(targetTag)
+		if schemaIsObject(info.schema) {
+			result[targetTag] = append(result[targetTag], info.schema)
+			namespaceBySchema[schemaName] = g.namespaceForTag(targetTag)
+		}
 	}
 
 	for tag := range result {

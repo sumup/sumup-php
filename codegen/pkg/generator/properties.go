@@ -201,6 +201,10 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 	}
 
 	if ref := schema.GetReference(); ref != "" {
+		if !schemaIsObject(schema) {
+			return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace)
+		}
+
 		name := schemaClassName(schema)
 		namespace := g.schemaNamespaces[name]
 		if namespace == "" {
@@ -215,7 +219,10 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 		return typeName, typeName
 	}
 
-	spec := schema.Schema()
+	return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace)
+}
+
+func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace string) (string, string) {
 	if spec == nil {
 		return "mixed", "mixed"
 	}

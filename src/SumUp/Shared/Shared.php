@@ -54,23 +54,9 @@ class AddressLegacy
 }
 
 /**
- * Amount of the event.
- */
-class AmountEvent
-{
-}
-
-/**
  * Object attributes that are modifiable only by SumUp applications.
  */
 class Attributes
-{
-}
-
-/**
- * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
- */
-class Currency
 {
 }
 
@@ -124,27 +110,6 @@ class ErrorForbidden
 }
 
 /**
- * Unique ID of the transaction event.
- */
-class EventId
-{
-}
-
-/**
- * Status of the transaction event.
- */
-class EventStatus
-{
-}
-
-/**
- * Type of the transaction event.
- */
-class EventType
-{
-}
-
-/**
  * Pending invitation for membership.
  */
 class Invite
@@ -190,13 +155,6 @@ class MandateResponse
      */
     public ?string $merchantCode = null;
 
-}
-
-/**
- * The status of the membership.
- */
-class MembershipStatus
-{
 }
 
 /**
@@ -272,13 +230,6 @@ class PersonalDetails
 }
 
 /**
- * Date and time of the transaction event.
- */
-class TimestampEvent
-{
-}
-
-/**
  * Details of the transaction.
  */
 class TransactionBase
@@ -307,9 +258,9 @@ class TransactionBase
     /**
      * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
      *
-     * @var Currency|null
+     * @var string|null
      */
-    public ?Currency $currency = null;
+    public ?string $currency = null;
 
     /**
      * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
@@ -385,11 +336,4 @@ class TransactionCheckoutInfo
      */
     public ?int $internalId = null;
 
-}
-
-/**
- * Unique ID of the transaction.
- */
-class TransactionId
-{
 }

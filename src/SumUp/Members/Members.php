@@ -61,9 +61,9 @@ class Member
     /**
      * The status of the membership.
      *
-     * @var \SumUp\Shared\MembershipStatus
+     * @var string
      */
-    public \SumUp\Shared\MembershipStatus $status;
+    public string $status;
 
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.

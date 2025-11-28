@@ -28,9 +28,9 @@ class Address
      * country code. This definition users `oneOf` with a two-character string
      * type to allow for support of future countries in client code.
      *
-     * @var CountryCode
+     * @var string
      */
-    public CountryCode $country;
+    public string $country;
 
     /**
      * The city of the address.
@@ -201,9 +201,9 @@ class BasePerson
     /**
      * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var PhoneNumber|null
+     * @var string|null
      */
-    public ?PhoneNumber $phoneNumber = null;
+    public ?string $phoneNumber = null;
 
     /**
      * A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship `representative`.
@@ -238,9 +238,9 @@ class BasePerson
      * country code. This definition users `oneOf` with a two-character string
      * type to allow for support of future countries in client code.
      *
-     * @var CountryCode|null
+     * @var string|null
      */
-    public ?CountryCode $citizenship = null;
+    public ?string $citizenship = null;
 
     /**
      * The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
@@ -259,17 +259,17 @@ class BasePerson
     /**
      * The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.
      *
-     * @var Version|null
+     * @var string|null
      */
-    public ?Version $version = null;
+    public ?string $version = null;
 
     /**
      * Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
      * The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
      *
-     * @var ChangeStatus|null
+     * @var string|null
      */
-    public ?ChangeStatus $changeStatus = null;
+    public ?string $changeStatus = null;
 
 }
 
@@ -374,9 +374,9 @@ class BusinessProfile
     /**
      * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var PhoneNumber|null
+     * @var string|null
      */
-    public ?PhoneNumber $phoneNumber = null;
+    public ?string $phoneNumber = null;
 
     /**
      * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
@@ -393,15 +393,6 @@ class BusinessProfile
      */
     public ?Branding $branding = null;
 
-}
-
-/**
- * Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
- * The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
- *
- */
-class ChangeStatus
-{
 }
 
 class ClassicMerchantIdentifiers
@@ -438,9 +429,9 @@ class Company
     /**
      * The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
      *
-     * @var LegalType|null
+     * @var string|null
      */
-    public ?LegalType $legalType = null;
+    public ?string $legalType = null;
 
     /**
      * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
@@ -461,16 +452,16 @@ class Company
     /**
      * A list of country-specific company identifiers.
      *
-     * @var CompanyIdentifiers|null
+     * @var CompanyIdentifier[]|null
      */
-    public ?CompanyIdentifiers $identifiers = null;
+    public ?array $identifiers = null;
 
     /**
      * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var PhoneNumber|null
+     * @var string|null
      */
-    public ?PhoneNumber $phoneNumber = null;
+    public ?string $phoneNumber = null;
 
     /**
      * HTTP(S) URL of the company's website.
@@ -504,63 +495,6 @@ class CompanyIdentifier
      */
     public string $value;
 
-}
-
-/**
- * A list of country-specific company identifiers.
- *
- */
-class CompanyIdentifiers
-{
-}
-
-/**
- * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
- * country code. This definition users `oneOf` with a two-character string
- * type to allow for support of future countries in client code.
- */
-class CountryCode
-{
-}
-
-/**
- * The category of the error.
- *
- */
-class ErrorCategoryClient
-{
-}
-
-/**
- * The category of the error.
- *
- */
-class ErrorCategoryServer
-{
-}
-
-/**
- * An error code specifying the exact error that occurred.
- *
- */
-class ErrorCodeInternalServerError
-{
-}
-
-/**
- * An error code specifying the exact error that occurred.
- *
- */
-class ErrorCodeNotFound
-{
-}
-
-/**
- * The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
- *
- */
-class LegalType
-{
 }
 
 class ListPersonsResponseBody
@@ -613,9 +547,9 @@ class Merchant
      * country code. This definition users `oneOf` with a two-character string
      * type to allow for support of future countries in client code.
      *
-     * @var CountryCode
+     * @var string
      */
-    public CountryCode $country;
+    public string $country;
 
     /**
      * Business information about the merchant. This information will be visible to the merchant's customers.
@@ -677,17 +611,17 @@ class Merchant
     /**
      * The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.
      *
-     * @var Version|null
+     * @var string|null
      */
-    public ?Version $version = null;
+    public ?string $version = null;
 
     /**
      * Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
      * The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
      *
-     * @var ChangeStatus|null
+     * @var string|null
      */
-    public ?ChangeStatus $changeStatus = null;
+    public ?string $changeStatus = null;
 
     /**
      * The date and time when the resource was created. This is a string as defined in [RFC 3339, section 5.6](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
@@ -763,9 +697,9 @@ class Person
     /**
      * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var PhoneNumber|null
+     * @var string|null
      */
-    public ?PhoneNumber $phoneNumber = null;
+    public ?string $phoneNumber = null;
 
     /**
      * A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship `representative`.
@@ -800,9 +734,9 @@ class Person
      * country code. This definition users `oneOf` with a two-character string
      * type to allow for support of future countries in client code.
      *
-     * @var CountryCode|null
+     * @var string|null
      */
-    public ?CountryCode $citizenship = null;
+    public ?string $citizenship = null;
 
     /**
      * The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
@@ -821,17 +755,17 @@ class Person
     /**
      * The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.
      *
-     * @var Version|null
+     * @var string|null
      */
-    public ?Version $version = null;
+    public ?string $version = null;
 
     /**
      * Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
      * The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
      *
-     * @var ChangeStatus|null
+     * @var string|null
      */
-    public ?ChangeStatus $changeStatus = null;
+    public ?string $changeStatus = null;
 
 }
 
@@ -853,14 +787,6 @@ class PersonalIdentifier
 
 }
 
-/**
- * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
- *
- */
-class PhoneNumber
-{
-}
-
 class Timestamps
 {
     /**
@@ -877,12 +803,4 @@ class Timestamps
      */
     public string $updatedAt;
 
-}
-
-/**
- * The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.
- *
- */
-class Version
-{
 }

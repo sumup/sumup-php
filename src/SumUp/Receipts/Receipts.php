@@ -57,44 +57,44 @@ class ReceiptEvent
     /**
      * Unique ID of the transaction event.
      *
-     * @var \SumUp\Shared\EventId|null
+     * @var int|null
      */
-    public ?\SumUp\Shared\EventId $id = null;
+    public ?int $id = null;
 
     /**
      * Unique ID of the transaction.
      *
-     * @var \SumUp\Shared\TransactionId|null
+     * @var string|null
      */
-    public ?\SumUp\Shared\TransactionId $transactionId = null;
+    public ?string $transactionId = null;
 
     /**
      * Type of the transaction event.
      *
-     * @var \SumUp\Shared\EventType|null
+     * @var string|null
      */
-    public ?\SumUp\Shared\EventType $type = null;
+    public ?string $type = null;
 
     /**
      * Status of the transaction event.
      *
-     * @var \SumUp\Shared\EventStatus|null
+     * @var string|null
      */
-    public ?\SumUp\Shared\EventStatus $status = null;
+    public ?string $status = null;
 
     /**
      * Amount of the event.
      *
-     * @var \SumUp\Shared\AmountEvent|null
+     * @var float|null
      */
-    public ?\SumUp\Shared\AmountEvent $amount = null;
+    public ?float $amount = null;
 
     /**
      * Date and time of the transaction event.
      *
-     * @var \SumUp\Shared\TimestampEvent|null
+     * @var string|null
      */
-    public ?\SumUp\Shared\TimestampEvent $timestamp = null;
+    public ?string $timestamp = null;
 
     /**
      *

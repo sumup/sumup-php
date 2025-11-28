@@ -1,0 +1,55 @@
+package generator
+
+import "github.com/pb33f/libopenapi/datamodel/high/base"
+
+// schemaIsObject reports whether the provided schema describes an object that
+// warrants generating a PHP class. It walks nested compositions (allOf/oneOf/anyOf)
+// to account for aggregated object schemas.
+func schemaIsObject(schema *base.SchemaProxy) bool {
+	return schemaIsObjectWithStack(schema, make(map[*base.SchemaProxy]struct{}))
+}
+
+func schemaIsObjectWithStack(schema *base.SchemaProxy, stack map[*base.SchemaProxy]struct{}) bool {
+	if schema == nil {
+		return false
+	}
+
+	if _, ok := stack[schema]; ok {
+		return false
+	}
+	stack[schema] = struct{}{}
+	defer delete(stack, schema)
+
+	spec := schema.Schema()
+	if spec == nil {
+		return false
+	}
+
+	if hasSchemaType(spec, "object") {
+		return true
+	}
+
+	if spec.Properties != nil && spec.Properties.Len() > 0 {
+		return true
+	}
+
+	for _, composite := range spec.AllOf {
+		if schemaIsObjectWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	for _, composite := range spec.AnyOf {
+		if schemaIsObjectWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	for _, composite := range spec.OneOf {
+		if schemaIsObjectWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	return false
+}

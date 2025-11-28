@@ -258,6 +258,10 @@ func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace
 	}
 
 	if ref := schema.GetReference(); ref != "" {
+		if !schemaIsObject(schema) {
+			return g.buildResponseTypeFromSpec(schema.Schema(), currentNamespace)
+		}
+
 		name := schemaClassName(schema)
 		namespace := g.schemaNamespaces[name]
 		typeName := name
@@ -271,7 +275,10 @@ func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace
 		}
 	}
 
-	spec := schema.Schema()
+	return g.buildResponseTypeFromSpec(schema.Schema(), currentNamespace)
+}
+
+func (g *Generator) buildResponseTypeFromSpec(spec *base.Schema, currentNamespace string) *responseType {
 	if spec == nil {
 		return nil
 	}

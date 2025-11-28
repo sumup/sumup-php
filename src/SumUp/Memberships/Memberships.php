@@ -29,9 +29,9 @@ class Membership
      * * `merchant` - merchant account(s)
      * * `organization` - organization(s)
      *
-     * @var ResourceType
+     * @var string
      */
-    public ResourceType $type;
+    public string $type;
 
     /**
      * User's roles.
@@ -71,9 +71,9 @@ class Membership
     /**
      * The status of the membership.
      *
-     * @var \SumUp\Shared\MembershipStatus
+     * @var string
      */
-    public \SumUp\Shared\MembershipStatus $status;
+    public string $status;
 
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
@@ -116,9 +116,9 @@ class MembershipResource
      * * `merchant` - merchant account(s)
      * * `organization` - organization(s)
      *
-     * @var ResourceType
+     * @var string
      */
-    public ResourceType $type;
+    public string $type;
 
     /**
      * Display name of the resource.
@@ -155,14 +155,4 @@ class MembershipResource
      */
     public ?\SumUp\Shared\Attributes $attributes = null;
 
-}
-
-/**
- * The type of the membership resource.
- * Possible values are:
- * * `merchant` - merchant account(s)
- * * `organization` - organization(s)
- */
-class ResourceType
-{
 }

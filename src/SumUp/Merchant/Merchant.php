@@ -344,13 +344,6 @@ class BankAccount
 }
 
 /**
- * Business owners information.
- */
-class BusinessOwners
-{
-}
-
-/**
  * Country Details
  */
 class CountryDetails
@@ -595,9 +588,9 @@ class MerchantProfileLegacy
     /**
      * Business owners information.
      *
-     * @var BusinessOwners|null
+     * @var array[]|null
      */
-    public ?BusinessOwners $businessOwners = null;
+    public ?array $businessOwners = null;
 
     /**
      * Doing Business As information
