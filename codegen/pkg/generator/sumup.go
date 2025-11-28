@@ -50,7 +50,13 @@ namespace SumUp;
  * Class SumUp
  *
  * @package SumUp
- */
+`)
+
+	if propertyDocs := renderSumUpPropertyDocs(services); propertyDocs != "" {
+		buf.WriteString(propertyDocs)
+	}
+
+	buf.WriteString(` */
 class SumUp
 {
     /**
@@ -71,6 +77,14 @@ class SumUp
      * @var SumUpHttpClientInterface
      */
     protected $client;
+
+`)
+
+	if serviceMap := renderSumUpServiceMap(services); serviceMap != "" {
+		buf.WriteString(serviceMap)
+	}
+
+	buf.WriteString(`
 
     /**
      * SumUp constructor.
@@ -154,18 +168,41 @@ class SumUp
         return $this->accessToken;
     }
 
+    /**
+     * Proxy access to services via properties.
+     *
+     * @param string $name
+     *
+     * @return SumUpService|null
+     */
+    public function __get($name)
+    {
+        return $this->getService($name);
+    }
+
+    /**
+     * Resolve a service by its property name.
+     *
+     * @param string $name
+     * @param AccessToken|null $accessToken
+     *
+     * @return SumUpService|null
+     */
+    public function getService($name, AccessToken $accessToken = null)
+    {
+        if (!array_key_exists($name, self::$serviceClassMap)) {
+            trigger_error('Undefined property: ' . static::class . '::$' . $name);
+
+            return null;
+        }
+
+        $token = $this->resolveAccessToken($accessToken);
+        $serviceClass = self::$serviceClassMap[$name];
+
+        return new $serviceClass($this->client, $token);
+    }
+
 `)
-
-	for idx, service := range services {
-		buf.WriteString(renderSumUpServiceMethod(service))
-		if idx < len(services)-1 {
-			buf.WriteString("\n")
-		}
-	}
-
-	if len(services) > 0 {
-		buf.WriteString("\n")
-	}
 
 	buf.WriteString(`    /**
      * @param AccessToken|null $accessToken
@@ -232,6 +269,7 @@ func sumUpUseStatements(serviceNames []string) []string {
 	serviceSet := map[string]struct{}{
 		"SumUp\\Services\\Authorization": {},
 		"SumUp\\Services\\Custom":        {},
+		"SumUp\\Services\\SumUpService":  {},
 	}
 
 	for _, name := range serviceNames {
@@ -244,25 +282,36 @@ func sumUpUseStatements(serviceNames []string) []string {
 	return append(uses, serviceUses...)
 }
 
-func renderSumUpServiceMethod(className string) string {
-	var buf strings.Builder
-	methodName := strcase.ToLowerCamel(className)
-	description := strings.TrimSpace(strcase.ToDelimited(className, ' '))
-	if description == "" {
-		description = strings.ToLower(className)
+func renderSumUpPropertyDocs(serviceNames []string) string {
+	if len(serviceNames) == 0 {
+		return ""
 	}
 
+	var buf strings.Builder
+	buf.WriteString(" *\n")
+	for _, service := range serviceNames {
+		fmt.Fprintf(&buf, " * @property %s $%s\n", service, strcase.ToLowerCamel(service))
+	}
+
+	return buf.String()
+}
+
+func renderSumUpServiceMap(serviceNames []string) string {
+	if len(serviceNames) == 0 {
+		return ""
+	}
+
+	var buf strings.Builder
 	buf.WriteString("    /**\n")
-	fmt.Fprintf(&buf, "     * Get the service for %s.\n", description)
+	buf.WriteString("     * Map of property names to service classes.\n")
 	buf.WriteString("     *\n")
-	buf.WriteString("     * @param AccessToken|null $accessToken\n")
-	buf.WriteString("     *\n")
-	fmt.Fprintf(&buf, "     * @return %s\n", className)
+	buf.WriteString("     * @var array<string, string>\n")
 	buf.WriteString("     */\n")
-	fmt.Fprintf(&buf, "    public function %s(AccessToken $accessToken = null)\n    {\n", methodName)
-	buf.WriteString("        $token = $this->resolveAccessToken($accessToken);\n\n")
-	fmt.Fprintf(&buf, "        return new %s($this->client, $token);\n", className)
-	buf.WriteString("    }\n")
+	buf.WriteString("    private static $serviceClassMap = [\n")
+	for _, service := range serviceNames {
+		fmt.Fprintf(&buf, "        '%s' => %s::class,\n", strcase.ToLowerCamel(service), service)
+	}
+	buf.WriteString("    ];\n\n")
 
 	return buf.String()
 }

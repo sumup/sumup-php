@@ -22,12 +22,26 @@ use SumUp\Services\Readers;
 use SumUp\Services\Receipts;
 use SumUp\Services\Roles;
 use SumUp\Services\Subaccounts;
+use SumUp\Services\SumUpService;
 use SumUp\Services\Transactions;
 
 /**
  * Class SumUp
  *
  * @package SumUp
+ *
+ * @property Checkouts $checkouts
+ * @property Customers $customers
+ * @property Members $members
+ * @property Memberships $memberships
+ * @property Merchant $merchant
+ * @property Merchants $merchants
+ * @property Payouts $payouts
+ * @property Readers $readers
+ * @property Receipts $receipts
+ * @property Roles $roles
+ * @property Subaccounts $subaccounts
+ * @property Transactions $transactions
  */
 class SumUp
 {
@@ -49,6 +63,28 @@ class SumUp
      * @var SumUpHttpClientInterface
      */
     protected $client;
+
+    /**
+     * Map of property names to service classes.
+     *
+     * @var array<string, string>
+     */
+    private static $serviceClassMap = [
+        'checkouts' => Checkouts::class,
+        'customers' => Customers::class,
+        'members' => Members::class,
+        'memberships' => Memberships::class,
+        'merchant' => Merchant::class,
+        'merchants' => Merchants::class,
+        'payouts' => Payouts::class,
+        'readers' => Readers::class,
+        'receipts' => Receipts::class,
+        'roles' => Roles::class,
+        'subaccounts' => Subaccounts::class,
+        'transactions' => Transactions::class,
+    ];
+
+
 
     /**
      * SumUp constructor.
@@ -133,171 +169,37 @@ class SumUp
     }
 
     /**
-     * Get the service for checkouts.
+     * Proxy access to services via properties.
      *
-     * @param AccessToken|null $accessToken
+     * @param string $name
      *
-     * @return Checkouts
+     * @return SumUpService|null
      */
-    public function checkouts(AccessToken $accessToken = null)
+    public function __get($name)
     {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Checkouts($this->client, $token);
+        return $this->getService($name);
     }
 
     /**
-     * Get the service for customers.
+     * Resolve a service by its property name.
      *
+     * @param string $name
      * @param AccessToken|null $accessToken
      *
-     * @return Customers
+     * @return SumUpService|null
      */
-    public function customers(AccessToken $accessToken = null)
+    public function getService($name, AccessToken $accessToken = null)
     {
+        if (!array_key_exists($name, self::$serviceClassMap)) {
+            trigger_error('Undefined property: ' . static::class . '::$' . $name);
+
+            return null;
+        }
+
         $token = $this->resolveAccessToken($accessToken);
+        $serviceClass = self::$serviceClassMap[$name];
 
-        return new Customers($this->client, $token);
-    }
-
-    /**
-     * Get the service for members.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Members
-     */
-    public function members(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Members($this->client, $token);
-    }
-
-    /**
-     * Get the service for memberships.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Memberships
-     */
-    public function memberships(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Memberships($this->client, $token);
-    }
-
-    /**
-     * Get the service for merchant.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Merchant
-     */
-    public function merchant(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Merchant($this->client, $token);
-    }
-
-    /**
-     * Get the service for merchants.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Merchants
-     */
-    public function merchants(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Merchants($this->client, $token);
-    }
-
-    /**
-     * Get the service for payouts.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Payouts
-     */
-    public function payouts(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Payouts($this->client, $token);
-    }
-
-    /**
-     * Get the service for readers.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Readers
-     */
-    public function readers(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Readers($this->client, $token);
-    }
-
-    /**
-     * Get the service for receipts.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Receipts
-     */
-    public function receipts(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Receipts($this->client, $token);
-    }
-
-    /**
-     * Get the service for roles.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Roles
-     */
-    public function roles(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Roles($this->client, $token);
-    }
-
-    /**
-     * Get the service for subaccounts.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Subaccounts
-     */
-    public function subaccounts(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Subaccounts($this->client, $token);
-    }
-
-    /**
-     * Get the service for transactions.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return Transactions
-     */
-    public function transactions(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Transactions($this->client, $token);
+        return new $serviceClass($this->client, $token);
     }
 
     /**

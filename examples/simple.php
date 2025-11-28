@@ -9,5 +9,5 @@ $sumup = new \SumUp\SumUp([
     'api_key' => getenv('SUMUP_API_KEY'),
 ]);
 
-$merchant = $sumup->getMerchantsService()->get(getenv('SUMUP_MERCHANT_CODE'));
+$merchant = $sumup->merchants->get(getenv('SUMUP_MERCHANT_CODE'));
 print_r($merchant->getBody());
