@@ -20,7 +20,7 @@ fmtcheck: vendor ## Check code formatting
 
 .PHONY: docs
 docs: vendor ## Generate API reference using phpDocumentor
-	vendor/bin/phpdoc --config=phpdoc.dist.xml
+	docker run --rm -v "$(pwd):/data" "phpdoc/phpdoc:3"
 
 .PHONY: test
 test: vendor ## Run PHPUnit test suite

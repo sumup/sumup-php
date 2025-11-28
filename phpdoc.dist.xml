@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor
         configVersion="3"
-        xmlns="https://www.phpdoc.org"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.phpdoc.org"
         xsi:noNamespaceSchemaLocation="data/xsd/phpdoc.xsd"
 >
-    <title>SumUp Ecommerce PHP SDK</title>
     <paths>
-        <output>docs</output>
-        <cache>build/phpdoc/cache</cache>
+        <output>build/phpdoc</output>
     </paths>
-    <version number="latest">
-        <api ignore-packages="true">
-            <source>
+    <version number="3.0.0">
+        <folder>latest</folder>
+        <api>
+            <source dsn=".">
                 <path>src</path>
             </source>
             <output>api</output>
             <ignore hidden="true" symlinks="true">
-                <path>vendor/**/*</path>
+                <path>build/**/*</path>
+                <path>examples/**/*</path>
                 <path>tests/**/*</path>
-                <path>codegen/**/*</path>
+                <path>vendor/**/*</path>
             </ignore>
             <extensions>
                 <extension>php</extension>
             </extensions>
-            <visibility>public</visibility>
-            <visibility>protected</visibility>
-            <default-package-name>SumUp Ecommerce SDK</default-package-name>
+            <default-package-name>sumup-php</default-package-name>
         </api>
     </version>
-    <setting name="graphs.enabled" value="false" />
-    <template name="clean"/>
+    <template name="default"/>
 </phpdocumentor>
