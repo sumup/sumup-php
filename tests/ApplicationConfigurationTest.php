@@ -26,6 +26,30 @@ class ApplicationConfigurationTest extends TestCase
         $this->assertSame('test-access-token', $config->getAccessToken());
     }
 
+    public function testFallsBackToEnvVariableWhenNoApiKeyProvided()
+    {
+        putenv('SUMUP_API_KEY=env-api-key');
+        
+        $config = new ApplicationConfiguration([]);
+        
+        $this->assertSame('env-api-key', $config->getApiKey());
+        
+        putenv('SUMUP_API_KEY');
+    }
+
+    public function testProvidedApiKeyTakesPrecedenceOverEnvVariable()
+    {
+        putenv('SUMUP_API_KEY=env-api-key');
+        
+        $config = new ApplicationConfiguration([
+            'api_key' => 'config-api-key',
+        ]);
+        
+        $this->assertSame('config-api-key', $config->getApiKey());
+        
+        putenv('SUMUP_API_KEY');
+    }
+
 
 
     public function testUserAgentHeaderIsAlwaysAdded()

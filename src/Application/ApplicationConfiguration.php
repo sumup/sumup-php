@@ -69,7 +69,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
             'ca_bundle_path' => null
         ], $config);
 
-        $this->apiKey = $config['api_key'];
+        $this->apiKey = $config['api_key'] ?? getenv('SUMUP_API_KEY') ?: null;
         $this->accessToken = $config['access_token'];
         $this->baseURL = $config['base_uri'];
         $this->setCustomHeaders($config['custom_headers']);
