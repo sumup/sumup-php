@@ -23,16 +23,6 @@ class Headers
     }
 
     /**
-     * Get the common header for Content-Type: application/x-www-form-urlencoded.
-     *
-     * @return array
-     */
-    public static function getCTForm()
-    {
-        return ['Content-Type' => 'application/x-www-form-urlencoded'];
-    }
-
-    /**
      * Get the authorization header with token.
      *
      * @param AccessToken $accessToken
