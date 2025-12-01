@@ -32,13 +32,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     protected $accessToken;
 
     /**
-     * Flag whether to use GuzzleHttp over cURL if both are present.
-     *
-     * @var $forceGuzzle
-     */
-    protected $forceGuzzle;
-
-    /**
      * Custom headers to be sent with every request.
      *
      * @var array $customHeaders
@@ -72,7 +65,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
             'api_key' => null,
             'access_token' => null,
             'base_uri' => 'https://api.sumup.com',
-            'use_guzzlehttp_over_curl' => false,
             'custom_headers' => [],
             'ca_bundle_path' => null
         ], $config);
@@ -80,7 +72,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
         $this->apiKey = $config['api_key'];
         $this->accessToken = $config['access_token'];
         $this->baseURL = $config['base_uri'];
-        $this->setForceGuzzle($config['use_guzzlehttp_over_curl']);
         $this->setCustomHeaders($config['custom_headers']);
         $this->setCABundlePath($config['ca_bundle_path']);
     }
@@ -103,16 +94,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function getAccessToken()
     {
         return $this->accessToken;
-    }
-
-    /**
-     * Returns the flag whether to use GuzzleHttp.
-     *
-     * @return bool
-     */
-    public function getForceGuzzle()
-    {
-        return $this->forceGuzzle;
     }
 
     /**
@@ -147,23 +128,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function getApiKey()
     {
         return $this->apiKey;
-    }
-
-
-
-    /**
-     * Set the flag whether to use GuzzleHttp.
-     *
-     * @param bool $forceGuzzle
-     *
-     * @throws SumUpConfigurationException
-     */
-    protected function setForceGuzzle($forceGuzzle)
-    {
-        if (!is_bool($forceGuzzle)) {
-            throw new SumUpConfigurationException('Invalid value for boolean parameter use_guzzlehttp_over_curl.');
-        }
-        $this->forceGuzzle = $forceGuzzle;
     }
 
     /**

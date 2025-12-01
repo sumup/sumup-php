@@ -62,7 +62,24 @@ $sumup = new \SumUp\SumUp([
 ]);
 ```
 
-If not provided, the bundled `resources/ca-bundle.crt` file is used automatically by both the cURL and Guzzle HTTP clients.
+If not provided, the bundled `resources/ca-bundle.crt` file is used automatically by the cURL HTTP client.
+
+### Custom HTTP Client
+
+The SDK allows you to use a custom HTTP client for making requests. By default, the SDK uses cURL, but you can provide your own implementation:
+
+```php
+// Create your custom HTTP client that implements SumUpHttpClientInterface
+$customClient = new YourCustomHttpClient();
+
+// Pass it to the SDK
+$sumup = new \SumUp\SumUp(
+    ['api_key' => 'YOUR-API-KEY'],
+    $customClient
+);
+```
+
+This is useful for adding logging, retry logic, or using a different HTTP library. See the [Custom HTTP Client guide](docs/HowToOverrideHttpClient.md) for more details and examples.
 
 ## API Reference
 

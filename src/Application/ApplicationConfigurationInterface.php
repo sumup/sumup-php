@@ -26,13 +26,6 @@ interface ApplicationConfigurationInterface
     public function getAccessToken();
 
     /**
-     * Returns a flag whether to use GuzzleHttp over cURL if both are present.
-     *
-     * @return bool
-     */
-    public function getForceGuzzle();
-
-    /**
      * Returns associative array with custom headers.
      *
      * @return array
