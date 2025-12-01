@@ -51,14 +51,7 @@ class SumUpTest extends TestCase
         $this->assertSame('Bearer', $token->getType());
     }
 
-    public function testCanSetDefaultAccessTokenWithCustomType()
-    {
-        $sumup = new SumUp();
-        $sumup->setDefaultAccessToken('new-token', 'Custom');
 
-        $token = $sumup->getDefaultAccessToken();
-        $this->assertSame('Custom', $token->getType());
-    }
 
     public function testGetServiceWithDefaultToken()
     {

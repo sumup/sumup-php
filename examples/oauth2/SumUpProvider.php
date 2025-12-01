@@ -34,7 +34,7 @@ class SumUpProvider extends AbstractProvider
      */
     const DEFAULT_SCOPES = [
         'payments',
-        'transactions.history', 
+        'transactions.history',
         'user.profile_readonly',
         'user.app-settings'
     ];

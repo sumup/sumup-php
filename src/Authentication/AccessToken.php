@@ -17,22 +17,13 @@ class AccessToken
     protected $value = '';
 
     /**
-     * The access token type.
-     *
-     * @var string
-     */
-    protected $type = 'Bearer';
-
-    /**
      * Create a new access token entity.
      *
      * @param string $value
-     * @param string $type
      */
-    public function __construct($value, $type = 'Bearer')
+    public function __construct($value)
     {
         $this->value = $value;
-        $this->type = $type;
     }
 
     /**
@@ -46,13 +37,13 @@ class AccessToken
     }
 
     /**
-     * Returns the type of the access token.
+     * Returns the type of the access token (always Bearer for SumUp API).
      *
      * @return string
      */
     public function getType()
     {
-        return $this->type;
+        return 'Bearer';
     }
 
 

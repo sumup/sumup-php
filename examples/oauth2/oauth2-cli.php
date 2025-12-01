@@ -85,7 +85,7 @@ function main(): void
         echo "\nOAuth2 Success!\n";
         echo "===============\n";
         echo "Access Token: " . substr($accessToken->getToken(), 0, 20) . "...\n";
-        echo "Token Type: Bearer\n";
+        echo "Token Type: " . (new \SumUp\Authentication\AccessToken($accessToken->getToken()))->getType() . "\n";
         echo "Expires: " . ($accessToken->getExpires() ? date('Y-m-d H:i:s', $accessToken->getExpires()) : 'Never') . "\n";
 
         if ($accessToken->getRefreshToken()) {

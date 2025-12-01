@@ -99,9 +99,9 @@ class SumUp
         
         // Create default access token from config
         if (!empty($this->appConfig->getApiKey())) {
-            $this->defaultAccessToken = new AccessToken($this->appConfig->getApiKey(), 'Bearer');
+            $this->defaultAccessToken = new AccessToken($this->appConfig->getApiKey());
         } elseif (!empty($this->appConfig->getAccessToken())) {
-            $this->defaultAccessToken = new AccessToken($this->appConfig->getAccessToken(), 'Bearer');
+            $this->defaultAccessToken = new AccessToken($this->appConfig->getAccessToken());
         }
     }
 
@@ -119,13 +119,12 @@ class SumUp
      * Set a new default access token.
      *
      * @param string $token
-     * @param string $type
      *
      * @return void
      */
-    public function setDefaultAccessToken($token, $type = 'Bearer')
+    public function setDefaultAccessToken($token)
     {
-        $this->defaultAccessToken = new AccessToken($token, $type);
+        $this->defaultAccessToken = new AccessToken($token);
     }
 
     /**
@@ -144,7 +143,7 @@ class SumUp
         }
         
         if (is_string($accessToken)) {
-            return new AccessToken($accessToken, 'Bearer');
+            return new AccessToken($accessToken);
         }
         
         if (!empty($accessToken)) {
