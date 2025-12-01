@@ -3,13 +3,11 @@
 namespace SumUp;
 
 use SumUp\Application\ApplicationConfiguration;
-use SumUp\Application\ApplicationConfigurationInterface;
 use SumUp\Authentication\AccessToken;
 use SumUp\Exceptions\SumUpConfigurationException;
 use SumUp\Exceptions\SumUpSDKException;
 use SumUp\HttpClients\HttpClientsFactory;
 use SumUp\HttpClients\SumUpHttpClientInterface;
-use SumUp\Services\Authorization;
 use SumUp\Services\Checkouts;
 use SumUp\Services\Custom;
 use SumUp\Services\Customers;
@@ -53,11 +51,11 @@ class SumUp
     protected $appConfig;
 
     /**
-     * The access token that holds the data from the response.
+     * The default access token.
      *
-     * @var AccessToken
+     * @var AccessToken|null
      */
-    protected $accessToken;
+    protected $defaultAccessToken;
 
     /**
      * @var SumUpHttpClientInterface
@@ -94,78 +92,70 @@ class SumUp
      *
      * @throws SumUpSDKException
      */
-    public function __construct(array $config = [], SumUpHttpClientInterface $customHttpClient = null)
+    public function __construct(array $config = [], ?SumUpHttpClientInterface $customHttpClient = null)
     {
         $this->appConfig = new ApplicationConfiguration($config);
         $this->client = HttpClientsFactory::createHttpClient($this->appConfig, $customHttpClient);
-        $authorizationService = new Authorization($this->client, $this->appConfig);
-        $this->accessToken = $authorizationService->getToken();
-    }
-
-    /**
-     * Returns the access token.
-     *
-     * @return AccessToken
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
-    }
-
-    /**
-     * Refresh the access token.
-     *
-     * @param string $refreshToken
-     *
-     * @return AccessToken
-     *
-     * @throws SumUpSDKException
-     */
-    public function refreshToken($refreshToken = null)
-    {
-        if (isset($refreshToken)) {
-            $rToken = $refreshToken;
-        } elseif (!isset($refreshToken) && !isset($this->accessToken)) {
-            throw new SumUpConfigurationException('There is no refresh token');
-        } else {
-            $rToken = $this->accessToken->getRefreshToken();
+        
+        // Create default access token from config
+        if (!empty($this->appConfig->getApiKey())) {
+            $this->defaultAccessToken = new AccessToken($this->appConfig->getApiKey(), 'Bearer');
+        } elseif (!empty($this->appConfig->getAccessToken())) {
+            $this->defaultAccessToken = new AccessToken($this->appConfig->getAccessToken(), 'Bearer');
         }
-        $authorizationService = new Authorization($this->client, $this->appConfig);
-        $this->accessToken = $authorizationService->refreshToken($rToken);
-        return $this->accessToken;
     }
 
     /**
-     * Get the service for authorization.
+     * Returns the default access token.
      *
-     * @param ApplicationConfigurationInterface|null $config
-     *
-     * @return Authorization
+     * @return AccessToken|null
      */
-    public function getAuthorizationService(ApplicationConfigurationInterface $config = null)
+    public function getDefaultAccessToken()
     {
-        if (empty($config)) {
-            $cfg = $this->appConfig;
-        } else {
-            $cfg = $config;
-        }
-        return new Authorization($this->client, $cfg);
+        return $this->defaultAccessToken;
+    }
+
+    /**
+     * Set a new default access token.
+     *
+     * @param string $token
+     * @param string $type
+     *
+     * @return void
+     */
+    public function setDefaultAccessToken($token, $type = 'Bearer')
+    {
+        $this->defaultAccessToken = new AccessToken($token, $type);
     }
 
     /**
      * Resolve the access token that should be used for a service.
      *
-     * @param AccessToken|null $accessToken
+     * @param AccessToken|string|null $accessToken
      *
-     * @return AccessToken
+     * @return AccessToken|null
+     *
+     * @throws SumUpConfigurationException
      */
-    protected function resolveAccessToken(AccessToken $accessToken = null)
+    protected function resolveAccessToken($accessToken = null)
     {
-        if (!empty($accessToken)) {
+        if ($accessToken instanceof AccessToken) {
             return $accessToken;
         }
+        
+        if (is_string($accessToken)) {
+            return new AccessToken($accessToken, 'Bearer');
+        }
+        
+        if (!empty($accessToken)) {
+            throw new SumUpConfigurationException('Access token must be a string or AccessToken instance');
+        }
 
-        return $this->accessToken;
+        if (!empty($this->defaultAccessToken)) {
+            return $this->defaultAccessToken;
+        }
+        
+        throw new SumUpConfigurationException('No access token provided. Please provide a token via constructor configuration, setDefaultAccessToken(), or pass one to the service method.');
     }
 
     /**
@@ -184,11 +174,11 @@ class SumUp
      * Resolve a service by its property name.
      *
      * @param string $name
-     * @param AccessToken|null $accessToken
+     * @param AccessToken|string|null $accessToken
      *
      * @return SumUpService|null
      */
-    public function getService($name, AccessToken $accessToken = null)
+    public function getService($name, $accessToken = null)
     {
         if (!array_key_exists($name, self::$serviceClassMap)) {
             trigger_error('Undefined property: ' . static::class . '::$' . $name);
@@ -203,11 +193,11 @@ class SumUp
     }
 
     /**
-     * @param AccessToken|null $accessToken
+     * @param AccessToken|string|null $accessToken
      *
      * @return Custom
      */
-    public function getCustomService(AccessToken $accessToken = null)
+    public function getCustomService($accessToken = null)
     {
         $token = $this->resolveAccessToken($accessToken);
 

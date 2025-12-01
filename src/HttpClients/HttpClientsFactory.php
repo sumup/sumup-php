@@ -27,7 +27,7 @@ class HttpClientsFactory
      *
      * @throws SumUpConfigurationException
      */
-    public static function createHttpClient(ApplicationConfigurationInterface $appConfig, SumUpHttpClientInterface $customHttpClient = null)
+    public static function createHttpClient(ApplicationConfigurationInterface $appConfig, ?SumUpHttpClientInterface $customHttpClient = null)
     {
         if ($customHttpClient) {
             return $customHttpClient;

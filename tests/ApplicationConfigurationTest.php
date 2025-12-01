@@ -4,37 +4,29 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\Application\ApplicationConfiguration;
-use SumUp\Exceptions\SumUpConfigurationException;
 use SumUp\SdkInfo;
 
 class ApplicationConfigurationTest extends TestCase
 {
-    public function testCustomScopesAreMergedWithDefaults()
+    public function testCanCreateWithApiKey()
     {
         $config = new ApplicationConfiguration([
             'api_key' => 'test-api-key',
-            'scopes' => ['transactions.history', 'custom.scope'],
         ]);
 
-        $scopes = $config->getScopes();
-
-        foreach (ApplicationConfiguration::DEFAULT_SCOPES as $scope) {
-            $this->assertContains($scope, $scopes);
-        }
-
-        $this->assertContains('custom.scope', $scopes);
-        $this->assertStringContainsString('custom.scope', $config->getFormattedScopes());
+        $this->assertSame('test-api-key', $config->getApiKey());
     }
 
-    public function testInvalidGrantTypeThrowsException()
+    public function testCanCreateWithAccessToken()
     {
-        $this->expectException(SumUpConfigurationException::class);
-
-        new ApplicationConfiguration([
-            'api_key' => 'test-api-key',
-            'grant_type' => 'invalid',
+        $config = new ApplicationConfiguration([
+            'access_token' => 'test-access-token',
         ]);
+
+        $this->assertSame('test-access-token', $config->getAccessToken());
     }
+
+
 
     public function testUserAgentHeaderIsAlwaysAdded()
     {
