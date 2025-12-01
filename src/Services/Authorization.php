@@ -92,9 +92,6 @@ class Authorization implements SumUpService
                 case 'client_credentials':
                     $accessToken = $this->getTokenByClientCredentials();
                     break;
-                case 'password':
-                    $accessToken = $this->getTokenByPassword();
-                    break;
             }
         }
         return $accessToken;
@@ -153,42 +150,7 @@ class Authorization implements SumUpService
         return new AccessToken($resBody->access_token, $resBody->token_type, $resBody->expires_in);
     }
 
-    /**
-     * Returns an access token for the grant type "password".
-     *
-     * @return AccessToken
-     *
-     * @throws SumUpConfigurationException
-     * @throws \SumUp\Exceptions\SumUpConnectionException
-     * @throws \SumUp\Exceptions\SumUpResponseException
-     * @throws \SumUp\Exceptions\SumUpAuthenticationException
-     * @throws \SumUp\Exceptions\SumUpSDKException
-     */
-    public function getTokenByPassword()
-    {
-        if (empty($this->appConfig->getUsername())) {
-            throw new SumUpConfigurationException(ExceptionMessages::getMissingParamMsg('username'));
-        }
-        if (empty($this->appConfig->getPassword())) {
-            throw new SumUpConfigurationException(ExceptionMessages::getMissingParamMsg("password"));
-        }
-        $payload = [
-            'grant_type' => 'password',
-            'client_id' => $this->appConfig->getAppId(),
-            'client_secret' => $this->appConfig->getAppSecret(),
-            'scope' => $this->appConfig->getFormattedScopes(),
-            'username' => $this->appConfig->getUsername(),
-            'password' => $this->appConfig->getPassword()
-        ];
-        $headers = Headers::getStandardHeaders();
-        $response = $this->client->send('POST', '/token', $payload, $headers);
-        $resBody = $response->getBody();
-        $scopes = [];
-        if (!empty($resBody->scope)) {
-            $scopes = explode(' ', $resBody->scope);
-        }
-        return new AccessToken($resBody->access_token, $resBody->token_type, $resBody->expires_in, $scopes, $resBody->refresh_token);
-    }
+
 
     /**
      * Refresh access token.

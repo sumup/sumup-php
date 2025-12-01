@@ -25,7 +25,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     /**
      * The possible values for grant type.
      */
-    const GRANT_TYPES = ['authorization_code', 'client_credentials', 'password'];
+    const GRANT_TYPES = ['authorization_code', 'client_credentials'];
 
     /**
      * The client ID.
@@ -55,22 +55,10 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      */
     protected $baseURL;
 
-    /**
-     * The merchant's username. Needed only if the authorization flow is "password".
-     *
-     * @var string
-     */
-    protected $username;
+
 
     /**
-     * The merchant's account password. Needed only if the authorization flow is "password".
-     *
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * The authorization grant type. Allowed values are: 'authorization_code'|'client_credentials'|'password'.
+     * The authorization grant type. Allowed values are: 'authorization_code'|'client_credentials'.
      *
      * @var string
      */
@@ -144,8 +132,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
             'code' => null,
             'access_token' => null,
             'refresh_token' => null,
-            'username' => null,
-            'password' => null,
             'use_guzzlehttp_over_curl' => false,
             'custom_headers' => [],
             'ca_bundle_path' => null
@@ -157,8 +143,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
         $this->setScopes($config['scopes']);
         $this->setGrantType($config['grant_type']);
         $this->baseURL = $config['base_uri'];
-        $this->username = $config['username'];
-        $this->password = $config['password'];
         $this->code = $config['code'];
         $this->accessToken = $config['access_token'];
         $this->refreshToken = $config['refresh_token'];
@@ -237,25 +221,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
         return $this->grantType;
     }
 
-    /**
-     * Returns merchant's username.
-     *
-     * @return null|string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
 
-    /**
-     * Returns merchant's password.
-     *
-     * @return null|string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
 
     /**
      * Returns initial access token.

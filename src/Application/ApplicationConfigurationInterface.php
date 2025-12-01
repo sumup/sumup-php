@@ -51,19 +51,7 @@ interface ApplicationConfigurationInterface
      */
     public function getGrantType();
 
-    /**
-     * Returns merchant's username;
-     *
-     * @return string
-     */
-    public function getUsername();
 
-    /**
-     * Returns merchant's passowrd;
-     *
-     * @return string
-     */
-    public function getPassword();
 
     /**
      * Returns access token.
