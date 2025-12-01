@@ -4,7 +4,6 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\SumUp;
-use SumUp\Authentication\AccessToken;
 use SumUp\Exceptions\SumUpConfigurationException;
 
 class SumUpTest extends TestCase
@@ -16,9 +15,8 @@ class SumUpTest extends TestCase
         ]);
 
         $token = $sumup->getDefaultAccessToken();
-        $this->assertInstanceOf(AccessToken::class, $token);
-        $this->assertSame('secret-api-key', $token->getValue());
-        $this->assertSame('Bearer', $token->getType());
+        $this->assertIsString($token);
+        $this->assertSame('secret-api-key', $token);
     }
 
     public function testCanCreateWithAccessToken()
@@ -28,9 +26,8 @@ class SumUpTest extends TestCase
         ]);
 
         $token = $sumup->getDefaultAccessToken();
-        $this->assertInstanceOf(AccessToken::class, $token);
-        $this->assertSame('access-token-value', $token->getValue());
-        $this->assertSame('Bearer', $token->getType());
+        $this->assertIsString($token);
+        $this->assertSame('access-token-value', $token);
     }
 
     public function testCanCreateWithoutToken()
@@ -46,9 +43,8 @@ class SumUpTest extends TestCase
         $sumup->setDefaultAccessToken('new-token');
 
         $token = $sumup->getDefaultAccessToken();
-        $this->assertInstanceOf(AccessToken::class, $token);
-        $this->assertSame('new-token', $token->getValue());
-        $this->assertSame('Bearer', $token->getType());
+        $this->assertIsString($token);
+        $this->assertSame('new-token', $token);
     }
 
 

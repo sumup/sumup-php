@@ -2,7 +2,6 @@
 
 namespace SumUp\Services;
 
-use SumUp\Authentication\AccessToken;
 use SumUp\HttpClients\SumUpHttpClientInterface;
 use SumUp\Utils\Headers;
 use SumUp\Utils\ResponseDecoder;
@@ -24,7 +23,7 @@ class Readers implements SumUpService
     /**
      * The access token needed for authentication for the services.
      *
-     * @var AccessToken
+     * @var string
      */
     protected $accessToken;
 
@@ -32,9 +31,9 @@ class Readers implements SumUpService
      * Readers constructor.
      *
      * @param SumUpHttpClientInterface $client
-     * @param AccessToken $accessToken
+     * @param $accessToken
      */
-    public function __construct(SumUpHttpClientInterface $client, AccessToken $accessToken)
+    public function __construct(SumUpHttpClientInterface $client, $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;

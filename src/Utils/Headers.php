@@ -2,7 +2,6 @@
 
 namespace SumUp\Utils;
 
-use SumUp\Authentication\AccessToken;
 use SumUp\SdkInfo;
 
 /**
@@ -25,13 +24,13 @@ class Headers
     /**
      * Get the authorization header with token.
      *
-     * @param AccessToken $accessToken
+     * @param string $accessToken
      *
      * @return array
      */
-    public static function getAuth(AccessToken $accessToken)
+    public static function getAuth($accessToken)
     {
-        return ['Authorization' => 'Bearer ' . $accessToken->getValue()];
+        return ['Authorization' => 'Bearer ' . $accessToken];
     }
 
     /**

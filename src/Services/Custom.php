@@ -4,7 +4,6 @@ namespace SumUp\Services;
 
 use SumUp\Exceptions\SumUpArgumentException;
 use SumUp\HttpClients\SumUpHttpClientInterface;
-use SumUp\Authentication\AccessToken;
 use SumUp\Utils\Headers;
 
 /**
@@ -29,7 +28,7 @@ class Custom implements SumUpService
     /**
      * The access token needed for authentication for the services.
      *
-     * @var AccessToken
+     * @var string
      */
     protected $accessToken;
 
@@ -37,9 +36,9 @@ class Custom implements SumUpService
      * Custom constructor.
      *
      * @param SumUpHttpClientInterface $client
-     * @param AccessToken $accessToken
+     * @param string $accessToken
      */
-    public function __construct(SumUpHttpClientInterface $client, AccessToken $accessToken)
+    public function __construct(SumUpHttpClientInterface $client, $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
