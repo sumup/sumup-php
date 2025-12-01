@@ -18,7 +18,7 @@ var reservedServiceNames = map[string]struct{}{
 }
 
 func (g *Generator) writeSumUpClass() error {
-	dir := filepath.Join(g.cfg.Out, "SumUp")
+	dir := g.cfg.Out
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 		return fmt.Errorf("create SumUp directory: %w", err)
 	}

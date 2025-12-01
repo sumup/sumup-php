@@ -18,36 +18,11 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     const USER_AGENT_HEADER = 'User-Agent';
 
     /**
-     * The client ID.
-     *
-     * @var string
-     */
-    protected $appId;
-
-    /**
-     * The client secret.
-     *
-     * @var string
-     */
-    protected $appSecret;
-
-    /**
-     * The scopes that are needed for all services the application uses.
-     *
-     * @var array
-     */
-    protected $scopes;
-
-    /**
      * The base URL of the SumUp API.
      *
      * @var string;
      */
     protected $baseURL;
-
-
-
-
 
     /**
      * The access token.

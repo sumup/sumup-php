@@ -108,7 +108,7 @@ func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) e
 	tagName := g.displayTagName(tagKey)
 	namespace := g.namespaceForTag(tagKey)
 
-	dir := filepath.Join(g.cfg.Out, "SumUp", tagName)
+	dir := filepath.Join(g.cfg.Out, tagName)
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 		return fmt.Errorf("create tag directory: %w", err)
 	}

@@ -42,7 +42,7 @@ func (g *Generator) writeServices() error {
 func (g *Generator) writeServiceFile(tagKey string, operations []*operation) error {
 	className := g.displayTagName(tagKey)
 
-	dir := filepath.Join(g.cfg.Out, "SumUp", "Services")
+	dir := filepath.Join(g.cfg.Out, "Services")
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 		return fmt.Errorf("create services directory: %w", err)
 	}
