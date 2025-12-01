@@ -2,9 +2,9 @@
 
 # SumUp PHP SDK
 
-[![Stars](https://img.shields.io/github/stars/sumup/sumup-ecom-php-sdk?style=social)](https://github.com/sumup/sumup-go/)
-[![Latest Stable Version](https://poser.pugx.org/sumup/sumup-ecom-php-sdk/v/stable.svg)](https://packagist.org/packages/sumup/sumup-ecom-php-sdk)
-[![Total Downloads](https://poser.pugx.org/sumup/sumup-ecom-php-sdk/downloads.svg)](https://packagist.org/packages/sumup/sumup-ecom-php-sdk)
+[![Stars](https://img.shields.io/github/stars/sumup/sumup-php?style=social)](https://github.com/sumup/sumup-go/)
+[![Latest Stable Version](https://poser.pugx.org/sumup/sumup-php/v/stable.svg)](https://packagist.org/packages/sumup/sumup-php)
+[![Total Downloads](https://poser.pugx.org/sumup/sumup-php/downloads.svg)](https://packagist.org/packages/sumup/sumup-php)
 [![License](https://img.shields.io/github/license/sumup/sumup-go)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](https://github.com/sumup/sumup-go/tree/main/CODE_OF_CONDUCT.md)
 
@@ -18,8 +18,8 @@ This repository contains the open source PHP SDK that allows you to integrate qu
 
 The SumUp eCom PHP SDK can be installed with [Composer](https://getcomposer.org/). Run the following command:
 
-```
-composer require sumup/sumup-ecom-php-sdk
+```bash
+composer require sumup/sumup-php
 ```
 
 ## Basic usage
@@ -113,8 +113,8 @@ For a full list of available services and methods, explore the `src/Services/` d
 
 ## License
 
-For information about the license see the [license](https://github.com/sumup/sumup-ecom-php-sdk/blob/master/LICENSE.md) file.
+For information about the license see the [license](https://github.com/sumup/sumup-php/blob/master/LICENSE.md) file.
 
 ## Contact us
 
-If you have found a bug or you lack some functionality please [open an issue](https://github.com/sumup/sumup-ecom-php-sdk/issues/new). If you have other issues when integrating with SumUp's API you can send an email to [integration@sumup.com](mailto:integration@sumup.com).
+If you have found a bug or you lack some functionality please [open an issue](https://github.com/sumup/sumup-php/issues/new). If you have other issues when integrating with SumUp's API you can send an email to [integration@sumup.com](mailto:integration@sumup.com).
