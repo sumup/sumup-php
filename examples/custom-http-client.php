@@ -18,7 +18,7 @@ if (!$apiKey) {
 
 /**
  * Example custom HTTP client implementation.
- * 
+ *
  * This demonstrates how to create your own HTTP client by implementing
  * the SumUpHttpClientInterface. You could use this to:
  * - Add custom logging

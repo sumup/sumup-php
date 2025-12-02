@@ -94,13 +94,6 @@ $sumup = new \SumUp\SumUp(['api_key' => 'your-api-key-here'], $customClient);
 
 This is useful for adding logging, retry logic, or using a different HTTP library. See `examples/custom-http-client.php` for a complete example.
 
-## Examples
-
-Check out the `examples/` directory for complete working examples:
-
-* `examples/simple.php` - Basic usage with API key
-* `examples/custom-http-client.php` - Using a custom HTTP client implementation
-
 ## API Reference
 
 For a full list of available services and methods, explore the `src/Services/` directory or check the inline documentation in the code.
