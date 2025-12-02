@@ -100,9 +100,7 @@ class Members implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Members\Member::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Members\Member::class);
     }
 
     /**
@@ -152,8 +150,6 @@ class Members implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Members\Member::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Members\Member::class);
     }
 }

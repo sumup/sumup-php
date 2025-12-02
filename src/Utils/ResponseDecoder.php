@@ -10,19 +10,26 @@ use SumUp\HttpClients\Response;
 class ResponseDecoder
 {
     /**
-     * Decode a response using the provided descriptor map.
+     * Decode a response using the provided descriptor map or class name.
      *
      * @param Response $response
-     * @param array $descriptors
+     * @param array|string|null $descriptors Can be a descriptor array, a class name string, or null
      *
      * @return mixed
      */
-    public static function decode(Response $response, array $descriptors = [])
+    public static function decode(Response $response, $descriptors = null)
     {
-        if (empty($descriptors)) {
-            return $response;
+        // If a simple class name string is provided, use it directly
+        if (is_string($descriptors)) {
+            return Hydrator::hydrate($response->getBody(), $descriptors);
         }
 
+        // If null or empty, return raw body
+        if (empty($descriptors)) {
+            return $response->getBody();
+        }
+
+        // Legacy descriptor array support
         $statusCode = (string) $response->getHttpResponseCode();
         $descriptor = null;
         if (isset($descriptors[$statusCode])) {
@@ -73,9 +80,6 @@ class ResponseDecoder
             case 'scalar':
                 return self::castScalar($value, isset($descriptor['scalar']) ? $descriptor['scalar'] : 'mixed');
             case 'object':
-                if ($value instanceof \stdClass) {
-                    return get_object_vars($value);
-                }
                 return is_array($value) ? $value : [];
             case 'void':
                 return null;

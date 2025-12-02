@@ -56,9 +56,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
     }
 
     /**
@@ -81,9 +79,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
     }
 
     /**
@@ -103,9 +99,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
     }
 
     /**
@@ -157,8 +151,6 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
     }
 }

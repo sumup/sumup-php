@@ -121,7 +121,7 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
      */
     private function parseBody($response)
     {
-        $jsonBody = json_decode($response);
+        $jsonBody = json_decode($response, true);
         if (isset($jsonBody)) {
             return $jsonBody;
         }

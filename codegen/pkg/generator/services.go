@@ -60,7 +60,6 @@ func (g *Generator) writeServiceFile(tagKey string, operations []*operation) err
 
 	buf.WriteString("<?php\n\n")
 	buf.WriteString("namespace SumUp\\Services;\n\n")
-	buf.WriteString("use SumUp\\Authentication\\AccessToken;\n")
 	buf.WriteString("use SumUp\\HttpClients\\SumUpHttpClientInterface;\n")
 	buf.WriteString("use SumUp\\Utils\\Headers;\n")
 	buf.WriteString("use SumUp\\Utils\\ResponseDecoder;\n\n")
@@ -75,7 +74,7 @@ func (g *Generator) writeServiceFile(tagKey string, operations []*operation) err
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * The access token needed for authentication for the services.\n")
 	buf.WriteString("     *\n")
-	buf.WriteString("     * @var AccessToken\n")
+	buf.WriteString("     * @var string\n")
 	buf.WriteString("     */\n")
 	buf.WriteString("    protected $accessToken;\n\n")
 	buf.WriteString("    /**\n")
@@ -84,9 +83,9 @@ func (g *Generator) writeServiceFile(tagKey string, operations []*operation) err
 	buf.WriteString(" constructor.\n")
 	buf.WriteString("     *\n")
 	buf.WriteString("     * @param SumUpHttpClientInterface $client\n")
-	buf.WriteString("     * @param AccessToken $accessToken\n")
+	buf.WriteString("     * @param $accessToken\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    public function __construct(SumUpHttpClientInterface $client, AccessToken $accessToken)\n")
+	buf.WriteString("    public function __construct(SumUpHttpClientInterface $client, $accessToken)\n")
 	buf.WriteString("    {\n")
 	buf.WriteString("        $this->client = $client;\n")
 	buf.WriteString("        $this->accessToken = $accessToken;\n")
@@ -310,6 +309,15 @@ func renderOperationResponseDescriptor(op *operation) string {
 		return ""
 	}
 
+	// Simplified approach: if there's a single 200 response with a class, just return the class name
+	if len(op.Responses) == 1 && op.Responses[0].StatusCode == "200" {
+		resp := op.Responses[0]
+		if resp.Type != nil && resp.Type.Kind == responseTypeClass && resp.Type.ClassName != "" {
+			return fmt.Sprintf("%s::class", formatClassReference(resp.Type.ClassName))
+		}
+	}
+
+	// For multiple status codes or non-200 responses, use descriptor array
 	var buf strings.Builder
 	buf.WriteString("[\n")
 	for _, resp := range op.Responses {

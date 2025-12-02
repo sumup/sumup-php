@@ -61,9 +61,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Transactions\TransactionFull::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Transactions\TransactionFull::class);
     }
 
     /**
@@ -89,9 +87,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Transactions\TransactionFull::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Transactions\TransactionFull::class);
     }
 
     /**

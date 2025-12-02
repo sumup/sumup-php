@@ -61,9 +61,7 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\Merchant::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Merchants\Merchant::class);
     }
 
     /**
@@ -89,9 +87,7 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\Person::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Merchants\Person::class);
     }
 
     /**
@@ -116,8 +112,6 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Merchants\ListPersonsResponseBody::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Merchants\ListPersonsResponseBody::class);
     }
 }

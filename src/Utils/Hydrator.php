@@ -36,15 +36,14 @@ class Hydrator
             return $payload;
         }
 
-        $data = self::normalizePayload($payload);
-        if ($data === null) {
-            return null;
+        if (!is_array($payload)) {
+            return $payload;
         }
 
         $object = new $className();
         $properties = self::getClassProperties($className);
 
-        foreach ($data as $key => $value) {
+        foreach ($payload as $key => $value) {
             $propertyName = self::normalizePropertyName($key);
             if (!isset($properties[$propertyName])) {
                 continue;
@@ -55,26 +54,6 @@ class Hydrator
         }
 
         return $object;
-    }
-
-    /**
-     * Convert payload into an array.
-     *
-     * @param mixed $payload
-     *
-     * @return array|null
-     */
-    private static function normalizePayload($payload)
-    {
-        if (is_array($payload)) {
-            return $payload;
-        }
-
-        if ($payload instanceof \stdClass) {
-            return get_object_vars($payload);
-        }
-
-        return null;
     }
 
     /**
@@ -145,10 +124,6 @@ class Hydrator
      */
     private static function castArrayValue($value, ReflectionProperty $property)
     {
-        if ($value instanceof \stdClass) {
-            $value = get_object_vars($value);
-        }
-
         if (!is_array($value)) {
             return [];
         }
@@ -216,7 +191,7 @@ class Hydrator
             case 'bool':
                 return (bool) $item;
             case 'array':
-                return is_array($item) ? $item : (self::normalizePayload($item) ?: []);
+                return is_array($item) ? $item : [];
             case 'mixed':
                 return $item;
         }

@@ -31,7 +31,7 @@ class Checkouts implements SumUpService
      * Checkouts constructor.
      *
      * @param SumUpHttpClientInterface $client
-     * @param string $accessToken
+     * @param $accessToken
      */
     public function __construct(SumUpHttpClientInterface $client, $accessToken)
     {
@@ -77,9 +77,7 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Checkouts\Checkout::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Checkouts\Checkout::class);
     }
 
     /**
@@ -97,9 +95,7 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Checkouts\CheckoutSuccess::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Checkouts\CheckoutSuccess::class);
     }
 
     /**

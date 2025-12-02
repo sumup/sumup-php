@@ -61,8 +61,6 @@ class Receipts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Receipts\Receipt::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Receipts\Receipt::class);
     }
 }

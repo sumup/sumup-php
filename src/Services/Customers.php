@@ -98,9 +98,7 @@ class Customers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Customers\Customer::class);
     }
 
     /**
@@ -142,8 +140,6 @@ class Customers implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Customers\Customer::class);
     }
 }

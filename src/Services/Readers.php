@@ -125,9 +125,7 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Readers\Reader::class);
     }
 
     /**
@@ -195,8 +193,6 @@ class Readers implements SumUpService
 
         $response = $this->client->send('PATCH', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Readers\Reader::class);
     }
 }

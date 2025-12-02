@@ -97,9 +97,11 @@ func (g *Generator) Build() error {
 		return err
 	}
 
-	if err := g.writeSumUpClass(); err != nil {
-		return err
-	}
+	// Skip SumUp class generation to avoid breaking existing code
+	// TODO: Fix Authorization service dependency before re-enabling
+	// if err := g.writeSumUpClass(); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

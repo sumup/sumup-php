@@ -100,9 +100,7 @@ class Roles implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Roles\Role::class);
     }
 
     /**
@@ -145,8 +143,6 @@ class Roles implements SumUpService
 
         $response = $this->client->send('PATCH', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Roles\Role::class);
     }
 }
