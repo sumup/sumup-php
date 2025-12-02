@@ -54,13 +54,6 @@ class AddressLegacy
 }
 
 /**
- * Object attributes that are modifiable only by SumUp applications.
- */
-class Attributes
-{
-}
-
-/**
  * Error message structure.
  */
 class Error
@@ -155,22 +148,6 @@ class MandateResponse
      */
     public ?string $merchantCode = null;
 
-}
-
-/**
- * A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
- *
- * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
- */
-class Meta
-{
-}
-
-/**
- * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
- */
-class Metadata
-{
 }
 
 /**

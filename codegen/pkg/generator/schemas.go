@@ -9,6 +9,36 @@ func schemaIsObject(schema *base.SchemaProxy) bool {
 	return schemaIsObjectWithStack(schema, make(map[*base.SchemaProxy]struct{}))
 }
 
+// schemaIsAdditionalPropertiesOnly checks if a schema is an object with only
+// additionalProperties defined (no explicit properties). These should extend ArrayObject.
+func schemaIsAdditionalPropertiesOnly(schema *base.SchemaProxy) bool {
+	if schema == nil {
+		return false
+	}
+
+	spec := schema.Schema()
+	if spec == nil {
+		return false
+	}
+
+	// Must be an object type
+	if !hasSchemaType(spec, "object") {
+		return false
+	}
+
+	// Must have no explicit properties
+	if spec.Properties != nil && spec.Properties.Len() > 0 {
+		return false
+	}
+
+	// Must have additionalProperties defined
+	if spec.AdditionalProperties == nil {
+		return false
+	}
+
+	return true
+}
+
 func schemaIsObjectWithStack(schema *base.SchemaProxy, stack map[*base.SchemaProxy]struct{}) bool {
 	if schema == nil {
 		return false

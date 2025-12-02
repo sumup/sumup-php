@@ -185,9 +185,9 @@ class Reader
      * A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
      * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
      *
-     * @var \SumUp\Shared\Meta|null
+     * @var array|null
      */
-    public ?\SumUp\Shared\Meta $meta = null;
+    public ?array $meta = null;
 
     /**
      * The timestamp of when the reader was created.

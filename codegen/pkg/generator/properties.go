@@ -205,6 +205,11 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 			return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace)
 		}
 
+		// Check if this is an additionalProperties-only schema - treat as array
+		if schemaIsAdditionalPropertiesOnly(schema) {
+			return "array", "array"
+		}
+
 		name := schemaClassName(schema)
 		namespace := g.schemaNamespaces[name]
 		if namespace == "" {

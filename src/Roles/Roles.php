@@ -47,9 +47,9 @@ class Role
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
      *
-     * @var \SumUp\Shared\Metadata|null
+     * @var array|null
      */
-    public ?\SumUp\Shared\Metadata $metadata = null;
+    public ?array $metadata = null;
 
     /**
      * The timestamp of when the role was created.

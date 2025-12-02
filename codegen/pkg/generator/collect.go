@@ -81,6 +81,11 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 			targetTag = tagNames[0]
 		}
 
+		// Skip schemas that are additionalProperties-only (they'll be treated as arrays)
+		if schemaIsAdditionalPropertiesOnly(info.schema) {
+			continue
+		}
+
 		if schemaIsObject(info.schema) {
 			result[targetTag] = append(result[targetTag], info.schema)
 			namespaceBySchema[schemaName] = g.namespaceForTag(targetTag)

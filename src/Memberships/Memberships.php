@@ -78,16 +78,16 @@ class Membership
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
      *
-     * @var \SumUp\Shared\Metadata|null
+     * @var array|null
      */
-    public ?\SumUp\Shared\Metadata $metadata = null;
+    public ?array $metadata = null;
 
     /**
      * Object attributes that are modifiable only by SumUp applications.
      *
-     * @var \SumUp\Shared\Attributes|null
+     * @var array|null
      */
-    public ?\SumUp\Shared\Attributes $attributes = null;
+    public ?array $attributes = null;
 
     /**
      * Information about the resource the membership is in.
@@ -151,8 +151,8 @@ class MembershipResource
     /**
      * Object attributes that are modifiable only by SumUp applications.
      *
-     * @var \SumUp\Shared\Attributes|null
+     * @var array|null
      */
-    public ?\SumUp\Shared\Attributes $attributes = null;
+    public ?array $attributes = null;
 
 }
