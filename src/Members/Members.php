@@ -5,6 +5,18 @@ declare(strict_types=1);
 namespace SumUp\Members;
 
 /**
+ * The status of the membership.
+ */
+enum MemberStatus: string
+{
+    case ACCEPTED = 'accepted';
+    case PENDING = 'pending';
+    case EXPIRED = 'expired';
+    case DISABLED = 'disabled';
+    case UNKNOWN = 'unknown';
+}
+
+/**
  * A member is user within specific resource identified by resource id, resource type, and associated roles.
  */
 class Member
@@ -61,12 +73,12 @@ class Member
     /**
      * The status of the membership.
      *
-     * @var string
+     * @var MemberStatus
      */
-    public string $status;
+    public MemberStatus $status;
 
     /**
-     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
      * @var array|null
      */

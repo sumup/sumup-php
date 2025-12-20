@@ -41,6 +41,19 @@ type Generator struct {
 	schemaNamespaces map[string]string
 
 	operationsByTag map[string][]*operation
+
+	// enumsByTag maps normalized tag names to enums they own.
+	enumsByTag map[string][]enumDefinition
+
+	// enumNamespaces tracks where an enum is defined so we can reference it.
+	enumNamespaces map[string]string
+}
+
+type enumDefinition struct {
+	Name        string
+	Description string
+	Values      []string
+	Type        string // "string" or "int"
 }
 
 // New creates a new Generator instance.
@@ -68,6 +81,7 @@ func (g *Generator) Load(spec *v3.Document) error {
 	usage := g.collectSchemaUsage()
 	g.schemasByTag, g.schemaNamespaces = g.assignSchemasToTags(usage)
 	g.operationsByTag = g.collectOperations()
+	g.enumsByTag, g.enumNamespaces = g.collectEnums()
 
 	return nil
 }
@@ -128,6 +142,18 @@ func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) e
 	buf.WriteString("<?php\n\ndeclare(strict_types=1);\n\n")
 	fmt.Fprintf(&buf, "namespace %s;\n\n", namespace)
 
+	// Write enums first if any exist for this tag
+	if enums, ok := g.enumsByTag[tagKey]; ok && len(enums) > 0 {
+		for idx, enum := range enums {
+			enumCode := g.buildPHPEnum(enum)
+			buf.WriteString(enumCode)
+			if idx < len(enums)-1 || len(schemas) > 0 {
+				buf.WriteString("\n")
+			}
+		}
+	}
+
+	// Write classes
 	for idx, schema := range schemas {
 		className := schemaClassName(schema)
 		classCode := g.buildPHPClass(className, schema, namespace)
@@ -141,11 +167,17 @@ func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) e
 		return fmt.Errorf("write file %q: %w", filename, err)
 	}
 
+	enumCount := 0
+	if enums, ok := g.enumsByTag[tagKey]; ok {
+		enumCount = len(enums)
+	}
+
 	slog.Info("generated models file",
 		slog.String("tag", tagName),
 		slog.String("namespace", namespace),
 		slog.String("file", filename),
 		slog.Int("classes", len(schemas)),
+		slog.Int("enums", enumCount),
 	)
 
 	return nil
@@ -209,4 +241,138 @@ func (g *Generator) namespaceForTag(tagKey string) string {
 
 	tagName := g.displayTagName(tagKey)
 	return fmt.Sprintf("SumUp\\%s", tagName)
+}
+
+func (g *Generator) buildPHPEnum(enum enumDefinition) string {
+	var buf strings.Builder
+
+	if enum.Description != "" {
+		buf.WriteString("/**\n")
+		for _, line := range strings.Split(enum.Description, "\n") {
+			line = strings.TrimSpace(line)
+			if line == "" {
+				buf.WriteString(" *\n")
+				continue
+			}
+			buf.WriteString(" * ")
+			buf.WriteString(line)
+			buf.WriteString("\n")
+		}
+		buf.WriteString(" */\n")
+	}
+
+	backingType := ""
+	if enum.Type == "string" {
+		backingType = ": string"
+	} else if enum.Type == "int" {
+		backingType = ": int"
+	}
+
+	fmt.Fprintf(&buf, "enum %s%s\n{\n", enum.Name, backingType)
+
+	for _, value := range enum.Values {
+		caseName := phpEnumCaseName(value)
+		if enum.Type == "string" {
+			fmt.Fprintf(&buf, "    case %s = '%s';\n", caseName, value)
+		} else if enum.Type == "int" {
+			fmt.Fprintf(&buf, "    case %s = %s;\n", caseName, value)
+		} else {
+			fmt.Fprintf(&buf, "    case %s;\n", caseName)
+		}
+	}
+
+	buf.WriteString("}\n")
+	return buf.String()
+}
+
+func (g *Generator) collectEnums() (map[string][]enumDefinition, map[string]string) {
+	enumsByTag := make(map[string][]enumDefinition)
+	enumNamespaces := make(map[string]string)
+	enumsSeen := make(map[string]struct{})
+
+	for tagKey, schemas := range g.schemasByTag {
+		for _, schema := range schemas {
+			g.collectEnumsFromSchema(schema, tagKey, enumsByTag, enumNamespaces, enumsSeen, make(map[*base.SchemaProxy]struct{}))
+		}
+	}
+
+	// Sort enums by name within each tag
+	for tag := range enumsByTag {
+		slices.SortFunc(enumsByTag[tag], func(a, b enumDefinition) int {
+			return strings.Compare(a.Name, b.Name)
+		})
+	}
+
+	return enumsByTag, enumNamespaces
+}
+
+func (g *Generator) collectEnumsFromSchema(schema *base.SchemaProxy, tagKey string, enumsByTag map[string][]enumDefinition, enumNamespaces map[string]string, enumsSeen map[string]struct{}, visited map[*base.SchemaProxy]struct{}) {
+	if schema == nil {
+		return
+	}
+
+	if _, ok := visited[schema]; ok {
+		return
+	}
+	visited[schema] = struct{}{}
+
+	spec := schema.Schema()
+	if spec == nil {
+		return
+	}
+
+	// Check properties for enums
+	if spec.Properties != nil {
+		for propName, propSchema := range spec.Properties.FromOldest() {
+			if propSchema == nil {
+				continue
+			}
+
+			propSpec := propSchema.Schema()
+			if propSpec == nil {
+				continue
+			}
+
+			if len(propSpec.Enum) > 0 {
+				enumName := phpEnumName(schemaClassName(schema), propName)
+				if _, seen := enumsSeen[enumName]; seen {
+					continue
+				}
+				enumsSeen[enumName] = struct{}{}
+
+				enumType := "string"
+				values := make([]string, 0, len(propSpec.Enum))
+				for _, val := range propSpec.Enum {
+					if val != nil && val.Value != "" {
+						values = append(values, val.Value)
+					}
+				}
+
+				if len(values) > 0 {
+					enum := enumDefinition{
+						Name:        enumName,
+						Description: propSpec.Description,
+						Values:      values,
+						Type:        enumType,
+					}
+					enumsByTag[tagKey] = append(enumsByTag[tagKey], enum)
+					enumNamespaces[enumName] = g.namespaceForTag(tagKey)
+				}
+			}
+
+			// Recursively check nested schemas
+			g.collectEnumsFromSchema(propSchema, tagKey, enumsByTag, enumNamespaces, enumsSeen, visited)
+		}
+	}
+
+	// Check allOf, anyOf, oneOf compositions
+	for _, composite := range spec.AllOf {
+		g.collectEnumsFromSchema(composite, tagKey, enumsByTag, enumNamespaces, enumsSeen, visited)
+	}
+	for _, composite := range spec.AnyOf {
+		g.collectEnumsFromSchema(composite, tagKey, enumsByTag, enumNamespaces, enumsSeen, visited)
+	}
+	for _, composite := range spec.OneOf {
+		g.collectEnumsFromSchema(composite, tagKey, enumsByTag, enumNamespaces, enumsSeen, visited)
+	}
 }

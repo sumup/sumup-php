@@ -5,6 +5,140 @@ declare(strict_types=1);
 namespace SumUp\Checkouts;
 
 /**
+ * Month from the expiration time of the payment card. Accepted format is `MM`.
+ */
+enum CardExpiryMonth: string
+{
+    case VALUE_01 = '01';
+    case VALUE_02 = '02';
+    case VALUE_03 = '03';
+    case VALUE_04 = '04';
+    case VALUE_05 = '05';
+    case VALUE_06 = '06';
+    case VALUE_07 = '07';
+    case VALUE_08 = '08';
+    case VALUE_09 = '09';
+    case VALUE_10 = '10';
+    case VALUE_11 = '11';
+    case VALUE_12 = '12';
+}
+
+/**
+ * Issuing card network of the payment card used for the transaction.
+ */
+enum CardType: string
+{
+    case AMEX = 'AMEX';
+    case CUP = 'CUP';
+    case DINERS = 'DINERS';
+    case DISCOVER = 'DISCOVER';
+    case ELO = 'ELO';
+    case ELV = 'ELV';
+    case HIPERCARD = 'HIPERCARD';
+    case JCB = 'JCB';
+    case MAESTRO = 'MAESTRO';
+    case MASTERCARD = 'MASTERCARD';
+    case VISA = 'VISA';
+    case VISA_ELECTRON = 'VISA_ELECTRON';
+    case VISA_VPAY = 'VISA_VPAY';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+ */
+enum CheckoutCreateRequestCurrency: string
+{
+    case BGN = 'BGN';
+    case BRL = 'BRL';
+    case CHF = 'CHF';
+    case CLP = 'CLP';
+    case CZK = 'CZK';
+    case DKK = 'DKK';
+    case EUR = 'EUR';
+    case GBP = 'GBP';
+    case HRK = 'HRK';
+    case HUF = 'HUF';
+    case NOK = 'NOK';
+    case PLN = 'PLN';
+    case RON = 'RON';
+    case SEK = 'SEK';
+    case USD = 'USD';
+}
+
+/**
+ * Purpose of the checkout.
+ */
+enum CheckoutCreateRequestPurpose: string
+{
+    case CHECKOUT = 'CHECKOUT';
+    case SETUP_RECURRING_PAYMENT = 'SETUP_RECURRING_PAYMENT';
+}
+
+/**
+ * Current status of the checkout.
+ */
+enum CheckoutCreateRequestStatus: string
+{
+    case PENDING = 'PENDING';
+    case FAILED = 'FAILED';
+    case PAID = 'PAID';
+}
+
+/**
+ * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+ */
+enum CheckoutCurrency: string
+{
+    case BGN = 'BGN';
+    case BRL = 'BRL';
+    case CHF = 'CHF';
+    case CLP = 'CLP';
+    case CZK = 'CZK';
+    case DKK = 'DKK';
+    case EUR = 'EUR';
+    case GBP = 'GBP';
+    case HRK = 'HRK';
+    case HUF = 'HUF';
+    case NOK = 'NOK';
+    case PLN = 'PLN';
+    case RON = 'RON';
+    case SEK = 'SEK';
+    case USD = 'USD';
+}
+
+/**
+ * Current status of the checkout.
+ */
+enum CheckoutStatus: string
+{
+    case PENDING = 'PENDING';
+    case FAILED = 'FAILED';
+    case PAID = 'PAID';
+    case EXPIRED = 'EXPIRED';
+}
+
+/**
+ * Indicates the mandate type
+ */
+enum MandatePayloadType: string
+{
+    case RECURRENT = 'recurrent';
+}
+
+/**
+ * Describes the payment method used to attempt processing
+ */
+enum ProcessCheckoutPaymentType: string
+{
+    case CARD = 'card';
+    case BOLETO = 'boleto';
+    case IDEAL = 'ideal';
+    case BLIK = 'blik';
+    case BANCONTACT = 'bancontact';
+}
+
+/**
  * __Required when payment type is `card`.__ Details of the payment card.
  */
 class Card
@@ -33,9 +167,9 @@ class Card
     /**
      * Month from the expiration time of the payment card. Accepted format is `MM`.
      *
-     * @var string
+     * @var CardExpiryMonth
      */
-    public string $expiryMonth;
+    public CardExpiryMonth $expiryMonth;
 
     /**
      * Three or four-digit card verification value (security code) of the payment card.
@@ -59,11 +193,11 @@ class Card
     public string $last4Digits;
 
     /**
-     * Issuing card network of the payment card.
+     * Issuing card network of the payment card used for the transaction.
      *
-     * @var string
+     * @var CardType
      */
-    public string $type;
+    public CardType $type;
 
 }
 
@@ -89,9 +223,9 @@ class Checkout
     /**
      * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
      *
-     * @var string|null
+     * @var CheckoutCurrency|null
      */
-    public ?string $currency = null;
+    public ?CheckoutCurrency $currency = null;
 
     /**
      * Unique identifying code of the merchant profile.
@@ -124,9 +258,9 @@ class Checkout
     /**
      * Current status of the checkout.
      *
-     * @var string|null
+     * @var CheckoutStatus|null
      */
-    public ?string $status = null;
+    public ?CheckoutStatus $status = null;
 
     /**
      * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
@@ -201,9 +335,9 @@ class CheckoutCreateRequest
     /**
      * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
      *
-     * @var string
+     * @var CheckoutCreateRequestCurrency
      */
-    public string $currency;
+    public CheckoutCreateRequestCurrency $currency;
 
     /**
      * Unique identifying code of the merchant profile.
@@ -236,9 +370,9 @@ class CheckoutCreateRequest
     /**
      * Purpose of the checkout.
      *
-     * @var string|null
+     * @var CheckoutCreateRequestPurpose|null
      */
-    public ?string $purpose = null;
+    public ?CheckoutCreateRequestPurpose $purpose = null;
 
     /**
      * Unique ID of the checkout resource.
@@ -250,9 +384,9 @@ class CheckoutCreateRequest
     /**
      * Current status of the checkout.
      *
-     * @var string|null
+     * @var CheckoutCreateRequestStatus|null
      */
-    public ?string $status = null;
+    public ?CheckoutCreateRequestStatus $status = null;
 
     /**
      * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
@@ -481,9 +615,9 @@ class MandatePayload
     /**
      * Indicates the mandate type
      *
-     * @var string
+     * @var MandatePayloadType
      */
-    public string $type;
+    public MandatePayloadType $type;
 
     /**
      * Operating system and web client used by the end-user
@@ -509,9 +643,9 @@ class ProcessCheckout
     /**
      * Describes the payment method used to attempt processing
      *
-     * @var string
+     * @var ProcessCheckoutPaymentType
      */
-    public string $paymentType;
+    public ProcessCheckoutPaymentType $paymentType;
 
     /**
      * Number of installments for deferred payments. Available only to merchant users in Brazil.

@@ -4,6 +4,35 @@ declare(strict_types=1);
 
 namespace SumUp\Customers;
 
+/**
+ * Issuing card network of the payment card used for the transaction.
+ */
+enum ModelType: string
+{
+    case AMEX = 'AMEX';
+    case CUP = 'CUP';
+    case DINERS = 'DINERS';
+    case DISCOVER = 'DISCOVER';
+    case ELO = 'ELO';
+    case ELV = 'ELV';
+    case HIPERCARD = 'HIPERCARD';
+    case JCB = 'JCB';
+    case MAESTRO = 'MAESTRO';
+    case MASTERCARD = 'MASTERCARD';
+    case VISA = 'VISA';
+    case VISA_ELECTRON = 'VISA_ELECTRON';
+    case VISA_VPAY = 'VISA_VPAY';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Type of the payment instrument.
+ */
+enum PaymentInstrumentResponseType: string
+{
+    case CARD = 'card';
+}
+
 class Customer
 {
     /**
@@ -44,9 +73,9 @@ class PaymentInstrumentResponse
     /**
      * Type of the payment instrument.
      *
-     * @var string|null
+     * @var PaymentInstrumentResponseType|null
      */
-    public ?string $type = null;
+    public ?PaymentInstrumentResponseType $type = null;
 
     /**
      * Details of the payment card.

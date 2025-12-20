@@ -42,7 +42,7 @@ class Members implements SumUpService
     /**
      * Create a member
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
      *
      * @return \SumUp\Members\Member
@@ -66,7 +66,7 @@ class Members implements SumUpService
     /**
      * Delete a member
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
      *
      * @return null
@@ -87,7 +87,7 @@ class Members implements SumUpService
     /**
      * Retrieve a member
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
      *
      * @return \SumUp\Members\Member
@@ -106,7 +106,7 @@ class Members implements SumUpService
     /**
      * List members
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param array $queryParams Optional query string parameters
      *
      * @return array
@@ -133,7 +133,7 @@ class Members implements SumUpService
     /**
      * Update a member
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
      * @param array|null $body Optional request payload
      *

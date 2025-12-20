@@ -5,6 +5,244 @@ declare(strict_types=1);
 namespace SumUp\Transactions;
 
 /**
+ * Issuing card network of the payment card used for the transaction.
+ */
+enum CardResponseType: string
+{
+    case AMEX = 'AMEX';
+    case CUP = 'CUP';
+    case DINERS = 'DINERS';
+    case DISCOVER = 'DISCOVER';
+    case ELO = 'ELO';
+    case ELV = 'ELV';
+    case HIPERCARD = 'HIPERCARD';
+    case JCB = 'JCB';
+    case MAESTRO = 'MAESTRO';
+    case MASTERCARD = 'MASTERCARD';
+    case VISA = 'VISA';
+    case VISA_ELECTRON = 'VISA_ELECTRON';
+    case VISA_VPAY = 'VISA_VPAY';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Status of the transaction event.
+ */
+enum EventStatus: string
+{
+    case PENDING = 'PENDING';
+    case SCHEDULED = 'SCHEDULED';
+    case FAILED = 'FAILED';
+    case REFUNDED = 'REFUNDED';
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case PAID_OUT = 'PAID_OUT';
+}
+
+/**
+ * Type of the transaction event.
+ */
+enum EventType: string
+{
+    case PAYOUT = 'PAYOUT';
+    case CHARGE_BACK = 'CHARGE_BACK';
+    case REFUND = 'REFUND';
+    case PAYOUT_DEDUCTION = 'PAYOUT_DEDUCTION';
+}
+
+/**
+ * Issuing card network of the payment card used for the transaction.
+ */
+enum ModelCardType: string
+{
+    case AMEX = 'AMEX';
+    case CUP = 'CUP';
+    case DINERS = 'DINERS';
+    case DISCOVER = 'DISCOVER';
+    case ELO = 'ELO';
+    case ELV = 'ELV';
+    case HIPERCARD = 'HIPERCARD';
+    case JCB = 'JCB';
+    case MAESTRO = 'MAESTRO';
+    case MASTERCARD = 'MASTERCARD';
+    case VISA = 'VISA';
+    case VISA_ELECTRON = 'VISA_ELECTRON';
+    case VISA_VPAY = 'VISA_VPAY';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Payout type for the transaction.
+ */
+enum ModelPayoutType: string
+{
+    case BANK_ACCOUNT = 'BANK_ACCOUNT';
+    case BALANCE = 'BALANCE';
+    case PREPAID_CARD = 'PREPAID_CARD';
+}
+
+/**
+ * Simple name of the payment type.
+ */
+enum ModelSimplePaymentType: string
+{
+    case MOTO = 'MOTO';
+    case CASH = 'CASH';
+    case CC_SIGNATURE = 'CC_SIGNATURE';
+    case ELV = 'ELV';
+    case CC_CUSTOMER_ENTERED = 'CC_CUSTOMER_ENTERED';
+    case MANUAL_ENTRY = 'MANUAL_ENTRY';
+    case EMV = 'EMV';
+}
+
+/**
+ * Status generated from the processing status and the latest transaction state.
+ */
+enum ModelSimpleStatus: string
+{
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case PAID_OUT = 'PAID_OUT';
+    case CANCEL_FAILED = 'CANCEL_FAILED';
+    case CANCELLED = 'CANCELLED';
+    case CHARGEBACK = 'CHARGEBACK';
+    case FAILED = 'FAILED';
+    case REFUND_FAILED = 'REFUND_FAILED';
+    case REFUNDED = 'REFUNDED';
+    case NON_COLLECTION = 'NON_COLLECTION';
+}
+
+/**
+ * Verification method used for the transaction.
+ */
+enum ModelVerificationMethod: string
+{
+    case NONE = 'none';
+    case NA = 'na';
+    case SIGNATURE = 'signature';
+    case OFFLINE_PIN = 'offline PIN';
+    case ONLINE_PIN = 'online PIN';
+    case OFFLINE_PIN_PLUS_SIGNATURE = 'offline PIN + signature';
+    case CONFIRMATION_CODE_VERIFIED = 'confirmation code verified';
+}
+
+/**
+ * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+ */
+enum TransactionBaseCurrency: string
+{
+    case BGN = 'BGN';
+    case BRL = 'BRL';
+    case CHF = 'CHF';
+    case CLP = 'CLP';
+    case CZK = 'CZK';
+    case DKK = 'DKK';
+    case EUR = 'EUR';
+    case GBP = 'GBP';
+    case HRK = 'HRK';
+    case HUF = 'HUF';
+    case NOK = 'NOK';
+    case PLN = 'PLN';
+    case RON = 'RON';
+    case SEK = 'SEK';
+    case USD = 'USD';
+}
+
+/**
+ * Payment type used for the transaction.
+ */
+enum TransactionBasePaymentType: string
+{
+    case CASH = 'CASH';
+    case POS = 'POS';
+    case ECOM = 'ECOM';
+    case RECURRING = 'RECURRING';
+    case BITCOIN = 'BITCOIN';
+    case BALANCE = 'BALANCE';
+    case MOTO = 'MOTO';
+    case BOLETO = 'BOLETO';
+    case DIRECT_DEBIT = 'DIRECT_DEBIT';
+    case APM = 'APM';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Current status of the transaction.
+ */
+enum TransactionBaseStatus: string
+{
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case CANCELLED = 'CANCELLED';
+    case FAILED = 'FAILED';
+    case PENDING = 'PENDING';
+}
+
+/**
+ * Entry mode of the payment details.
+ */
+enum TransactionCheckoutInfoEntryMode: string
+{
+    case BOLETO = 'BOLETO';
+    case SOFORT = 'SOFORT';
+    case IDEAL = 'IDEAL';
+    case BANCONTACT = 'BANCONTACT';
+    case EPS = 'EPS';
+    case MYBANK = 'MYBANK';
+    case SATISPAY = 'SATISPAY';
+    case BLIK = 'BLIK';
+    case P_24 = 'P24';
+    case GIROPAY = 'GIROPAY';
+    case PIX = 'PIX';
+    case QR_CODE_PIX = 'QR_CODE_PIX';
+    case APPLE_PAY = 'APPLE_PAY';
+    case GOOGLE_PAY = 'GOOGLE_PAY';
+    case PAYPAL = 'PAYPAL';
+    case NONE = 'NONE';
+    case CHIP = 'CHIP';
+    case MANUAL_ENTRY = 'MANUAL_ENTRY';
+    case CUSTOMER_ENTRY = 'CUSTOMER_ENTRY';
+    case MAGSTRIPE_FALLBACK = 'MAGSTRIPE_FALLBACK';
+    case MAGSTRIPE = 'MAGSTRIPE';
+    case DIRECT_DEBIT = 'DIRECT_DEBIT';
+    case CONTACTLESS = 'CONTACTLESS';
+    case MOTO = 'MOTO';
+    case CONTACTLESS_MAGSTRIPE = 'CONTACTLESS_MAGSTRIPE';
+    case N_A = 'N/A';
+}
+
+/**
+ * Type of the transaction event.
+ */
+enum TransactionEventEventType: string
+{
+    case PAYOUT = 'PAYOUT';
+    case CHARGE_BACK = 'CHARGE_BACK';
+    case REFUND = 'REFUND';
+    case PAYOUT_DEDUCTION = 'PAYOUT_DEDUCTION';
+}
+
+/**
+ * Status of the transaction event.
+ */
+enum TransactionEventStatus: string
+{
+    case PENDING = 'PENDING';
+    case SCHEDULED = 'SCHEDULED';
+    case FAILED = 'FAILED';
+    case REFUNDED = 'REFUNDED';
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case PAID_OUT = 'PAID_OUT';
+}
+
+/**
+ * Payout plan of the registered user at the time when the transaction was made.
+ */
+enum TransactionMixinHistoryPayoutPlan: string
+{
+    case SINGLE_PAYMENT = 'SINGLE_PAYMENT';
+    case TRUE_INSTALLMENT = 'TRUE_INSTALLMENT';
+    case ACCELERATED_INSTALLMENT = 'ACCELERATED_INSTALLMENT';
+}
+
+/**
  * Details of the payment card.
  */
 class CardResponse
@@ -17,11 +255,11 @@ class CardResponse
     public ?string $last4Digits = null;
 
     /**
-     * Issuing card network of the payment card.
+     * Issuing card network of the payment card used for the transaction.
      *
-     * @var string|null
+     * @var CardResponseType|null
      */
-    public ?string $type = null;
+    public ?CardResponseType $type = null;
 
 }
 
@@ -44,16 +282,16 @@ class Event
     /**
      * Type of the transaction event.
      *
-     * @var string|null
+     * @var EventType|null
      */
-    public ?string $type = null;
+    public ?EventType $type = null;
 
     /**
      * Status of the transaction event.
      *
-     * @var string|null
+     * @var EventStatus|null
      */
-    public ?string $status = null;
+    public ?EventStatus $status = null;
 
     /**
      * Amount of the event.
@@ -251,16 +489,16 @@ class TransactionEvent
     /**
      * Type of the transaction event.
      *
-     * @var string|null
+     * @var TransactionEventEventType|null
      */
-    public ?string $eventType = null;
+    public ?TransactionEventEventType $eventType = null;
 
     /**
      * Status of the transaction event.
      *
-     * @var string|null
+     * @var TransactionEventStatus|null
      */
-    public ?string $status = null;
+    public ?TransactionEventStatus $status = null;
 
     /**
      * Amount of the event.
@@ -697,8 +935,8 @@ class TransactionMixinHistory
     /**
      * Payout plan of the registered user at the time when the transaction was made.
      *
-     * @var string|null
+     * @var TransactionMixinHistoryPayoutPlan|null
      */
-    public ?string $payoutPlan = null;
+    public ?TransactionMixinHistoryPayoutPlan $payoutPlan = null;
 
 }

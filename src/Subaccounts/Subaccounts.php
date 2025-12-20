@@ -4,23 +4,10 @@ declare(strict_types=1);
 
 namespace SumUp\Subaccounts;
 
-/**
- * Error object for compat API calls.
- */
-class CompatError
+enum OperatorAccountType: string
 {
-    /**
-     *
-     * @var string
-     */
-    public string $errorCode;
-
-    /**
-     *
-     * @var string
-     */
-    public string $message;
-
+    case OPERATOR = 'operator';
+    case NORMAL = 'normal';
 }
 
 /**
@@ -75,9 +62,9 @@ class Operator
 
     /**
      *
-     * @var string
+     * @var OperatorAccountType
      */
-    public string $accountType;
+    public OperatorAccountType $accountType;
 
 }
 

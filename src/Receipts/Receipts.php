@@ -4,6 +4,30 @@ declare(strict_types=1);
 
 namespace SumUp\Receipts;
 
+/**
+ * Status of the transaction event.
+ */
+enum ReceiptEventStatus: string
+{
+    case PENDING = 'PENDING';
+    case SCHEDULED = 'SCHEDULED';
+    case FAILED = 'FAILED';
+    case REFUNDED = 'REFUNDED';
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case PAID_OUT = 'PAID_OUT';
+}
+
+/**
+ * Type of the transaction event.
+ */
+enum ReceiptEventType: string
+{
+    case PAYOUT = 'PAYOUT';
+    case CHARGE_BACK = 'CHARGE_BACK';
+    case REFUND = 'REFUND';
+    case PAYOUT_DEDUCTION = 'PAYOUT_DEDUCTION';
+}
+
 class Receipt
 {
     /**
@@ -71,16 +95,16 @@ class ReceiptEvent
     /**
      * Type of the transaction event.
      *
-     * @var string|null
+     * @var ReceiptEventType|null
      */
-    public ?string $type = null;
+    public ?ReceiptEventType $type = null;
 
     /**
      * Status of the transaction event.
      *
-     * @var string|null
+     * @var ReceiptEventStatus|null
      */
-    public ?string $status = null;
+    public ?ReceiptEventStatus $status = null;
 
     /**
      * Amount of the event.

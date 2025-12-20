@@ -42,7 +42,7 @@ class Roles implements SumUpService
     /**
      * Create a role
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
      *
      * @return \SumUp\Roles\Role
@@ -66,7 +66,7 @@ class Roles implements SumUpService
     /**
      * Delete a role
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      *
      * @return null
@@ -87,7 +87,7 @@ class Roles implements SumUpService
     /**
      * Retrieve a role
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      *
      * @return \SumUp\Roles\Role
@@ -106,7 +106,7 @@ class Roles implements SumUpService
     /**
      * List roles
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      *
      * @return array
      */
@@ -126,7 +126,7 @@ class Roles implements SumUpService
     /**
      * Update a role
      *
-     * @param string $merchantCode Merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      * @param array|null $body Optional request payload
      *

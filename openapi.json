@@ -184,6 +184,7 @@
         "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.\n",
         "requestBody": {
           "description": "",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -658,6 +659,7 @@
         "description": "Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nFollow this request with `Retrieve a checkout` to confirm its status.\n",
         "requestBody": {
           "description": "Details of the payment instrument for processing the checkout.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -1190,6 +1192,7 @@
         "description": "Creates a new saved customer resource which you can later manipulate and save payment instruments to.",
         "requestBody": {
           "description": "Details of the customer.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -1429,6 +1432,7 @@
         "description": "Updates an identified saved customer resource's personal details.\n\nThe request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.\n",
         "requestBody": {
           "description": "",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -2241,16 +2245,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": [
-                  "CASH",
-                  "POS",
-                  "ECOM",
-                  "BALANCE",
-                  "MOTO",
-                  "BOLETO",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/PaymentType"
               }
             }
           },
@@ -2476,16 +2471,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": [
-                  "CASH",
-                  "POS",
-                  "ECOM",
-                  "BALANCE",
-                  "MOTO",
-                  "BOLETO",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/PaymentType"
               }
             }
           },
@@ -3475,11 +3461,11 @@
             }
           },
           "403": {
-            "description": "Error response for compat API calls.",
+            "description": "Operator creation was forbidden.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CompatError"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -3629,7 +3615,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CompatError"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -3768,6 +3754,45 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "resource.parent.id",
+            "in": "query",
+            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "resource.parent.type",
+            "in": "query",
+            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ResourceType"
+                }
+              ],
+              "nullable": true
+            }
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "description": "Filter the returned memberships by role.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "role_employee",
+                "role_accountant"
+              ]
+            },
+            "explode": true,
+            "style": "form"
           }
         ],
         "responses": {
@@ -3902,11 +3927,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -3937,7 +3962,14 @@
             }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -3971,11 +4003,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -4046,13 +4078,34 @@
             }
           },
           "400": {
-            "description": "Invalid request."
+            "description": "Invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "429": {
-            "description": "Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit."
+            "description": "Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4088,11 +4141,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4118,7 +4171,14 @@
             }
           },
           "404": {
-            "description": "Merchant or member not found."
+            "description": "Merchant or member not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4152,11 +4212,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4235,16 +4295,44 @@
             }
           },
           "400": {
-            "description": "Cannot set password or nickname for an invited user."
+            "description": "Cannot set password or nickname for an invited user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Cannot change password for managed user. Password was already used before."
+            "description": "Cannot change password for managed user. Password was already used before.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Merchant or member not found."
+            "description": "Merchant or member not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Cannot update member as some data conflict with existing members."
+            "description": "Cannot update member as some data conflict with existing members.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4278,11 +4366,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4301,7 +4389,14 @@
             "description": "Returns an empty response if the deletion succeeded."
           },
           "404": {
-            "description": "Merchant or member not found."
+            "description": "Merchant or member not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4337,11 +4432,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -4368,7 +4463,14 @@
             }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4402,11 +4504,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -4464,10 +4566,24 @@
             }
           },
           "400": {
-            "description": "Invalid request."
+            "description": "Invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4503,11 +4619,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4533,7 +4649,14 @@
             }
           },
           "404": {
-            "description": "Merchant or role not found."
+            "description": "Merchant or role not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4567,11 +4690,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4590,10 +4713,24 @@
             "description": "Returns an empty response if the role deletion succeeded."
           },
           "400": {
-            "description": "Invalid request."
+            "description": "Invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4627,11 +4764,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -4700,10 +4837,24 @@
             }
           },
           "400": {
-            "description": "Invalid request."
+            "description": "Invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Merchant not found."
+            "description": "Merchant not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5088,11 +5239,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Unique identifier of the merchant account.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -5154,11 +5305,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Unique identifier of the merchant account.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           }
         ],
@@ -5175,8 +5326,8 @@
                   "name": {
                     "$ref": "#/components/schemas/ReaderName"
                   },
-                  "meta": {
-                    "$ref": "#/components/schemas/Meta"
+                  "metadata": {
+                    "$ref": "#/components/schemas/Metadata"
                   }
                 },
                 "required": [
@@ -5227,6 +5378,36 @@
                   "id": "$response.body#/id"
                 },
                 "description": "Delete the reader."
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "There's no pending reader for the submitted pairing code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The Reader is not in a pending state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
               }
             }
           }
@@ -5289,11 +5470,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Unique identifier of the merchant account.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -5318,7 +5499,14 @@
             }
           },
           "404": {
-            "description": "The requested Reader resource does not exists."
+            "description": "The requested Reader resource does not exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5356,11 +5544,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Unique identifier of the merchant account.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -5376,6 +5564,16 @@
         "responses": {
           "200": {
             "description": "Returns an empty response if the deletion succeeded."
+          },
+          "404": {
+            "description": "The requested Reader resource does not exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5391,6 +5589,9 @@
         "tags": [
           "Readers"
         ],
+        "x-codegen": {
+          "method_name": "delete"
+        },
         "x-permissions": [
           {
             "relation": "readers_delete",
@@ -5410,11 +5611,11 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Unique identifier of the merchant account.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "MC0X0ABC"
+              "example": "MK10CL2A"
             }
           },
           {
@@ -5437,8 +5638,8 @@
                   "name": {
                     "$ref": "#/components/schemas/ReaderName"
                   },
-                  "meta": {
-                    "$ref": "#/components/schemas/Meta"
+                  "metadata": {
+                    "$ref": "#/components/schemas/Metadata"
                   }
                 }
               }
@@ -5457,7 +5658,24 @@
             }
           },
           "403": {
-            "description": "The reader is not linked to the merchant account."
+            "description": "The request isn't sufficiently authorized to modify the reader.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested Reader resource does not exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5646,6 +5864,166 @@
         ],
         "x-scopes": [
           "readers.write"
+        ]
+      }
+    },
+    "/v0.1/merchants/{merchant_code}/readers/{reader_id}/status": {
+      "get": {
+        "operationId": "GetReaderStatus",
+        "summary": "Get a Reader Status",
+        "description": "Provides the last known status for a Reader.\n\nThis endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).\n\nSupported States\n\n* `IDLE` – Reader ready for next transaction\n* `SELECTING_TIP` – Waiting for tip input\n* `WAITING_FOR_CARD` – Awaiting card insert/tap\n* `WAITING_FOR_PIN` – Waiting for PIN entry\n* `WAITING_FOR_SIGNATURE` – Waiting for customer signature\n* `UPDATING_FIRMWARE` – Firmware update in progress\n\nDevice Status\n\n* `ONLINE` – Device connected and operational\n* `OFFLINE` – Device disconnected (last state persisted)\n\n**Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.\n",
+        "parameters": [
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "Merchant Code",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            "example": "MC0X0ABC"
+          },
+          {
+            "name": "reader_id",
+            "in": "path",
+            "description": "The unique identifier of the Reader",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            "example": "Bearer 4470641ddc7ac230dc463417aab0ba30ef499844c73072c3f6c7a88204c700bd"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response with the device status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response when given params (or one of them) are invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Response when given merchant's token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response when given reader is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic error response for backend failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Generic error response for an upstream service failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadGateway"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Generic error response for an upstream service timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayTimeout"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "readers.read"
+            ]
+          }
+        ],
+        "tags": [
+          "Readers"
+        ],
+        "x-codegen": {
+          "method_name": "get_status"
+        },
+        "x-permissions": [
+          "readers_view"
+        ],
+        "x-scopes": [
+          "readers.read"
         ]
       }
     },
@@ -5876,16 +6254,7 @@
         "schema": {
           "type": "array",
           "items": {
-            "type": "string",
-            "enum": [
-              "CASH",
-              "POS",
-              "ECOM",
-              "BALANCE",
-              "MOTO",
-              "BOLETO",
-              "UNKNOWN"
-            ]
+            "$ref": "#/components/schemas/PaymentType"
           }
         }
       },
@@ -6333,25 +6702,7 @@
             "readOnly": true
           },
           "type": {
-            "description": "Issuing card network of the payment card.",
-            "type": "string",
-            "enum": [
-              "AMEX",
-              "CUP",
-              "DINERS",
-              "DISCOVER",
-              "ELO",
-              "ELV",
-              "HIPERCARD",
-              "JCB",
-              "MAESTRO",
-              "MASTERCARD",
-              "VISA",
-              "VISA_ELECTRON",
-              "VISA_VPAY",
-              "UNKNOWN"
-            ],
-            "readOnly": true
+            "$ref": "#/components/schemas/CardType"
           }
         },
         "required": [
@@ -6377,25 +6728,7 @@
             "readOnly": true
           },
           "type": {
-            "description": "Issuing card network of the payment card.",
-            "type": "string",
-            "enum": [
-              "AMEX",
-              "CUP",
-              "DINERS",
-              "DISCOVER",
-              "ELO",
-              "ELV",
-              "HIPERCARD",
-              "JCB",
-              "MAESTRO",
-              "MASTERCARD",
-              "VISA",
-              "VISA_ELECTRON",
-              "VISA_VPAY",
-              "UNKNOWN"
-            ],
-            "readOnly": true
+            "$ref": "#/components/schemas/CardType"
           }
         }
       },
@@ -6443,7 +6776,8 @@
             "enum": [
               "PENDING",
               "FAILED",
-              "PAID"
+              "PAID",
+              "EXPIRED"
             ]
           },
           "date": {
@@ -7293,25 +7627,7 @@
                 "readOnly": true
               },
               "type": {
-                "description": "Issuing card network of the payment card.",
-                "type": "string",
-                "enum": [
-                  "AMEX",
-                  "CUP",
-                  "DINERS",
-                  "DISCOVER",
-                  "ELO",
-                  "ELV",
-                  "HIPERCARD",
-                  "JCB",
-                  "MAESTRO",
-                  "MASTERCARD",
-                  "VISA",
-                  "VISA_ELECTRON",
-                  "VISA_VPAY",
-                  "UNKNOWN"
-                ],
-                "readOnly": true
+                "$ref": "#/components/schemas/CardType"
               }
             }
           },
@@ -7819,14 +8135,7 @@
             ]
           },
           "payment_type": {
-            "description": "Payment type used for the transaction.",
-            "type": "string",
-            "enum": [
-              "ECOM",
-              "RECURRING",
-              "BOLETO",
-              "POS"
-            ]
+            "$ref": "#/components/schemas/PaymentType"
           },
           "installments_count": {
             "description": "Current number of the installment for deferred payments.",
@@ -7856,12 +8165,7 @@
             "example": 3
           },
           "entry_mode": {
-            "description": "Entry mode of the payment details.",
-            "type": "string",
-            "enum": [
-              "CUSTOMER_ENTRY",
-              "BOLETO"
-            ]
+            "$ref": "#/components/schemas/EntryMode"
           },
           "auth_code": {
             "description": "Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.",
@@ -7871,6 +8175,7 @@
           "internal_id": {
             "description": "Internal unique ID of the transaction on the SumUp platform.",
             "type": "integer",
+            "format": "int64",
             "example": 1763892018
           }
         }
@@ -7934,27 +8239,79 @@
                 ]
               },
               "card_type": {
-                "description": "Issuing card network of the payment card used for the transaction.",
-                "type": "string",
-                "enum": [
-                  "VISA",
-                  "AMEX",
-                  "CUP",
-                  "DINERS",
-                  "DISCOVER",
-                  "ELO",
-                  "ELV",
-                  "HIPERCARD",
-                  "JCB",
-                  "MAESTRO",
-                  "MASTERCARD",
-                  "VISA_ELECTRON",
-                  "VISA_VPAY",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/CardType"
               }
             }
           }
+        ]
+      },
+      "PaymentType": {
+        "description": "Payment type used for the transaction.",
+        "type": "string",
+        "enum": [
+          "CASH",
+          "POS",
+          "ECOM",
+          "RECURRING",
+          "BITCOIN",
+          "BALANCE",
+          "MOTO",
+          "BOLETO",
+          "DIRECT_DEBIT",
+          "APM",
+          "UNKNOWN"
+        ]
+      },
+      "EntryMode": {
+        "description": "Entry mode of the payment details.",
+        "type": "string",
+        "enum": [
+          "BOLETO",
+          "SOFORT",
+          "IDEAL",
+          "BANCONTACT",
+          "EPS",
+          "MYBANK",
+          "SATISPAY",
+          "BLIK",
+          "P24",
+          "GIROPAY",
+          "PIX",
+          "QR_CODE_PIX",
+          "APPLE_PAY",
+          "GOOGLE_PAY",
+          "PAYPAL",
+          "NONE",
+          "CHIP",
+          "MANUAL_ENTRY",
+          "CUSTOMER_ENTRY",
+          "MAGSTRIPE_FALLBACK",
+          "MAGSTRIPE",
+          "DIRECT_DEBIT",
+          "CONTACTLESS",
+          "MOTO",
+          "CONTACTLESS_MAGSTRIPE",
+          "N/A"
+        ]
+      },
+      "CardType": {
+        "description": "Issuing card network of the payment card used for the transaction.",
+        "type": "string",
+        "enum": [
+          "AMEX",
+          "CUP",
+          "DINERS",
+          "DISCOVER",
+          "ELO",
+          "ELV",
+          "HIPERCARD",
+          "JCB",
+          "MAESTRO",
+          "MASTERCARD",
+          "VISA",
+          "VISA_ELECTRON",
+          "VISA_VPAY",
+          "UNKNOWN"
         ]
       },
       "TransactionFull": {
@@ -8003,10 +8360,11 @@
                 "type": "string",
                 "enum": [
                   "none",
+                  "na",
                   "signature",
-                  "offline pin",
-                  "online pin",
-                  "offline pin + signature",
+                  "offline PIN",
+                  "online PIN",
+                  "offline PIN + signature",
                   "confirmation code verified"
                 ]
               },
@@ -8317,39 +8675,11 @@
           "account_type"
         ]
       },
-      "CompatError": {
-        "description": "Error object for compat API calls.",
-        "type": "object",
-        "properties": {
-          "error_code": {
-            "type": "string",
-            "example": "NOT_FOUND"
-          },
-          "message": {
-            "type": "string",
-            "example": "Resource not found."
-          }
-        },
-        "required": [
-          "error_code",
-          "message"
-        ]
-      },
-      "Metadata": {
-        "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.",
-        "type": "object",
-        "example": {},
-        "additionalProperties": {
-          "maxLength": 256
-        }
-      },
       "Attributes": {
         "description": "Object attributes that are modifiable only by SumUp applications.",
         "type": "object",
         "example": {},
-        "additionalProperties": {
-          "maxLength": 256
-        }
+        "additionalProperties": true
       },
       "CountryCode": {
         "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
@@ -8507,6 +8837,42 @@
         "required": [
           "ref",
           "value"
+        ]
+      },
+      "Problem": {
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "A URI reference that identifies the problem type.",
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem type.",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "type": "integer",
+            "example": 400,
+            "exclusiveMaximum": true,
+            "maximum": 600,
+            "minimum": 400
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": "string"
+          },
+          "instance": {
+            "description": "A URI reference that identifies the specific occurrence of the problem.",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type"
         ]
       },
       "MembershipStatus": {
@@ -8916,6 +9282,13 @@
           "updated_at"
         ],
         "title": "Role"
+      },
+      "Metadata": {
+        "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
+        "type": "object",
+        "example": {},
+        "additionalProperties": true,
+        "maxProperties": 64
       },
       "ListPersonsResponseBody": {
         "type": "object",
@@ -9484,8 +9857,8 @@
           "device": {
             "$ref": "#/components/schemas/ReaderDevice"
           },
-          "meta": {
-            "$ref": "#/components/schemas/Meta"
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
           },
           "created_at": {
             "description": "The timestamp of when the reader was created.",
@@ -9511,7 +9884,7 @@
         "title": "Reader"
       },
       "ReaderID": {
-        "description": "Unique identifier of the object.\nNote that this identifies the instance of the physical devices pairing with your SumUp account.\nIf you DELETE a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
+        "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
         "type": "string",
         "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
         "maxLength": 30,
@@ -9599,11 +9972,22 @@
               }
             }
           },
-          "ReaderCheckoutPending": {
+          "InstallmentsTooLow": {
+            "description": "Error returned when installments is not within the allowed range.",
+            "value": {
+              "errors": {
+                "installments": [
+                  "is invalid"
+                ]
+              }
+            }
+          },
+          "ReaderBusy": {
             "description": "Error returned when a checkout was requested in the last 60 seconds.",
             "value": {
               "errors": {
-                "detail": "A pending transaction already exists for this device"
+                "detail": "There is a pending checkout for the device.",
+                "type": "READER_BUSY"
               }
             }
           },
@@ -9652,6 +10036,112 @@
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutError",
         "x-validate": null
       },
+      "StatusResponse": {
+        "description": "Status of a device",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "battery_level": {
+                "description": "Battery level percentage",
+                "type": "float",
+                "example": 10.5,
+                "maximum": 100,
+                "minimum": 0,
+                "x-struct": null,
+                "x-validate": null
+              },
+              "battery_temperature": {
+                "description": "Battery temperature in Celsius",
+                "type": "integer",
+                "example": 35,
+                "x-struct": null,
+                "x-validate": null
+              },
+              "connection_type": {
+                "description": "Type of connection used by the device",
+                "type": "string",
+                "example": "Wi-Fi",
+                "enum": [
+                  "btle",
+                  "edge",
+                  "gprs",
+                  "lte",
+                  "umts",
+                  "usb",
+                  "Wi-Fi"
+                ],
+                "x-struct": null,
+                "x-validate": null
+              },
+              "firmware_version": {
+                "description": "Firmware version of the device",
+                "type": "string",
+                "example": "3.3.3.21",
+                "x-struct": null,
+                "x-validate": null
+              },
+              "last_activity": {
+                "description": "Timestamp of the last activity from the device",
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-09-25T15:20:00Z",
+                "x-struct": null,
+                "x-validate": null
+              },
+              "state": {
+                "description": "Latest state of the device",
+                "type": "string",
+                "example": "IDLE",
+                "enum": [
+                  "IDLE",
+                  "SELECTING_TIP",
+                  "WAITING_FOR_CARD",
+                  "WAITING_FOR_PIN",
+                  "WAITING_FOR_SIGNATURE",
+                  "UPDATING_FIRMWARE"
+                ],
+                "x-struct": null,
+                "x-validate": null
+              },
+              "status": {
+                "description": "Status of a device",
+                "type": "string",
+                "example": "ONLINE",
+                "enum": [
+                  "ONLINE",
+                  "OFFLINE"
+                ],
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "status"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "data": {
+            "battery_level": 10,
+            "battery_temperature": 35,
+            "connection_type": "Wi-Fi",
+            "firmware_version": "3.3.3.21",
+            "last_activity": "2025-09-25T15:20:00Z",
+            "state": "IDLE",
+            "status": "ONLINE"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "StatusResponse",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.StatusResponse",
+        "x-validate": null
+      },
       "CreateReaderTerminateUnprocessableEntity": {
         "description": "Unprocessable entity",
         "type": "object",
@@ -9681,6 +10171,39 @@
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateUnprocessableEntity",
         "x-validate": null
       },
+      "BadGateway": {
+        "description": "502 Bad Gateway",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "detail"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Bad Gateway"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "BadGateway",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.BadGateway",
+        "x-validate": null
+      },
       "CreateReaderTerminateError": {
         "description": "Error description",
         "type": "object",
@@ -9707,6 +10230,52 @@
         ],
         "title": "CreateReaderTerminateError",
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateError",
+        "x-validate": null
+      },
+      "BadRequest": {
+        "description": "400 Bad Request",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              },
+              "type": {
+                "description": "Key indicating type of error",
+                "type": "string",
+                "enum": [
+                  "INVALID_BEARER_TOKEN",
+                  "INVALID_USER_AGENT",
+                  "NOT_ENOUGH_UNPAID_PAYOUTS",
+                  "DUPLICATE_HEADERS"
+                ],
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Bad request",
+            "type": "INVALID_BEARER_TOKEN"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "BadRequest",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.BadRequest",
         "x-validate": null
       },
       "CreateReaderCheckoutResponse": {
@@ -9742,6 +10311,116 @@
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutResponse",
         "x-validate": null
       },
+      "GatewayTimeout": {
+        "description": "504 Gateway Timeout",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "detail"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Gateway Timeout"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "GatewayTimeout",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.GatewayTimeout",
+        "x-validate": null
+      },
+      "Unauthorized": {
+        "description": "401 Unauthorized",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              },
+              "type": {
+                "description": "Key indicating type of error",
+                "type": "string",
+                "enum": [
+                  "INVALID_ACCESS_TOKEN",
+                  "INVALID_PASSWORD"
+                ],
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Invalid or expired access token",
+            "type": "INVALID_ACCESS_TOKEN"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "Unauthorized",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.Unauthorized",
+        "x-validate": null
+      },
+      "InternalServerError": {
+        "description": "500 Internal Server Error",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "detail"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Internal Server Error"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "InternalServerError",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.InternalServerError",
+        "x-validate": null
+      },
       "CreateReaderCheckoutRequest": {
         "description": "Reader Checkout",
         "type": "object",
@@ -9749,6 +10428,7 @@
           "affiliate": {
             "description": "Affiliate metadata for the transaction.\nIt is a field that allow for integrators to track the source of the transaction.\n",
             "type": "object",
+            "nullable": true,
             "properties": {
               "app_id": {
                 "description": "Application ID of the affiliate.\nIt is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.\n",
@@ -9810,9 +10490,11 @@
             "x-validate": null
           },
           "installments": {
-            "description": "Number of installments for the transaction.\nIt may vary according to the merchant country.\nFor example, in Brazil, the maximum number of installments is 12.\n",
+            "description": "Number of installments for the transaction.\nIt may vary according to the merchant country.\nFor example, in Brazil, the maximum number of installments is 12.\n\nOmit if the merchant country does support installments.\nOtherwise, the checkout will be rejected.\n",
             "type": "integer",
             "example": 1,
+            "minimum": 1,
+            "nullable": true,
             "x-struct": null,
             "x-validate": null
           },
@@ -10004,6 +10686,39 @@
         ],
         "title": "ReaderCheckoutStatusChange",
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.ReaderCheckoutStatusChange",
+        "x-validate": null
+      },
+      "NotFound": {
+        "description": "404 Not Found",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "properties": {
+              "detail": {
+                "description": "Fuller message giving context to error",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              }
+            },
+            "required": [
+              "detail"
+            ],
+            "x-struct": null,
+            "x-validate": null
+          }
+        },
+        "example": {
+          "errors": {
+            "detail": "Not Found"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "title": "NotFound",
+        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.NotFound",
         "x-validate": null
       },
       "AddressPayloadLegacy": {
@@ -10397,6 +11112,7 @@
         }
       },
       "CheckoutCreate": {
+        "required": true,
         "content": {
           "application/json": {
             "schema": {
@@ -10446,6 +11162,7 @@
         }
       },
       "CheckoutProcess": {
+        "required": true,
         "description": "Details of the payment instrument for processing the checkout.",
         "content": {
           "application/json": {
@@ -10536,6 +11253,7 @@
         }
       },
       "CustomerCreate": {
+        "required": true,
         "description": "Details of the customer.",
         "content": {
           "application/json": {
@@ -10546,6 +11264,7 @@
         }
       },
       "CustomerUpdate": {
+        "required": true,
         "content": {
           "application/json": {
             "schema": {
@@ -11076,16 +11795,6 @@
                   "message": "Checkout is already processed"
                 }
               }
-            }
-          }
-        }
-      },
-      "CompatErrorResponse": {
-        "description": "Error response for compat API calls.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CompatError"
             }
           }
         }

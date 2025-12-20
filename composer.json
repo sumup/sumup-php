@@ -42,7 +42,21 @@
 	"autoload": {
 		"psr-4": {
 			"SumUp\\": "src/"
-		}
+		},
+		"classmap": [
+			"src/Checkouts/Checkouts.php",
+			"src/Customers/Customers.php",
+			"src/Members/Members.php",
+			"src/Memberships/Memberships.php",
+			"src/Merchant/Merchant.php",
+			"src/Merchants/Merchants.php",
+			"src/Readers/Readers.php",
+			"src/Receipts/Receipts.php",
+			"src/Roles/Roles.php",
+			"src/Shared/Shared.php",
+			"src/Subaccounts/Subaccounts.php",
+			"src/Transactions/Transactions.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

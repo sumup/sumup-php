@@ -5,6 +5,106 @@ declare(strict_types=1);
 namespace SumUp\Readers;
 
 /**
+ * The card type of the card used for the transaction.
+ * Is is required only for some countries (e.g: Brazil).
+ *
+ */
+enum CreateReaderCheckoutRequestCardType: string
+{
+    case CREDIT = 'credit';
+    case DEBIT = 'debit';
+}
+
+/**
+ * Type of connection used by the device
+ */
+enum ModelConnectionType: string
+{
+    case BTLE = 'btle';
+    case EDGE = 'edge';
+    case GPRS = 'gprs';
+    case LTE = 'lte';
+    case UMTS = 'umts';
+    case USB = 'usb';
+    case WI_FI = 'Wi-Fi';
+}
+
+/**
+ * Latest state of the device
+ */
+enum ModelState: string
+{
+    case IDLE = 'IDLE';
+    case SELECTING_TIP = 'SELECTING_TIP';
+    case WAITING_FOR_CARD = 'WAITING_FOR_CARD';
+    case WAITING_FOR_PIN = 'WAITING_FOR_PIN';
+    case WAITING_FOR_SIGNATURE = 'WAITING_FOR_SIGNATURE';
+    case UPDATING_FIRMWARE = 'UPDATING_FIRMWARE';
+}
+
+/**
+ * Status of a device
+ */
+enum ModelStatus: string
+{
+    case ONLINE = 'ONLINE';
+    case OFFLINE = 'OFFLINE';
+}
+
+/**
+ * Identifier of the model of the device.
+ */
+enum ReaderDeviceModel: string
+{
+    case SOLO = 'solo';
+    case VIRTUAL_SOLO = 'virtual-solo';
+}
+
+/**
+ * The status of the reader object gives information about the current state of the reader.
+ *
+ * Possible values:
+ *
+ * - `unknown` - The reader status is unknown.
+ * - `processing` - The reader is created and waits for the physical device to confirm the pairing.
+ * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
+ * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
+ */
+enum ReaderStatus: string
+{
+    case UNKNOWN = 'unknown';
+    case PROCESSING = 'processing';
+    case PAIRED = 'paired';
+    case EXPIRED = 'expired';
+}
+
+/**
+ * 502 Bad Gateway
+ */
+class BadGateway
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
+
+}
+
+/**
+ * 400 Bad Request
+ */
+class BadRequest
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
+
+}
+
+/**
  * Error description
  */
 class CreateReaderCheckoutError
@@ -34,9 +134,9 @@ class CreateReaderCheckoutRequest
      * The card type of the card used for the transaction.
      * Is is required only for some countries (e.g: Brazil).
      *
-     * @var string|null
+     * @var CreateReaderCheckoutRequestCardType|null
      */
-    public ?string $cardType = null;
+    public ?CreateReaderCheckoutRequestCardType $cardType = null;
 
     /**
      * Description of the checkout to be shown in the Merchant Sales
@@ -49,6 +149,8 @@ class CreateReaderCheckoutRequest
      * Number of installments for the transaction.
      * It may vary according to the merchant country.
      * For example, in Brazil, the maximum number of installments is 12.
+     * Omit if the merchant country does support installments.
+     * Otherwise, the checkout will be rejected.
      *
      * @var int|null
      */
@@ -142,14 +244,52 @@ class CreateReaderTerminateUnprocessableEntity
 }
 
 /**
+ * 504 Gateway Timeout
+ */
+class GatewayTimeout
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
+
+}
+
+/**
+ * 500 Internal Server Error
+ */
+class InternalServerError
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
+
+}
+
+/**
+ * 404 Not Found
+ */
+class NotFound
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
+
+}
+
+/**
  * A physical card reader device that can accept in-person payments.
  */
 class Reader
 {
     /**
      * Unique identifier of the object.
-     * Note that this identifies the instance of the physical devices pairing with your SumUp account.
-     * If you DELETE a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
+     * Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
      *
      * @var string
      */
@@ -170,9 +310,9 @@ class Reader
      * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
      * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
      *
-     * @var string
+     * @var ReaderStatus
      */
-    public string $status;
+    public ReaderStatus $status;
 
     /**
      * Information about the underlying physical device.
@@ -182,12 +322,11 @@ class Reader
     public ReaderDevice $device;
 
     /**
-     * A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-     * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
      * @var array|null
      */
-    public ?array $meta = null;
+    public ?array $metadata = null;
 
     /**
      * The timestamp of when the reader was created.
@@ -220,8 +359,34 @@ class ReaderDevice
     /**
      * Identifier of the model of the device.
      *
-     * @var string
+     * @var ReaderDeviceModel
      */
-    public string $model;
+    public ReaderDeviceModel $model;
+
+}
+
+/**
+ * Status of a device
+ */
+class StatusResponse
+{
+    /**
+     *
+     * @var array
+     */
+    public array $data;
+
+}
+
+/**
+ * 401 Unauthorized
+ */
+class Unauthorized
+{
+    /**
+     *
+     * @var array
+     */
+    public array $errors;
 
 }

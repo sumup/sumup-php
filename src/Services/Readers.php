@@ -40,30 +40,9 @@ class Readers implements SumUpService
     }
 
     /**
-     * Delete a reader
-     *
-     * @param string $merchantCode Unique identifier of the merchant account.
-     * @param string $id The unique identifier of the reader.
-     *
-     * @return null
-     */
-    public function deleteReader($merchantCode, $id)
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
-        $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
-
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
-
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'void'],
-        ]);
-    }
-
-    /**
      * Create a Reader
      *
-     * @param string $merchantCode Unique identifier of the merchant account.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
      *
      * @return \SumUp\Readers\Reader
@@ -110,9 +89,30 @@ class Readers implements SumUpService
     }
 
     /**
+     * Delete a reader
+     *
+     * @param string $merchantCode Short unique identifier for the merchant.
+     * @param string $id The unique identifier of the reader.
+     *
+     * @return null
+     */
+    public function delete($merchantCode, $id)
+    {
+        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
+        $payload = [];
+        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+
+        $response = $this->client->send('DELETE', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, [
+            '200' => ['type' => 'void'],
+        ]);
+    }
+
+    /**
      * Retrieve a Reader
      *
-     * @param string $merchantCode Unique identifier of the merchant account.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
      *
      * @return \SumUp\Readers\Reader
@@ -129,9 +129,28 @@ class Readers implements SumUpService
     }
 
     /**
+     * Get a Reader Status
+     *
+     * @param string $merchantCode Merchant Code
+     * @param string $readerId The unique identifier of the Reader
+     *
+     * @return \SumUp\Readers\StatusResponse
+     */
+    public function getStatus($merchantCode, $readerId)
+    {
+        $path = sprintf('/v0.1/merchants/%s/readers/%s/status', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
+        $payload = [];
+        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+
+        $response = $this->client->send('GET', $path, $payload, $headers);
+
+        return ResponseDecoder::decode($response, \SumUp\Readers\StatusResponse::class);
+    }
+
+    /**
      * List Readers
      *
-     * @param string $merchantCode Unique identifier of the merchant account.
+     * @param string $merchantCode Short unique identifier for the merchant.
      *
      * @return array
      */
@@ -176,7 +195,7 @@ class Readers implements SumUpService
     /**
      * Update a Reader
      *
-     * @param string $merchantCode Unique identifier of the merchant account.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
      * @param array|null $body Optional request payload
      *

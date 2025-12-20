@@ -24,6 +24,7 @@ func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace 
 		return nil
 	}
 
+	schemaName := schemaClassName(schema)
 	props := make([]phpProperty, 0, len(propertySpecs))
 	for _, spec := range propertySpecs {
 		prop := phpProperty{
@@ -36,7 +37,7 @@ func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace 
 			prop.Description = spec.Schema.Schema().Description
 		}
 
-		prop.Type, prop.DocType = g.resolvePHPType(spec.Schema, currentNamespace)
+		prop.Type, prop.DocType = g.resolvePHPType(spec.Schema, currentNamespace, schemaName, spec.Name)
 		props = append(props, prop)
 	}
 
@@ -195,14 +196,14 @@ func (g *Generator) renderProperty(prop phpProperty) string {
 	return b.String()
 }
 
-func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace string) (string, string) {
+func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace string, parentSchemaName string, propertyName string) (string, string) {
 	if schema == nil {
 		return "mixed", "mixed"
 	}
 
 	if ref := schema.GetReference(); ref != "" {
 		if !schemaIsObject(schema) {
-			return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace)
+			return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace, parentSchemaName, propertyName)
 		}
 
 		// Check if this is an additionalProperties-only schema - treat as array
@@ -224,12 +225,27 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 		return typeName, typeName
 	}
 
-	return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace)
+	return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace, parentSchemaName, propertyName)
 }
 
-func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace string) (string, string) {
+func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace string, parentSchemaName string, propertyName string) (string, string) {
 	if spec == nil {
 		return "mixed", "mixed"
+	}
+
+	// Check if this property has an enum
+	if len(spec.Enum) > 0 && parentSchemaName != "" && propertyName != "" {
+		enumName := phpEnumName(parentSchemaName, propertyName)
+		namespace := g.enumNamespaces[enumName]
+		if namespace != "" {
+			typeName := enumName
+			if namespace != currentNamespace {
+				typeName = fmt.Sprintf("\\%s\\%s", namespace, enumName)
+			}
+			return typeName, typeName
+		}
+		// Fallback to string if enum wasn't generated
+		return "string", "string"
 	}
 
 	if len(spec.Enum) > 0 {
@@ -248,7 +264,7 @@ func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace s
 	case hasSchemaType(spec, "array"):
 		itemDoc := "mixed"
 		if spec.Items != nil && spec.Items.A != nil {
-			_, itemDoc = g.resolvePHPType(spec.Items.A, currentNamespace)
+			_, itemDoc = g.resolvePHPType(spec.Items.A, currentNamespace, "", "")
 		}
 		return "array", itemDoc + "[]"
 	case hasSchemaType(spec, "object"):

@@ -5,6 +5,26 @@ declare(strict_types=1);
 namespace SumUp\Merchant;
 
 /**
+ * The role of the user.
+ */
+enum AccountLegacyType: string
+{
+    case NORMAL = 'normal';
+    case OPERATOR = 'operator';
+}
+
+/**
+ * Whether merchant can make MOTO payments
+ */
+enum MerchantSettingsMotoPayment: string
+{
+    case UNAVAILABLE = 'UNAVAILABLE';
+    case ENFORCED = 'ENFORCED';
+    case ON = 'ON';
+    case OFF = 'OFF';
+}
+
+/**
  * Profile information.
  */
 class AccountLegacy
@@ -19,9 +39,9 @@ class AccountLegacy
     /**
      * The role of the user.
      *
-     * @var string|null
+     * @var AccountLegacyType|null
      */
-    public ?string $type = null;
+    public ?AccountLegacyType $type = null;
 
 }
 
@@ -706,9 +726,9 @@ class MerchantSettings
     /**
      * Whether merchant can make MOTO payments
      *
-     * @var string|null
+     * @var MerchantSettingsMotoPayment|null
      */
-    public ?string $motoPayment = null;
+    public ?MerchantSettingsMotoPayment $motoPayment = null;
 
     /**
      * Stone merchant code
