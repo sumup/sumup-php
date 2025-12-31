@@ -4,8 +4,6 @@
 help: ## Show help
 	@grep -Eh '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-export PHPDOCUMENTOR_VERSION := v3.0.0
-
 .PHONY: vendor
 vendor: composer.json ## Install dependencies
 	composer install
@@ -20,7 +18,7 @@ fmtcheck: vendor ## Check code formatting
 
 .PHONY: docs
 docs: vendor ## Generate API reference using phpDocumentor
-	docker run --rm -v "$(pwd):/data" "phpdoc/phpdoc:3"
+	docker run --rm -v "$(CURDIR):/data" "phpdoc/phpdoc:3"
 
 .PHONY: test
 test: vendor ## Run PHPUnit test suite

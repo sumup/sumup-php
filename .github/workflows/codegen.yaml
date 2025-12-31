@@ -3,13 +3,13 @@ name: Codegen CI
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - "codegen/**"
       - ".github/workflows/codegen.yaml"
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - "codegen/**"
       - ".github/workflows/codegen.yaml"

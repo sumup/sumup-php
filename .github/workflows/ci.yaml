@@ -7,12 +7,12 @@ on:
   workflow_dispatch: {}
   push:
     branches:
-      - master
+      - main
     tags:
       - v[0-9]+.[0-9]+.[0-9]+*
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   lint:
@@ -24,7 +24,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.31.0
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: intl
           coverage: none
 
@@ -43,7 +43,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.31.0
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           coverage: none
           tools: composer:v2
 
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.2']
+        php: ['8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
@@ -82,7 +82,7 @@ jobs:
   release-please:
     name: Prepare release
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
       pull-requests: write

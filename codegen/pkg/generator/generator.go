@@ -262,9 +262,10 @@ func (g *Generator) buildPHPEnum(enum enumDefinition) string {
 	}
 
 	backingType := ""
-	if enum.Type == "string" {
+	switch enum.Type {
+	case "string":
 		backingType = ": string"
-	} else if enum.Type == "int" {
+	case "int":
 		backingType = ": int"
 	}
 
@@ -272,11 +273,12 @@ func (g *Generator) buildPHPEnum(enum enumDefinition) string {
 
 	for _, value := range enum.Values {
 		caseName := phpEnumCaseName(value)
-		if enum.Type == "string" {
+		switch enum.Type {
+		case "string":
 			fmt.Fprintf(&buf, "    case %s = '%s';\n", caseName, value)
-		} else if enum.Type == "int" {
+		case "int":
 			fmt.Fprintf(&buf, "    case %s = %s;\n", caseName, value)
-		} else {
+		default:
 			fmt.Fprintf(&buf, "    case %s;\n", caseName)
 		}
 	}

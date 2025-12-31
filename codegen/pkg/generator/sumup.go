@@ -12,11 +12,13 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
+//nolint:unused // retained for future SumUp class generation
 var reservedServiceNames = map[string]struct{}{
 	"Authorization": {},
 	"Custom":        {},
 }
 
+//nolint:unused // writeSumUpClass is kept for the legacy SumUp SDK surface
 func (g *Generator) writeSumUpClass() error {
 	dir := g.cfg.Out
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
@@ -225,6 +227,7 @@ class SumUp
 	return nil
 }
 
+//nolint:unused // helper is used when SumUp class generation is re-enabled
 func (g *Generator) collectServiceDefinitions() []string {
 	if len(g.operationsByTag) == 0 {
 		return nil
@@ -255,6 +258,7 @@ func (g *Generator) collectServiceDefinitions() []string {
 	return services
 }
 
+//nolint:unused // helper for the SumUp class code generation
 func sumUpUseStatements(serviceNames []string) []string {
 	uses := []string{
 		"SumUp\\Application\\ApplicationConfiguration",
@@ -282,6 +286,7 @@ func sumUpUseStatements(serviceNames []string) []string {
 	return append(uses, serviceUses...)
 }
 
+//nolint:unused // helper for generating the SumUp class docblocks
 func renderSumUpPropertyDocs(serviceNames []string) string {
 	if len(serviceNames) == 0 {
 		return ""
@@ -296,6 +301,7 @@ func renderSumUpPropertyDocs(serviceNames []string) string {
 	return buf.String()
 }
 
+//nolint:unused // helper for generating the SumUp class service map
 func renderSumUpServiceMap(serviceNames []string) string {
 	if len(serviceNames) == 0 {
 		return ""
