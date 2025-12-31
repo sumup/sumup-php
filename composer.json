@@ -1,5 +1,5 @@
 {
-	"name": "sumup/sumup-ecom-php-sdk",
+	"name": "sumup/sumup-php",
 	"description": "SumUp PHP SDK",
 	"type": "library",
 	"license": "Apache-2.0",
@@ -50,6 +50,7 @@
 			"src/Memberships/Memberships.php",
 			"src/Merchant/Merchant.php",
 			"src/Merchants/Merchants.php",
+			"src/Payouts/Payouts.php",
 			"src/Readers/Readers.php",
 			"src/Receipts/Receipts.php",
 			"src/Roles/Roles.php",

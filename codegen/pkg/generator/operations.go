@@ -11,7 +11,7 @@ import (
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 
-	"github.com/sumup/sumup-ecom-php-sdk/codegen/pkg/extension"
+	"github.com/sumup/sumup-php/codegen/pkg/extension"
 )
 
 type operation struct {

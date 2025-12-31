@@ -92,24 +92,31 @@ func (g *Generator) Build() error {
 		return fmt.Errorf("missing specs: call Load to load the specs first")
 	}
 
-	tagKeys := slices.Collect(maps.Keys(g.schemasByTag))
+	tagSet := make(map[string]struct{})
+	for tag := range g.schemasByTag {
+		tagSet[tag] = struct{}{}
+	}
+	for tag := range g.operationsByTag {
+		tagSet[tag] = struct{}{}
+	}
+
+	tagKeys := slices.Collect(maps.Keys(tagSet))
 	slices.Sort(tagKeys)
 
 	for _, tagKey := range tagKeys {
-		if len(g.schemasByTag[tagKey]) == 0 {
+		schemas := g.schemasByTag[tagKey]
+		operations := g.operationsByTag[tagKey]
+
+		if len(schemas) == 0 && len(operations) == 0 {
 			continue
 		}
 
-		if err := g.writeTagModels(tagKey, g.schemasByTag[tagKey]); err != nil {
+		if err := g.writeTagFile(tagKey, schemas, operations); err != nil {
 			return err
 		}
 	}
 
 	slog.Info("models generated", slog.Int("tags", len(tagKeys)))
-
-	if err := g.writeServices(); err != nil {
-		return err
-	}
 
 	// Skip SumUp class generation to avoid breaking existing code
 	// TODO: Fix Authorization service dependency before re-enabling
@@ -120,9 +127,10 @@ func (g *Generator) Build() error {
 	return nil
 }
 
-func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) error {
+func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, operations []*operation) error {
 	tagName := g.displayTagName(tagKey)
 	namespace := g.namespaceForTag(tagKey)
+	includeService := g.shouldIncludeService(tagKey, operations)
 
 	dir := filepath.Join(g.cfg.Out, tagName)
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
@@ -163,8 +171,22 @@ func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) e
 		}
 	}
 
+	if includeService {
+		if buf.Len() > 0 {
+			buf.WriteString("\n")
+		}
+		buf.WriteString("\n")
+		buf.WriteString(g.buildServiceBlock(tagKey, operations))
+	}
+
 	if _, err := f.Write(buf.Bytes()); err != nil {
 		return fmt.Errorf("write file %q: %w", filename, err)
+	}
+
+	if includeService {
+		if err := g.removeLegacyServiceFile(tagName); err != nil {
+			return err
+		}
 	}
 
 	enumCount := 0
@@ -172,14 +194,29 @@ func (g *Generator) writeTagModels(tagKey string, schemas []*base.SchemaProxy) e
 		enumCount = len(enums)
 	}
 
-	slog.Info("generated models file",
+	serviceCount := 0
+	if includeService {
+		serviceCount = 1
+	}
+
+	slog.Info("generated tag file",
 		slog.String("tag", tagName),
 		slog.String("namespace", namespace),
 		slog.String("file", filename),
 		slog.Int("classes", len(schemas)),
 		slog.Int("enums", enumCount),
+		slog.Int("services", serviceCount),
 	)
 
+	return nil
+}
+
+func (g *Generator) removeLegacyServiceFile(className string) error {
+	servicesDir := filepath.Join(g.cfg.Out, "Services")
+	filename := filepath.Join(servicesDir, fmt.Sprintf("%s.php", className))
+	if err := os.Remove(filename); err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("remove legacy service file %q: %w", filename, err)
+	}
 	return nil
 }
 
@@ -287,12 +324,20 @@ func (g *Generator) buildPHPEnum(enum enumDefinition) string {
 	return buf.String()
 }
 
+func (g *Generator) shouldIncludeService(tagKey string, operations []*operation) bool {
+	return tagKey != sharedTagKey && len(operations) > 0
+}
+
 func (g *Generator) collectEnums() (map[string][]enumDefinition, map[string]string) {
 	enumsByTag := make(map[string][]enumDefinition)
 	enumNamespaces := make(map[string]string)
 	enumsSeen := make(map[string]struct{})
 
-	for tagKey, schemas := range g.schemasByTag {
+	tagKeys := slices.Collect(maps.Keys(g.schemasByTag))
+	slices.Sort(tagKeys)
+
+	for _, tagKey := range tagKeys {
+		schemas := g.schemasByTag[tagKey]
 		for _, schema := range schemas {
 			g.collectEnumsFromSchema(schema, tagKey, enumsByTag, enumNamespaces, enumsSeen, make(map[*base.SchemaProxy]struct{}))
 		}

@@ -2,7 +2,7 @@
 	"$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
 	"include-component-in-tag": false,
 	"include-v-in-tag": true,
-	"pull-request-header": "Automated sumup-ecom-php-sdk release",
+	"pull-request-header": "Automated sumup-php SDK release",
 	"pull-request-title-pattern": "release: ${version}",
 	"extra-label": "release",
 	"draft": true,

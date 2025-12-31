@@ -2,17 +2,19 @@
 
 # sumup-php codegen
 
-A tiny OpenAPI specs to SDK generator for [sumup-ecom-php-sdk](https://github.com/sumup/sumup-ecom-php-sdk).
+A tiny OpenAPI specs to SDK generator for [sumup-php](https://github.com/sumup/sumup-php) SDK.
 
 </div>
 
 ## Quickstart
 
-Generate the SDK using:
+Generate the SDK using the JSON spec:
 
 ```sh
-go run ./... generate ./openapi.yaml ./build
+go run ./... generate ../openapi.json ./build
 ```
+
+> Note: The PHP SDK now ships only with `openapi.json`; the YAML version is no longer maintained.
 
 ## Features
 

@@ -5,6 +5,90 @@ declare(strict_types=1);
 namespace SumUp\Shared;
 
 /**
+ * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+ */
+enum TransactionBaseCurrency: string
+{
+    case BGN = 'BGN';
+    case BRL = 'BRL';
+    case CHF = 'CHF';
+    case CLP = 'CLP';
+    case CZK = 'CZK';
+    case DKK = 'DKK';
+    case EUR = 'EUR';
+    case GBP = 'GBP';
+    case HRK = 'HRK';
+    case HUF = 'HUF';
+    case NOK = 'NOK';
+    case PLN = 'PLN';
+    case RON = 'RON';
+    case SEK = 'SEK';
+    case USD = 'USD';
+}
+
+/**
+ * Payment type used for the transaction.
+ */
+enum TransactionBasePaymentType: string
+{
+    case CASH = 'CASH';
+    case POS = 'POS';
+    case ECOM = 'ECOM';
+    case RECURRING = 'RECURRING';
+    case BITCOIN = 'BITCOIN';
+    case BALANCE = 'BALANCE';
+    case MOTO = 'MOTO';
+    case BOLETO = 'BOLETO';
+    case DIRECT_DEBIT = 'DIRECT_DEBIT';
+    case APM = 'APM';
+    case UNKNOWN = 'UNKNOWN';
+}
+
+/**
+ * Current status of the transaction.
+ */
+enum TransactionBaseStatus: string
+{
+    case SUCCESSFUL = 'SUCCESSFUL';
+    case CANCELLED = 'CANCELLED';
+    case FAILED = 'FAILED';
+    case PENDING = 'PENDING';
+}
+
+/**
+ * Entry mode of the payment details.
+ */
+enum TransactionCheckoutInfoEntryMode: string
+{
+    case BOLETO = 'BOLETO';
+    case SOFORT = 'SOFORT';
+    case IDEAL = 'IDEAL';
+    case BANCONTACT = 'BANCONTACT';
+    case EPS = 'EPS';
+    case MYBANK = 'MYBANK';
+    case SATISPAY = 'SATISPAY';
+    case BLIK = 'BLIK';
+    case P_24 = 'P24';
+    case GIROPAY = 'GIROPAY';
+    case PIX = 'PIX';
+    case QR_CODE_PIX = 'QR_CODE_PIX';
+    case APPLE_PAY = 'APPLE_PAY';
+    case GOOGLE_PAY = 'GOOGLE_PAY';
+    case PAYPAL = 'PAYPAL';
+    case NONE = 'NONE';
+    case CHIP = 'CHIP';
+    case MANUAL_ENTRY = 'MANUAL_ENTRY';
+    case CUSTOMER_ENTRY = 'CUSTOMER_ENTRY';
+    case MAGSTRIPE_FALLBACK = 'MAGSTRIPE_FALLBACK';
+    case MAGSTRIPE = 'MAGSTRIPE';
+    case DIRECT_DEBIT = 'DIRECT_DEBIT';
+    case CONTACTLESS = 'CONTACTLESS';
+    case MOTO = 'MOTO';
+    case CONTACTLESS_MAGSTRIPE = 'CONTACTLESS_MAGSTRIPE';
+    case N_A = 'N/A';
+}
+
+/**
  * Profile's personal address information.
  */
 class AddressLegacy
@@ -280,9 +364,9 @@ class TransactionBase
     /**
      * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
      *
-     * @var \SumUp\Transactions\TransactionBaseCurrency|null
+     * @var TransactionBaseCurrency|null
      */
-    public ?\SumUp\Transactions\TransactionBaseCurrency $currency = null;
+    public ?TransactionBaseCurrency $currency = null;
 
     /**
      * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
@@ -294,16 +378,16 @@ class TransactionBase
     /**
      * Current status of the transaction.
      *
-     * @var \SumUp\Transactions\TransactionBaseStatus|null
+     * @var TransactionBaseStatus|null
      */
-    public ?\SumUp\Transactions\TransactionBaseStatus $status = null;
+    public ?TransactionBaseStatus $status = null;
 
     /**
      * Payment type used for the transaction.
      *
-     * @var \SumUp\Transactions\TransactionBasePaymentType|null
+     * @var TransactionBasePaymentType|null
      */
-    public ?\SumUp\Transactions\TransactionBasePaymentType $paymentType = null;
+    public ?TransactionBasePaymentType $paymentType = null;
 
     /**
      * Current number of the installment for deferred payments.
@@ -340,9 +424,9 @@ class TransactionCheckoutInfo
     /**
      * Entry mode of the payment details.
      *
-     * @var \SumUp\Transactions\TransactionCheckoutInfoEntryMode|null
+     * @var TransactionCheckoutInfoEntryMode|null
      */
-    public ?\SumUp\Transactions\TransactionCheckoutInfoEntryMode $entryMode = null;
+    public ?TransactionCheckoutInfoEntryMode $entryMode = null;
 
     /**
      * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.

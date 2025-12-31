@@ -16,13 +16,13 @@ This repository contains the open source PHP SDK that allows you to integrate qu
 
 ## Installation
 
-The SumUp eCom PHP SDK can be installed with [Composer](https://getcomposer.org/). Run the following command:
+The SumUp PHP SDK can be installed with [Composer](https://getcomposer.org/). Run the following command:
 
 ```bash
 composer require sumup/sumup-php
 ```
 
-## Basic usage
+## Basic Usage
 
 Before using the SDK, set the `SUMUP_API_KEY` environment variable with your API key. The SDK will automatically use this key for authentication.
 
@@ -65,7 +65,7 @@ $sumup = new \SumUp\SumUp([
 ]);
 ```
 
-### TLS certificates
+### TLS Certificates
 
 The SDK ships with the latest Mozilla CA bundle to prevent `SSL certificate problem: unable to get local issuer certificate` errors on Windows and other environments that do not expose a system-wide trust store. You can override the bundled file by passing the `ca_bundle_path` configuration key:
 
@@ -98,16 +98,10 @@ This is useful for adding logging, retry logic, or using a different HTTP librar
 
 For a full list of available services and methods, explore the `src/Services/` directory or check the inline documentation in the code.
 
-## Roadmap
-
-| Version | Status | PHP Version |
-|--- |--- |--- |
-| 1.x | Latest | \>= 5.6 |
-
 ## License
 
 For information about the license see the [license](https://github.com/sumup/sumup-php/blob/master/LICENSE.md) file.
 
-## Contact us
+## Contact Us
 
 If you have found a bug or you lack some functionality please [open an issue](https://github.com/sumup/sumup-php/issues/new). If you have other issues when integrating with SumUp's API you can send an email to [integration@sumup.com](mailto:integration@sumup.com).

@@ -179,43 +179,16 @@ class SumUp
      */
     public function __get($name)
     {
-        return $this->getService($name);
-    }
-
-    /**
-     * Resolve a service by its property name.
-     *
-     * @param string $name
-     * @param AccessToken|null $accessToken
-     *
-     * @return SumUpService|null
-     */
-    public function getService($name, AccessToken $accessToken = null)
-    {
         if (!array_key_exists($name, self::$serviceClassMap)) {
             trigger_error('Undefined property: ' . static::class . '::$' . $name);
 
             return null;
         }
 
-        $token = $this->resolveAccessToken($accessToken);
+        $token = $this->resolveAccessToken();
         $serviceClass = self::$serviceClassMap[$name];
 
         return new $serviceClass($this->client, $token);
-    }
-
-`)
-
-	buf.WriteString(`    /**
-     * @param AccessToken|null $accessToken
-     *
-     * @return Custom
-     */
-    public function getCustomService(AccessToken $accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Custom($this->client, $token);
     }
 }
 `)

@@ -7,7 +7,7 @@ import (
 	"github.com/pb33f/libopenapi"
 	"github.com/urfave/cli/v2"
 
-	"github.com/sumup/sumup-ecom-php-sdk/codegen/pkg/generator"
+	"github.com/sumup/sumup-php/codegen/pkg/generator"
 )
 
 func Generate() *cli.Command {

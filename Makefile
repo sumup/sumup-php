@@ -26,4 +26,4 @@ test: vendor ## Run PHPUnit test suite
 
 .PHONY: generate
 generate: ## Generate SDK from the local OpenAPI specs
-	cd codegen && go run ./... generate ../openapi.yaml ../src
+	cd codegen && go run ./... generate ../openapi.json ../src

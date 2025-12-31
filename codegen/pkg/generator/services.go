@@ -1,64 +1,17 @@
 package generator
 
 import (
-	"bytes"
 	"fmt"
-	"maps"
-	"os"
-	"path/filepath"
 	"regexp"
-	"slices"
 	"strings"
 )
 
 var pathParamRegexp = regexp.MustCompile(`\{([^}]+)\}`)
 
-func (g *Generator) writeServices() error {
-	if len(g.operationsByTag) == 0 {
-		return nil
-	}
-
-	tagKeys := slices.Collect(maps.Keys(g.operationsByTag))
-	slices.Sort(tagKeys)
-
-	for _, tagKey := range tagKeys {
-		if tagKey == sharedTagKey {
-			continue
-		}
-
-		ops := g.operationsByTag[tagKey]
-		if len(ops) == 0 {
-			continue
-		}
-
-		if err := g.writeServiceFile(tagKey, ops); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (g *Generator) writeServiceFile(tagKey string, operations []*operation) error {
+func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) string {
 	className := g.displayTagName(tagKey)
 
-	dir := filepath.Join(g.cfg.Out, "Services")
-	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return fmt.Errorf("create services directory: %w", err)
-	}
-
-	filename := filepath.Join(dir, fmt.Sprintf("%s.php", className))
-	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
-	if err != nil {
-		return fmt.Errorf("open %q: %w", filename, err)
-	}
-	defer func() {
-		_ = f.Close()
-	}()
-
-	var buf bytes.Buffer
-
-	buf.WriteString("<?php\n\n")
+	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
 	buf.WriteString("use SumUp\\HttpClients\\SumUpHttpClientInterface;\n")
 	buf.WriteString("use SumUp\\Utils\\Headers;\n")
@@ -100,11 +53,7 @@ func (g *Generator) writeServiceFile(tagKey string, operations []*operation) err
 
 	buf.WriteString("}\n")
 
-	if _, err := f.Write(buf.Bytes()); err != nil {
-		return fmt.Errorf("write service file %q: %w", filename, err)
-	}
-
-	return nil
+	return buf.String()
 }
 
 func (g *Generator) renderServiceMethod(op *operation) string {
