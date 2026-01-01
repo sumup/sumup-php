@@ -48,12 +48,16 @@ try {
     // Pass the $checkoutId to the front-end to be processed
 } catch (\SumUp\Exceptions\SumUpAuthenticationException $e) {
     echo 'Authentication error: ' . $e->getMessage();
-} catch (\SumUp\Exceptions\SumUpResponseException $e) {
-    echo 'Response error: ' . $e->getMessage();
+} catch (\SumUp\Exceptions\SumUpValidationException $e) {
+    echo 'Validation error: ' . $e->getMessage();
 } catch (\SumUp\Exceptions\SumUpSDKException $e) {
-    echo 'SumUp SDK error: ' . $e->getMessage();
+    echo 'SumUp SDK error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
+    // Inspect the parsed response body for additional details.
+    var_dump($e->getResponseBody());
 }
 ```
+
+Unexpected responses are wrapped in `SumUpSDKException`, which now exposes the HTTP status code (`getStatusCode()`) and the decoded payload (`getResponseBody()`), making it easier to inspect raw error payloads that don't match the SDK's validation/authentication error formats.
 
 ### Providing API Key Programmatically
 

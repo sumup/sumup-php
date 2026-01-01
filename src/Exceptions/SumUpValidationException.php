@@ -28,7 +28,7 @@ class SumUpValidationException extends SumUpSDKException
     {
         $this->fields = $fields;
         $message = self::VALIDATION_ERROR_BASE . implode(', ', $fields);
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, null, $previous);
     }
 
     /**

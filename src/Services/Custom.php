@@ -55,7 +55,6 @@ class Custom implements SumUpService
      *
      * @throws SumUpArgumentException
      * @throws \SumUp\Exceptions\SumUpConnectionException
-     * @throws \SumUp\Exceptions\SumUpResponseException
      * @throws \SumUp\Exceptions\SumUpAuthenticationException
      * @throws \SumUp\Exceptions\SumUpSDKException
      */

@@ -3,8 +3,7 @@
 namespace SumUp\HttpClients;
 
 use SumUp\Exceptions\SumUpAuthenticationException;
-use SumUp\Exceptions\SumUpResponseException;
-use SumUp\Exceptions\SumUpServerException;
+use SumUp\Exceptions\SumUpSDKException;
 use SumUp\Exceptions\SumUpValidationException;
 
 /**
@@ -35,11 +34,7 @@ class Response
      * @param $body
      *
      * @throws SumUpAuthenticationException
-     * @throws SumUpResponseException
-     * @throws SumUpValidationException
-     * @throws SumUpServerException
-     * @throws \SumUp\Exceptions\SumUpSDKException
-     * @throws SumUpValidationException
+     * @throws SumUpSDKException
      */
     public function __construct($httpResponseCode, $body)
     {
@@ -74,10 +69,8 @@ class Response
      * @return mixed
      *
      * @throws SumUpAuthenticationException
-     * @throws SumUpResponseException
      * @throws SumUpValidationException
-     * @throws SumUpServerException
-     * @throws \SumUp\Exceptions\SumUpSDKException
+     * @throws SumUpSDKException
      */
     protected function parseResponseForErrors()
     {
@@ -96,11 +89,11 @@ class Response
         }
         if ($this->httpResponseCode >= 500) {
             $message = $this->parseErrorMessage('Server error');
-            throw new SumUpServerException($message, $this->httpResponseCode);
+            throw new SumUpSDKException($message, $this->httpResponseCode, $this->body);
         }
         if ($this->httpResponseCode >= 400) {
             $message = $this->parseErrorMessage('Client error');
-            throw new SumUpResponseException($message, $this->httpResponseCode);
+            throw new SumUpSDKException($message, $this->httpResponseCode, $this->body);
         }
     }
 

@@ -56,7 +56,6 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
      * @return Response
      *
      * @throws SumUpConnectionException
-     * @throws \SumUp\Exceptions\SumUpResponseException
      * @throws \SumUp\Exceptions\SumUpAuthenticationException
      * @throws \SumUp\Exceptions\SumUpValidationException
      * @throws SumUpSDKException
