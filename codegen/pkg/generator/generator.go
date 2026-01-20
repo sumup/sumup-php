@@ -124,6 +124,10 @@ func (g *Generator) Build() error {
 	// 	return err
 	// }
 
+	if err := g.writeApiVersion(); err != nil {
+		return err
+	}
+
 	return nil
 }
 

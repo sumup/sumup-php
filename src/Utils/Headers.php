@@ -42,6 +42,6 @@ class Headers
     {
         $headers = self::getCTJson();
         $headers['User-Agent'] = SdkInfo::getUserAgent();
-        return $headers;
+        return array_merge($headers, SdkInfo::getRuntimeHeaders());
     }
 }
