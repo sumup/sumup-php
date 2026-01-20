@@ -34,7 +34,7 @@
 		"ext-curl": "*"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "3.89.2",
+		"friendsofphp/php-cs-fixer": "3.92.5",
 		"phpunit/phpunit": "^9.6",
 		"phpdocumentor/phpdocumentor": "^3.9",
 		"league/oauth2-client": "^2.9"
