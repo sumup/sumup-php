@@ -42,7 +42,7 @@ class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
         $this->wrappedClient = $wrappedClient;
     }
 
-    public function send($method, $url, $body, $headers)
+    public function send($method, $url, $body, $headers, $options = null)
     {
         // Log the request
         echo "[HTTP Request] {$method} {$url}\n";
@@ -51,7 +51,7 @@ class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
         }
 
         // Forward to the wrapped client
-        $response = $this->wrappedClient->send($method, $url, $body, $headers);
+        $response = $this->wrappedClient->send($method, $url, $body, $headers, $options);
 
         // Log the response
         echo "[HTTP Response] Status: " . $response->getHttpStatusCode() . "\n";
