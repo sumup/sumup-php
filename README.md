@@ -2,11 +2,11 @@
 
 # SumUp PHP SDK
 
-[![Stars](https://img.shields.io/github/stars/sumup/sumup-php?style=social)](https://github.com/sumup/sumup-go/)
+[![Stars](https://img.shields.io/github/stars/sumup/sumup-php?style=social)](https://github.com/sumup/sumup-php)
 [![Latest Stable Version](https://poser.pugx.org/sumup/sumup-php/v/stable.svg)](https://packagist.org/packages/sumup/sumup-php)
 [![Total Downloads](https://poser.pugx.org/sumup/sumup-php/downloads.svg)](https://packagist.org/packages/sumup/sumup-php)
-[![License](https://img.shields.io/github/license/sumup/sumup-go)](./LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](https://github.com/sumup/sumup-go/tree/main/CODE_OF_CONDUCT.md)
+[![License](https://img.shields.io/github/license/sumup/sumup-php)](./LICENSE)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](https://github.com/sumup/sumup-php/tree/main/CODE_OF_CONDUCT.md)
 
 </div>
 
@@ -36,14 +36,14 @@ Then create checkouts and use other API endpoints:
 try {
     // SDK automatically uses SUMUP_API_KEY environment variable
     $sumup = new \SumUp\SumUp();
-    
+
     $checkout = $sumup->checkouts->create([
         'amount' => 10.00,
         'currency' => 'EUR',
         'checkout_reference' => 'your-checkout-ref',
         'merchant_code' => 'YOUR-MERCHANT-CODE',
     ]);
-    
+
     $checkoutId = $checkout->id;
     // Pass the $checkoutId to the front-end to be processed
 } catch (\SumUp\Exception\AuthenticationException $e) {
