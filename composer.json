@@ -40,6 +40,9 @@
 		"phpdocumentor/shim": "^3.9",
 		"league/oauth2-client": "^2.9"
 	},
+	"suggest": {
+		"guzzlehttp/guzzle": "Use SumUp\\\\HttpClient\\\\GuzzleClient for a Guzzle-based HTTP client."
+	},
 	"autoload": {
 		"psr-4": {
 			"SumUp\\": "src/"

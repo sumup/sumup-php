@@ -99,7 +99,23 @@ $sumup = new \SumUp\SumUp([
 ]);
 ```
 
-This is useful for adding logging, retry logic, or using a different HTTP library. See `examples/custom-http-client.php` for a complete example.
+This is useful for adding logging, retry logic, or using a different HTTP library. See `examples/custom-http-client.php` for a complete example. If you prefer Guzzle, check `examples/guzzle-http-client.php` (requires `guzzlehttp/guzzle`).
+
+### Guzzle HTTP Client (Optional)
+
+If you want to use Guzzle, the SDK ships with a built-in client that does not add a hard dependency. Install Guzzle and pass the client into the SDK:
+
+```bash
+composer require guzzlehttp/guzzle
+```
+
+```php
+$guzzleClient = new \SumUp\HttpClient\GuzzleClient('https://api.sumup.com');
+$sumup = new \SumUp\SumUp([
+    'api_key' => 'your-api-key-here',
+    'client' => $guzzleClient,
+]);
+```
 
 ## API Reference
 

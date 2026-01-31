@@ -8,6 +8,10 @@ help: ## Show help
 vendor: composer.json ## Install dependencies
 	composer install
 
+.PHONY: lock
+lock: ## Update the lockfile
+	composer update friendsofphp/php-cs-fixer --with-all-dependencies
+
 .PHONY: fmt
 fmt: vendor ## Format code using php-cs-fixer
 	vendor/bin/php-cs-fixer fix -v --using-cache=no
