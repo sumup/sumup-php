@@ -1,11 +1,11 @@
 <?php
 
-namespace SumUp\Utils;
+namespace SumUp;
 
 /**
  * Class ExceptionMessages
  *
- * @package SumUp\Utils
+ * @package SumUp
  */
 class ExceptionMessages
 {

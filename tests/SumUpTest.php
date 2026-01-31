@@ -4,15 +4,38 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\SumUp;
-use SumUp\Exceptions\SumUpConfigurationException;
 
 class SumUpTest extends TestCase
 {
+    private $originalApiKey;
+    private $originalAccessToken;
+
+    protected function setUp(): void
+    {
+        $this->originalApiKey = getenv('SUMUP_API_KEY');
+        $this->originalAccessToken = getenv('SUMUP_ACCESS_TOKEN');
+        putenv('SUMUP_API_KEY');
+        putenv('SUMUP_ACCESS_TOKEN');
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->originalApiKey !== false && $this->originalApiKey !== null) {
+            putenv('SUMUP_API_KEY=' . $this->originalApiKey);
+        } else {
+            putenv('SUMUP_API_KEY');
+        }
+
+        if ($this->originalAccessToken !== false && $this->originalAccessToken !== null) {
+            putenv('SUMUP_ACCESS_TOKEN=' . $this->originalAccessToken);
+        } else {
+            putenv('SUMUP_ACCESS_TOKEN');
+        }
+    }
+
     public function testCanCreateWithApiKey()
     {
-        $sumup = new SumUp([
-            'api_key' => 'secret-api-key',
-        ]);
+        $sumup = new SumUp('secret-api-key');
 
         $token = $sumup->getDefaultAccessToken();
         $this->assertIsString($token);
@@ -49,41 +72,9 @@ class SumUpTest extends TestCase
 
 
 
-    public function testGetServiceWithDefaultToken()
-    {
-        $sumup = new SumUp([
-            'api_key' => 'test-key',
-        ]);
-
-        $checkouts = $sumup->getService('checkouts');
-        $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
-    }
-
-    public function testGetServiceWithOverrideToken()
-    {
-        $sumup = new SumUp([
-            'api_key' => 'test-key',
-        ]);
-
-        $checkouts = $sumup->getService('checkouts', 'override-token');
-        $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
-    }
-
-    public function testGetServiceThrowsExceptionWhenNoTokenAvailable()
-    {
-        $sumup = new SumUp();
-
-        $this->expectException(SumUpConfigurationException::class);
-        $this->expectExceptionMessage('No access token provided');
-        
-        $sumup->getService('checkouts');
-    }
-
     public function testPropertyAccessUsesDefaultToken()
     {
-        $sumup = new SumUp([
-            'api_key' => 'test-key',
-        ]);
+        $sumup = new SumUp('test-key');
 
         $checkouts = $sumup->checkouts;
         $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);

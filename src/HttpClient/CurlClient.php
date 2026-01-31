@@ -1,16 +1,17 @@
 <?php
 
-namespace SumUp\HttpClients;
+namespace SumUp\HttpClient;
 
-use SumUp\Exceptions\SumUpConnectionException;
-use SumUp\Exceptions\SumUpSDKException;
+use SumUp\Exception\ConfigurationException;
+use SumUp\Exception\ConnectionException;
+use SumUp\Exception\SDKException;
 
 /**
- * Class SumUpCUrlClient
+ * Class CurlClient
  *
- * @package SumUp\HttpClients
+ * @package SumUp\HttpClient
  */
-class SumUpCUrlClient implements SumUpHttpClientInterface
+class CurlClient implements HttpClientInterface
 {
     /**
      * The base URL.
@@ -34,17 +35,20 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
     private $caBundlePath;
 
     /**
-     * SumUpCUrlClient constructor.
+     * CurlClient constructor.
      *
-     * @param string      $baseUrl
-     * @param array       $customHeaders
+     * @param string $baseUrl
+     * @param array $customHeaders
      * @param string|null $caBundlePath
      */
-    public function __construct($baseUrl, $customHeaders, $caBundlePath = null)
+    public function __construct($baseUrl, $customHeaders = [], $caBundlePath = null)
     {
         $this->baseUrl = $baseUrl;
         $this->customHeaders = $customHeaders;
-        $this->caBundlePath = $caBundlePath;
+        $this->caBundlePath = $this->normalizeCABundlePath($caBundlePath);
+        if ($this->caBundlePath === null) {
+            $this->caBundlePath = $this->getDefaultCABundlePath();
+        }
     }
 
     /**
@@ -55,10 +59,10 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
      *
      * @return Response
      *
-     * @throws SumUpConnectionException
-     * @throws \SumUp\Exceptions\SumUpAuthenticationException
-     * @throws \SumUp\Exceptions\SumUpValidationException
-     * @throws SumUpSDKException
+     * @throws ConnectionException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws SDKException
      */
     public function send($method, $url, $body, $headers = [])
     {
@@ -83,7 +87,7 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
         $error = curl_error($ch);
         if ($error) {
             $this->closeHandle($ch);
-            throw new SumUpConnectionException($error, $code);
+            throw new ConnectionException($error, $code);
         }
 
         $this->closeHandle($ch);
@@ -137,5 +141,46 @@ class SumUpCUrlClient implements SumUpHttpClientInterface
         if (PHP_VERSION_ID < 80000 && is_resource($handle)) {
             curl_close($handle);
         }
+    }
+
+    /**
+     * Normalize and validate the CA bundle path.
+     *
+     * @param string|null $caBundlePath
+     *
+     * @return string|null
+     *
+     * @throws ConfigurationException
+     */
+    private function normalizeCABundlePath($caBundlePath)
+    {
+        if ($caBundlePath === null || $caBundlePath === '') {
+            return null;
+        }
+
+        if (!is_string($caBundlePath)) {
+            throw new ConfigurationException('Invalid value for "ca_bundle_path". Expected string path or null.');
+        }
+
+        if (!is_readable($caBundlePath)) {
+            throw new ConfigurationException(sprintf('The provided ca_bundle_path "%s" is not readable.', $caBundlePath));
+        }
+
+        return $caBundlePath;
+    }
+
+    /**
+     * Returns the path to the CA bundle shipped with the SDK, if present.
+     *
+     * @return string|null
+     */
+    private function getDefaultCABundlePath()
+    {
+        $path = realpath(__DIR__ . '/../../resources/ca-bundle.crt');
+        if ($path && is_readable($path)) {
+            return $path;
+        }
+
+        return null;
     }
 }

@@ -46,27 +46,25 @@ try {
     
     $checkoutId = $checkout->id;
     // Pass the $checkoutId to the front-end to be processed
-} catch (\SumUp\Exceptions\SumUpAuthenticationException $e) {
+} catch (\SumUp\Exception\AuthenticationException $e) {
     echo 'Authentication error: ' . $e->getMessage();
-} catch (\SumUp\Exceptions\SumUpValidationException $e) {
+} catch (\SumUp\Exception\ValidationException $e) {
     echo 'Validation error: ' . $e->getMessage();
-} catch (\SumUp\Exceptions\SumUpSDKException $e) {
+} catch (\SumUp\Exception\SDKException $e) {
     echo 'SumUp SDK error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
     // Inspect the parsed response body for additional details.
     var_dump($e->getResponseBody());
 }
 ```
 
-Unexpected responses are wrapped in `SumUpSDKException`, which now exposes the HTTP status code (`getStatusCode()`) and the decoded payload (`getResponseBody()`), making it easier to inspect raw error payloads that don't match the SDK's validation/authentication error formats.
+Unexpected responses are wrapped in `SDKException`, which now exposes the HTTP status code (`getStatusCode()`) and the decoded payload (`getResponseBody()`), making it easier to inspect raw error payloads that don't match the SDK's validation/authentication error formats.
 
 ### Providing API Key Programmatically
 
 If you prefer to provide the API key directly in your code instead of using the environment variable:
 
 ```php
-$sumup = new \SumUp\SumUp([
-    'api_key' => 'your-api-key-here'
-]);
+$sumup = new \SumUp\SumUp('your-api-key-here');
 ```
 
 ### TLS Certificates
@@ -86,14 +84,19 @@ If not provided, the bundled `resources/ca-bundle.crt` file is used automaticall
 The SDK allows you to use a custom HTTP client for making requests. By default, the SDK uses cURL, but you can provide your own implementation:
 
 ```php
-// Create your custom HTTP client that implements SumUpHttpClientInterface
+// Create your custom HTTP client that implements HttpClientInterface
 $customClient = new YourCustomHttpClient();
 
 // Pass it to the SDK (uses SUMUP_API_KEY environment variable)
-$sumup = new \SumUp\SumUp([], $customClient);
+$sumup = new \SumUp\SumUp([
+    'client' => $customClient,
+]);
 
 // Or provide API key explicitly
-$sumup = new \SumUp\SumUp(['api_key' => 'your-api-key-here'], $customClient);
+$sumup = new \SumUp\SumUp([
+    'api_key' => 'your-api-key-here',
+    'client' => $customClient,
+]);
 ```
 
 This is useful for adding logging, retry logic, or using a different HTTP library. See `examples/custom-http-client.php` for a complete example.

@@ -15,7 +15,6 @@ import (
 //nolint:unused // retained for future SumUp class generation
 var reservedServiceNames = map[string]struct{}{
 	"Authorization": {},
-	"Custom":        {},
 }
 
 //nolint:unused // writeSumUpClass is kept for the legacy SumUp SDK surface
@@ -62,21 +61,14 @@ namespace SumUp;
 class SumUp
 {
     /**
-     * The application's configuration.
+     * The access token for API authentication.
      *
-     * @var ApplicationConfiguration
-     */
-    protected $appConfig;
-
-    /**
-     * The access token that holds the data from the response.
-     *
-     * @var AccessToken
+     * @var string|null
      */
     protected $accessToken;
 
     /**
-     * @var SumUpHttpClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -91,83 +83,81 @@ class SumUp
     /**
      * SumUp constructor.
      *
+     * @param string|array|null $configOrApiKey
+     *
+     * @throws SDKException
+     */
+    public function __construct($configOrApiKey = null)
+    {
+        $config = [];
+        if (is_string($configOrApiKey) && $configOrApiKey !== '') {
+            $config['api_key'] = $configOrApiKey;
+        } elseif (is_array($configOrApiKey)) {
+            $config = $configOrApiKey;
+        }
+        $customHttpClient = $config['client'] ?? null;
+        if (array_key_exists('client', $config)) {
+            unset($config['client']);
+        }
+        $config = $this->normalizeConfig($config);
+        if ($customHttpClient instanceof HttpClientInterface) {
+            $this->client = $customHttpClient;
+        } else {
+            $this->client = new CurlClient(
+                $config['base_uri'],
+                $config['custom_headers'],
+                $config['ca_bundle_path']
+            );
+        }
+        if (!empty($config['api_key'])) {
+            $this->accessToken = $config['api_key'];
+        } elseif (!empty($config['access_token'])) {
+            $this->accessToken = $config['access_token'];
+        }
+    }
+
+    /**
+     * Returns the default access token.
+     *
+     * @return string|null
+     */
+    public function getDefaultAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * Normalize configuration and apply defaults.
+     *
      * @param array $config
-     * @param SumUpHttpClientInterface|null $customHttpClient
      *
-     * @throws SumUpSDKException
+     * @return array
+     *
+     * @throws ConfigurationException
      */
-    public function __construct(array $config = [], SumUpHttpClientInterface $customHttpClient = null)
+    private function normalizeConfig(array $config)
     {
-        $this->appConfig = new ApplicationConfiguration($config);
-        $this->client = HttpClientsFactory::createHttpClient($this->appConfig, $customHttpClient);
-        $authorizationService = new Authorization($this->client, $this->appConfig);
-        $this->accessToken = $authorizationService->getToken();
-    }
+        $config = array_merge([
+            'api_key' => null,
+            'access_token' => null,
+            'base_uri' => 'https://api.sumup.com',
+            'custom_headers' => [],
+            'ca_bundle_path' => null,
+        ], $config);
 
-    /**
-     * Returns the access token.
-     *
-     * @return AccessToken
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
-    }
-
-    /**
-     * Refresh the access token.
-     *
-     * @param string $refreshToken
-     *
-     * @return AccessToken
-     *
-     * @throws SumUpSDKException
-     */
-    public function refreshToken($refreshToken = null)
-    {
-        if (isset($refreshToken)) {
-            $rToken = $refreshToken;
-        } elseif (!isset($refreshToken) && !isset($this->accessToken)) {
-            throw new SumUpConfigurationException('There is no refresh token');
-        } else {
-            $rToken = $this->accessToken->getRefreshToken();
-        }
-        $authorizationService = new Authorization($this->client, $this->appConfig);
-        $this->accessToken = $authorizationService->refreshToken($rToken);
-        return $this->accessToken;
-    }
-
-    /**
-     * Get the service for authorization.
-     *
-     * @param ApplicationConfigurationInterface|null $config
-     *
-     * @return Authorization
-     */
-    public function getAuthorizationService(ApplicationConfigurationInterface $config = null)
-    {
-        if (empty($config)) {
-            $cfg = $this->appConfig;
-        } else {
-            $cfg = $config;
-        }
-        return new Authorization($this->client, $cfg);
-    }
-
-    /**
-     * Resolve the access token that should be used for a service.
-     *
-     * @param AccessToken|null $accessToken
-     *
-     * @return AccessToken
-     */
-    protected function resolveAccessToken(AccessToken $accessToken = null)
-    {
-        if (!empty($accessToken)) {
-            return $accessToken;
+        if ($config['api_key'] === null) {
+            $config['api_key'] = getenv('SUMUP_API_KEY') ?: null;
         }
 
-        return $this->accessToken;
+        if ($config['access_token'] === null) {
+            $config['access_token'] = getenv('SUMUP_ACCESS_TOKEN') ?: null;
+        }
+
+        $headers = is_array($config['custom_headers']) ? $config['custom_headers'] : [];
+        $headers['User-Agent'] = SdkInfo::getUserAgent();
+        $config['custom_headers'] = $headers;
+
+        return $config;
     }
 
     /**
@@ -185,7 +175,11 @@ class SumUp
             return null;
         }
 
-        $token = $this->resolveAccessToken();
+        if (empty($this->accessToken)) {
+            throw new ConfigurationException('No access token provided');
+        }
+
+        $token = $this->accessToken;
         $serviceClass = self::$serviceClassMap[$name];
 
         return new $serviceClass($this->client, $token);
@@ -234,19 +228,15 @@ func (g *Generator) collectServiceDefinitions() []string {
 //nolint:unused // helper for the SumUp class code generation
 func sumUpUseStatements(serviceNames []string) []string {
 	uses := []string{
-		"SumUp\\Application\\ApplicationConfiguration",
-		"SumUp\\Application\\ApplicationConfigurationInterface",
-		"SumUp\\Authentication\\AccessToken",
-		"SumUp\\Exceptions\\SumUpConfigurationException",
-		"SumUp\\Exceptions\\SumUpSDKException",
-		"SumUp\\HttpClients\\HttpClientsFactory",
-		"SumUp\\HttpClients\\SumUpHttpClientInterface",
+		"SumUp\\Exception\\ConfigurationException",
+		"SumUp\\Exception\\SDKException",
+		"SumUp\\HttpClient\\CurlClient",
+		"SumUp\\HttpClient\\HttpClientInterface",
+		"SumUp\\SdkInfo",
 	}
 
 	serviceSet := map[string]struct{}{
-		"SumUp\\Services\\Authorization": {},
-		"SumUp\\Services\\Custom":        {},
-		"SumUp\\Services\\SumUpService":  {},
+		"SumUp\\Services\\SumUpService": {},
 	}
 
 	for _, name := range serviceNames {

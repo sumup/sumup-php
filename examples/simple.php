@@ -21,9 +21,7 @@ if (!$merchantCode) {
 }
 
 // Option 1: Create SDK with API key
-$sumup = new \SumUp\SumUp([
-    'api_key' => $apiKey,
-]);
+$sumup = new \SumUp\SumUp($apiKey);
 
 // Option 2: Create SDK with access token
 // $sumup = new \SumUp\SumUp([
@@ -38,6 +36,4 @@ $sumup = new \SumUp\SumUp([
 $merchant = $sumup->merchants->get($merchantCode);
 print_r($merchant);
 
-// Or override the token for a specific service call
-// $merchantsService = $sumup->getService('merchants', 'different-token');
-// $merchant = $merchantsService->get($merchantCode);
+// Override the default token by creating a new client instance instead.

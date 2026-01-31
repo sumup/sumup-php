@@ -9,7 +9,6 @@ Before running these examples, you need:
 1. **Client Credentials**: Create an OAuth2 application in the [SumUp Developer Settings](https://me.sumup.com/en-us/settings/oauth2-applications)
 2. **Redirect URI**: Configure your application with the correct redirect URI:
    - For web server example: `http://localhost:8080/callback`
-   - For CLI example: `urn:ietf:wg:oauth:2.0:oob`
 
 ## Examples
 
@@ -43,39 +42,9 @@ php -S localhost:8080 oauth2-server.php
 - Merchant information display
 - Example API usage
 
-### 2. Command Line Example (`oauth2-cli.php`)
-
-A simpler command-line OAuth2 implementation similar to the Go SDK example.
-
-**Setup:**
-```bash
-export CLIENT_ID="your_client_id"
-export CLIENT_SECRET="your_client_secret"
-```
-
-**Run:**
-```bash
-cd examples/oauth2
-php oauth2-cli.php
-```
-
-**Usage:**
-1. Run the script
-2. Copy the authorization URL and open it in your browser
-3. Authorize the application
-4. Copy the authorization code from the redirect page
-5. Paste it back into the terminal
-
-**Features:**
-- OAuth2 Authorization Code flow with PKCE
-- Out-of-band redirect for CLI applications
-- Interactive authorization code input
-- Basic merchant information retrieval
-- Example code generation
-
 ## OAuth 2.0 Flow Overview
 
-Both examples implement the Authorization Code flow with PKCE (Proof Key for Code Exchange):
+The example implements the Authorization Code flow with PKCE (Proof Key for Code Exchange):
 
 1. **Authorization Request**: User is redirected to SumUp's authorization server
 2. **User Authorization**: User logs in and grants permissions
@@ -115,9 +84,6 @@ $sumup = new \SumUp\SumUp([
 // Option 2: Set token later
 $sumup = new \SumUp\SumUp();
 $sumup->setDefaultAccessToken($accessToken);
-
-// Option 3: Override token per service call
-$checkouts = $sumup->getService('checkouts', $accessToken);
 
 // Use the SDK normally
 $checkout = $sumup->checkouts->create([

@@ -6,9 +6,9 @@ namespace SumUp\Receipts;
 
 namespace SumUp\Services;
 
-use SumUp\HttpClients\SumUpHttpClientInterface;
-use SumUp\Utils\Headers;
-use SumUp\Utils\ResponseDecoder;
+use SumUp\HttpClient\HttpClientInterface;
+use SumUp\ResponseDecoder;
+use SumUp\SdkInfo;
 
 /**
  * Class Receipts
@@ -20,7 +20,7 @@ class Receipts implements SumUpService
     /**
      * The client for the http communication.
      *
-     * @var SumUpHttpClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -34,10 +34,10 @@ class Receipts implements SumUpService
     /**
      * Receipts constructor.
      *
-     * @param SumUpHttpClientInterface $client
+     * @param HttpClientInterface $client
      * @param $accessToken
      */
-    public function __construct(SumUpHttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -61,7 +61,9 @@ class Receipts implements SumUpService
             }
         }
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 

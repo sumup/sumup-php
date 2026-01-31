@@ -13,15 +13,15 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 
 	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
-	buf.WriteString("use SumUp\\HttpClients\\SumUpHttpClientInterface;\n")
-	buf.WriteString("use SumUp\\Utils\\Headers;\n")
-	buf.WriteString("use SumUp\\Utils\\ResponseDecoder;\n\n")
+	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
+	buf.WriteString("use SumUp\\ResponseDecoder;\n")
+	buf.WriteString("use SumUp\\SdkInfo;\n\n")
 	fmt.Fprintf(&buf, "/**\n * Class %s\n *\n * @package SumUp\\Services\n */\n", className)
 	fmt.Fprintf(&buf, "class %s implements SumUpService\n{\n", className)
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * The client for the http communication.\n")
 	buf.WriteString("     *\n")
-	buf.WriteString("     * @var SumUpHttpClientInterface\n")
+	buf.WriteString("     * @var HttpClientInterface\n")
 	buf.WriteString("     */\n")
 	buf.WriteString("    protected $client;\n\n")
 	buf.WriteString("    /**\n")
@@ -35,10 +35,10 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString(className)
 	buf.WriteString(" constructor.\n")
 	buf.WriteString("     *\n")
-	buf.WriteString("     * @param SumUpHttpClientInterface $client\n")
+	buf.WriteString("     * @param HttpClientInterface $client\n")
 	buf.WriteString("     * @param $accessToken\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    public function __construct(SumUpHttpClientInterface $client, $accessToken)\n")
+	buf.WriteString("    public function __construct(HttpClientInterface $client, $accessToken)\n")
 	buf.WriteString("    {\n")
 	buf.WriteString("        $this->client = $client;\n")
 	buf.WriteString("        $this->accessToken = $accessToken;\n")
@@ -140,7 +140,9 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 		buf.WriteString("        }\n")
 	}
 
-	buf.WriteString("        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));\n\n")
+	buf.WriteString("        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];\n")
+	buf.WriteString("        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());\n")
+	buf.WriteString("        $headers['Authorization'] = 'Bearer ' . $this->accessToken;\n\n")
 	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers);\n\n", strings.ToUpper(op.Method))
 	if descriptor := renderOperationResponseDescriptor(op); descriptor != "" {
 		fmt.Fprintf(&buf, "        return ResponseDecoder::decode($response, %s);\n", descriptor)

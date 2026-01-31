@@ -1,13 +1,13 @@
 <?php
 
-namespace SumUp\Exceptions;
+namespace SumUp\Exception;
 
 /**
- * Class SumUpSDKException
+ * Class SDKException
  *
- * @package SumUp\Exceptions
+ * @package SumUp\Exception
  */
-class SumUpSDKException extends \Exception
+class SDKException extends \Exception
 {
     /**
      * HTTP status code returned by the API, if any.

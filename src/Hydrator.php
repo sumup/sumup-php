@@ -1,6 +1,6 @@
 <?php
 
-namespace SumUp\Utils;
+namespace SumUp;
 
 use ReflectionClass;
 use ReflectionNamedType;

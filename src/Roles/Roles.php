@@ -6,9 +6,9 @@ namespace SumUp\Roles;
 
 namespace SumUp\Services;
 
-use SumUp\HttpClients\SumUpHttpClientInterface;
-use SumUp\Utils\Headers;
-use SumUp\Utils\ResponseDecoder;
+use SumUp\HttpClient\HttpClientInterface;
+use SumUp\ResponseDecoder;
+use SumUp\SdkInfo;
 
 /**
  * Class Roles
@@ -20,7 +20,7 @@ class Roles implements SumUpService
     /**
      * The client for the http communication.
      *
-     * @var SumUpHttpClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -34,10 +34,10 @@ class Roles implements SumUpService
     /**
      * Roles constructor.
      *
-     * @param SumUpHttpClientInterface $client
+     * @param HttpClientInterface $client
      * @param $accessToken
      */
-    public function __construct(SumUpHttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -58,7 +58,9 @@ class Roles implements SumUpService
         if ($body !== null) {
             $payload = $body;
         }
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('POST', $path, $payload, $headers);
 
@@ -79,7 +81,9 @@ class Roles implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('DELETE', $path, $payload, $headers);
 
@@ -100,7 +104,9 @@ class Roles implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
@@ -118,7 +124,9 @@ class Roles implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
@@ -143,7 +151,9 @@ class Roles implements SumUpService
         if ($body !== null) {
             $payload = $body;
         }
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('PATCH', $path, $payload, $headers);
 

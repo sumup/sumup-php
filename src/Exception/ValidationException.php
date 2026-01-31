@@ -1,13 +1,13 @@
 <?php
 
-namespace SumUp\Exceptions;
+namespace SumUp\Exception;
 
 /**
- * Class SumUpValidationException
+ * Class ValidationException
  *
- * @package SumUp\Exceptions
+ * @package SumUp\Exception
  */
-class SumUpValidationException extends SumUpSDKException
+class ValidationException extends SDKException
 {
     const VALIDATION_ERROR_BASE = 'Validation error in: ';
     /**
@@ -18,7 +18,7 @@ class SumUpValidationException extends SumUpSDKException
     protected $fields;
 
     /**
-     * SumUpValidationException constructor.
+     * ValidationException constructor.
      *
      * @param array $fields
      * @param int   $code

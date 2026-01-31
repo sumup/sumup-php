@@ -16,21 +16,28 @@ if (!$apiKey) {
     exit(1);
 }
 
+$merchantCode = getenv('SUMUP_MERCHANT_CODE');
+
+if (!$merchantCode) {
+    fwrite(STDERR, "Missing SUMUP_MERCHANT_CODE environment variable\n");
+    exit(1);
+}
+
 /**
  * Example custom HTTP client implementation.
  *
  * This demonstrates how to create your own HTTP client by implementing
- * the SumUpHttpClientInterface. You could use this to:
+ * the HttpClientInterface. You could use this to:
  * - Add custom logging
  * - Implement retry logic
  * - Use a different HTTP library
  * - Add custom middleware
  */
-class CustomLoggingHttpClient implements \SumUp\HttpClients\SumUpHttpClientInterface
+class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
 {
     private $wrappedClient;
 
-    public function __construct(\SumUp\HttpClients\SumUpHttpClientInterface $wrappedClient)
+    public function __construct(\SumUp\HttpClient\HttpClientInterface $wrappedClient)
     {
         $this->wrappedClient = $wrappedClient;
     }
@@ -59,7 +66,7 @@ $customHeaders = ['User-Agent' => 'SumUp-PHP-SDK-Custom'];
 $caBundlePath = null;
 
 // Create base cURL client
-$baseClient = new \SumUp\HttpClients\SumUpCUrlClient(
+$baseClient = new \SumUp\HttpClient\CurlClient(
     $baseUrl,
     $customHeaders,
     $caBundlePath
@@ -69,16 +76,16 @@ $baseClient = new \SumUp\HttpClients\SumUpCUrlClient(
 $customClient = new CustomLoggingHttpClient($baseClient);
 
 // Pass the custom client to the SumUp SDK
-$sumup = new \SumUp\SumUp(
-    ['api_key' => $apiKey],
-    $customClient
-);
+$sumup = new \SumUp\SumUp([
+    'api_key' => $apiKey,
+    'client' => $customClient,
+]);
 
 // Use the SDK normally - all requests will be logged
 try {
-    $merchant = $sumup->merchant->get();
+    $merchant = $sumup->merchants->get($merchantCode);
     echo "\nMerchant retrieved successfully!\n";
-    echo "Merchant code: " . $merchant->merchant_code . "\n";
-} catch (\SumUp\Exceptions\SumUpSDKException $e) {
+    echo "Merchant code: " . $merchant->merchantCode . "\n";
+} catch (\SumUp\Exception\SDKException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }

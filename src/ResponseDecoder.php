@@ -1,8 +1,8 @@
 <?php
 
-namespace SumUp\Utils;
+namespace SumUp;
 
-use SumUp\HttpClients\Response;
+use SumUp\HttpClient\Response;
 
 /**
  * Converts HTTP responses into SDK models or scalar values.

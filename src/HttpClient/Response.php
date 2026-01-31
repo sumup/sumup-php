@@ -1,15 +1,15 @@
 <?php
 
-namespace SumUp\HttpClients;
+namespace SumUp\HttpClient;
 
-use SumUp\Exceptions\SumUpAuthenticationException;
-use SumUp\Exceptions\SumUpSDKException;
-use SumUp\Exceptions\SumUpValidationException;
+use SumUp\Exception\AuthenticationException;
+use SumUp\Exception\SDKException;
+use SumUp\Exception\ValidationException;
 
 /**
  * Class Response
  *
- * @package SumUp\HttpClients
+ * @package SumUp\HttpClient
  */
 class Response
 {
@@ -33,8 +33,8 @@ class Response
      * @param number $httpResponseCode
      * @param $body
      *
-     * @throws SumUpAuthenticationException
-     * @throws SumUpSDKException
+     * @throws AuthenticationException
+     * @throws SDKException
      */
     public function __construct($httpResponseCode, $body)
     {
@@ -68,32 +68,32 @@ class Response
      *
      * @return mixed
      *
-     * @throws SumUpAuthenticationException
-     * @throws SumUpValidationException
-     * @throws SumUpSDKException
+     * @throws AuthenticationException
+     * @throws ValidationException
+     * @throws SDKException
      */
     protected function parseResponseForErrors()
     {
         if (isset($this->body->error_code) && $this->body->error_code === 'NOT_AUTHORIZED') {
-            throw new SumUpAuthenticationException($this->body->error_message, $this->httpResponseCode);
+            throw new AuthenticationException($this->body->error_message, $this->httpResponseCode);
         }
         if (isset($this->body->error_code) && ($this->body->error_code === 'MISSING' || $this->body->error_code === 'INVALID')) {
-            throw new SumUpValidationException([$this->body->param], $this->httpResponseCode);
+            throw new ValidationException([$this->body->param], $this->httpResponseCode);
         }
         if (is_array($this->body) && sizeof($this->body) > 0 && isset($this->body[0]->error_code) && ($this->body[0]->error_code === 'MISSING' || $this->body[0]->error_code === 'INVALID')) {
             $invalidFields = [];
             foreach ($this->body as $errorObject) {
                 $invalidFields[] = $errorObject->param;
             }
-            throw new SumUpValidationException($invalidFields, $this->httpResponseCode);
+            throw new ValidationException($invalidFields, $this->httpResponseCode);
         }
         if ($this->httpResponseCode >= 500) {
             $message = $this->parseErrorMessage('Server error');
-            throw new SumUpSDKException($message, $this->httpResponseCode, $this->body);
+            throw new SDKException($message, $this->httpResponseCode, $this->body);
         }
         if ($this->httpResponseCode >= 400) {
             $message = $this->parseErrorMessage('Client error');
-            throw new SumUpSDKException($message, $this->httpResponseCode, $this->body);
+            throw new SDKException($message, $this->httpResponseCode, $this->body);
         }
     }
 

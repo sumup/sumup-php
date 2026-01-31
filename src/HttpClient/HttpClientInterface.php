@@ -1,13 +1,13 @@
 <?php
 
-namespace SumUp\HttpClients;
+namespace SumUp\HttpClient;
 
 /**
- * Interface SumUpHttpClientInterface
+ * Interface HttpClientInterface
  *
- * @package SumUp\HttpClients
+ * @package SumUp\HttpClient
  */
-interface SumUpHttpClientInterface
+interface HttpClientInterface
 {
     /**
      * @param string $method      The request method.

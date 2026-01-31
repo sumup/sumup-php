@@ -6,9 +6,9 @@ namespace SumUp\Merchant;
 
 namespace SumUp\Services;
 
-use SumUp\HttpClients\SumUpHttpClientInterface;
-use SumUp\Utils\Headers;
-use SumUp\Utils\ResponseDecoder;
+use SumUp\HttpClient\HttpClientInterface;
+use SumUp\ResponseDecoder;
+use SumUp\SdkInfo;
 
 /**
  * Class Merchant
@@ -20,7 +20,7 @@ class Merchant implements SumUpService
     /**
      * The client for the http communication.
      *
-     * @var SumUpHttpClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -34,10 +34,10 @@ class Merchant implements SumUpService
     /**
      * Merchant constructor.
      *
-     * @param SumUpHttpClientInterface $client
+     * @param HttpClientInterface $client
      * @param $accessToken
      */
-    public function __construct(SumUpHttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -62,7 +62,9 @@ class Merchant implements SumUpService
             }
         }
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
@@ -81,7 +83,9 @@ class Merchant implements SumUpService
     {
         $path = '/v0.1/me/merchant-profile/doing-business-as';
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
@@ -100,7 +104,9 @@ class Merchant implements SumUpService
     {
         $path = '/v0.1/me/merchant-profile';
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
@@ -119,7 +125,9 @@ class Merchant implements SumUpService
     {
         $path = '/v0.1/me/personal-profile';
         $payload = [];
-        $headers = array_merge(Headers::getStandardHeaders(), Headers::getAuth($this->accessToken));
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 

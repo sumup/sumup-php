@@ -162,7 +162,17 @@ func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, ope
 
 	var buf bytes.Buffer
 	buf.WriteString("<?php\n\ndeclare(strict_types=1);\n\n")
-	fmt.Fprintf(&buf, "namespace %s;\n\n", namespace)
+	fmt.Fprintf(&buf, "namespace %s;\n", namespace)
+
+	hasEnums := false
+	if enums, ok := g.enumsByTag[tagKey]; ok && len(enums) > 0 {
+		hasEnums = true
+	}
+	hasSchemas := len(schemas) > 0
+	hasTagContent := hasEnums || hasSchemas
+	if hasTagContent {
+		buf.WriteString("\n")
+	}
 
 	// Write enums first if any exist for this tag
 	if enums, ok := g.enumsByTag[tagKey]; ok && len(enums) > 0 {
@@ -186,9 +196,6 @@ func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, ope
 	}
 
 	if includeService {
-		if buf.Len() > 0 {
-			buf.WriteString("\n")
-		}
 		buf.WriteString("\n")
 		buf.WriteString(g.buildServiceBlock(tagKey, operations))
 	}

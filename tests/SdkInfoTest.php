@@ -5,13 +5,13 @@ namespace SumUp\Tests;
 use PHPUnit\Framework\TestCase;
 use SumUp\ApiVersion;
 use SumUp\SdkInfo;
-use SumUp\Utils\Headers;
 
 class SdkInfoTest extends TestCase
 {
     public function testStandardHeadersIncludeRuntimeMetadata()
     {
-        $headers = Headers::getStandardHeaders();
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
 
         $this->assertSame('application/json', $headers['Content-Type']);
         $this->assertSame(SdkInfo::getUserAgent(), $headers['User-Agent']);

@@ -3,14 +3,14 @@
 namespace SumUp\Tests\Doubles;
 
 use RuntimeException;
-use SumUp\HttpClients\Response;
-use SumUp\HttpClients\SumUpHttpClientInterface;
+use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\Response;
 
 /**
  * Lightweight test double that records outgoing requests and can optionally
  * fail when an HTTP call is not expected.
  */
-class FakeHttpClient implements SumUpHttpClientInterface
+class FakeHttpClient implements HttpClientInterface
 {
     /**
      * @var array<int, array<string, mixed>>

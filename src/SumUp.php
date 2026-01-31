@@ -2,13 +2,11 @@
 
 namespace SumUp;
 
-use SumUp\Application\ApplicationConfiguration;
-use SumUp\Exceptions\SumUpConfigurationException;
-use SumUp\Exceptions\SumUpSDKException;
-use SumUp\HttpClients\HttpClientsFactory;
-use SumUp\HttpClients\SumUpHttpClientInterface;
+use SumUp\Exception\ConfigurationException;
+use SumUp\Exception\SDKException;
+use SumUp\HttpClient\CurlClient;
+use SumUp\HttpClient\HttpClientInterface;
 use SumUp\Services\Checkouts;
-use SumUp\Services\Custom;
 use SumUp\Services\Customers;
 use SumUp\Services\Members;
 use SumUp\Services\Memberships;
@@ -43,13 +41,6 @@ use SumUp\Services\Transactions;
 class SumUp
 {
     /**
-     * The application's configuration.
-     *
-     * @var ApplicationConfiguration
-     */
-    protected $appConfig;
-
-    /**
      * The access token for API authentication.
      *
      * @var string|null
@@ -57,7 +48,7 @@ class SumUp
     protected $accessToken;
 
     /**
-     * @var SumUpHttpClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -86,21 +77,39 @@ class SumUp
     /**
      * SumUp constructor.
      *
-     * @param array $config
-     * @param SumUpHttpClientInterface|null $customHttpClient
+     * @param string|array|null $configOrApiKey
      *
-     * @throws SumUpSDKException
+     * @throws SDKException
      */
-    public function __construct(array $config = [], ?SumUpHttpClientInterface $customHttpClient = null)
+    public function __construct($configOrApiKey = null)
     {
-        $this->appConfig = new ApplicationConfiguration($config);
-        $this->client = HttpClientsFactory::createHttpClient($this->appConfig, $customHttpClient);
+        $config = [];
+        if (is_string($configOrApiKey) && $configOrApiKey !== '') {
+            $config['api_key'] = $configOrApiKey;
+        } elseif (is_array($configOrApiKey)) {
+            $config = $configOrApiKey;
+        }
+        $customHttpClient = $config['client'] ?? null;
+        if (array_key_exists('client', $config)) {
+            unset($config['client']);
+        }
+
+        $config = $this->normalizeConfig($config);
+        if ($customHttpClient instanceof HttpClientInterface) {
+            $this->client = $customHttpClient;
+        } else {
+            $this->client = new CurlClient(
+                $config['base_uri'],
+                $config['custom_headers'],
+                $config['ca_bundle_path']
+            );
+        }
         
         // Set access token from config (api_key or access_token)
-        if ($this->appConfig->getApiKey()) {
-            $this->accessToken = $this->appConfig->getApiKey();
-        } elseif ($this->appConfig->getAccessToken()) {
-            $this->accessToken = $this->appConfig->getAccessToken();
+        if (!empty($config['api_key'])) {
+            $this->accessToken = $config['api_key'];
+        } elseif (!empty($config['access_token'])) {
+            $this->accessToken = $config['access_token'];
         }
     }
 
@@ -133,7 +142,7 @@ class SumUp
      *
      * @return string
      *
-     * @throws SumUpConfigurationException
+     * @throws ConfigurationException
      */
     protected function resolveAccessToken($accessToken = null)
     {
@@ -142,10 +151,44 @@ class SumUp
         }
 
         if (empty($this->accessToken)) {
-            throw new SumUpConfigurationException('No access token provided');
+            throw new ConfigurationException('No access token provided');
         }
 
         return $this->accessToken;
+    }
+
+    /**
+     * Normalize configuration and apply defaults.
+     *
+     * @param array $config
+     *
+     * @return array
+     *
+     * @throws ConfigurationException
+     */
+    private function normalizeConfig(array $config)
+    {
+        $config = array_merge([
+            'api_key' => null,
+            'access_token' => null,
+            'base_uri' => 'https://api.sumup.com',
+            'custom_headers' => [],
+            'ca_bundle_path' => null,
+        ], $config);
+
+        if ($config['api_key'] === null) {
+            $config['api_key'] = getenv('SUMUP_API_KEY') ?: null;
+        }
+
+        if ($config['access_token'] === null) {
+            $config['access_token'] = getenv('SUMUP_ACCESS_TOKEN') ?: null;
+        }
+
+        $headers = is_array($config['custom_headers']) ? $config['custom_headers'] : [];
+        $headers['User-Agent'] = SdkInfo::getUserAgent();
+        $config['custom_headers'] = $headers;
+
+        return $config;
     }
 
     /**
@@ -157,40 +200,16 @@ class SumUp
      */
     public function __get($name)
     {
-        return $this->getService($name);
-    }
-
-    /**
-     * Resolve a service by its property name.
-     *
-     * @param string $name
-     * @param string|null $accessToken
-     *
-     * @return SumUpService|null
-     */
-    public function getService($name, $accessToken = null)
-    {
         if (!array_key_exists($name, self::$serviceClassMap)) {
             trigger_error('Undefined property: ' . static::class . '::$' . $name);
 
             return null;
         }
 
-        $token = $this->resolveAccessToken($accessToken);
+        $token = $this->resolveAccessToken();
         $serviceClass = self::$serviceClassMap[$name];
 
         return new $serviceClass($this->client, $token);
     }
 
-    /**
-     * @param string|null $accessToken
-     *
-     * @return Custom
-     */
-    public function getCustomService($accessToken = null)
-    {
-        $token = $this->resolveAccessToken($accessToken);
-
-        return new Custom($this->client, $token);
-    }
 }
