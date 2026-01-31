@@ -14,8 +14,7 @@ $config->setRules([
     'no_closing_tag' => true,
     'concat_space' => ['spacing' => 'one'],
 
-    // PHP 5.6 compatibility
-    'visibility_required' => [
+    'modifier_keywords' => [
         'elements' => [
             'method',
             'property',

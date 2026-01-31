@@ -52,62 +52,9 @@ enum ModelStatus: string
 }
 
 /**
- * Identifier of the model of the device.
- */
-enum ReaderDeviceModel: string
-{
-    case SOLO = 'solo';
-    case VIRTUAL_SOLO = 'virtual-solo';
-}
-
-/**
- * The status of the reader object gives information about the current state of the reader.
- *
- * Possible values:
- *
- * - `unknown` - The reader status is unknown.
- * - `processing` - The reader is created and waits for the physical device to confirm the pairing.
- * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
- * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
- */
-enum ReaderStatus: string
-{
-    case UNKNOWN = 'unknown';
-    case PROCESSING = 'processing';
-    case PAIRED = 'paired';
-    case EXPIRED = 'expired';
-}
-
-/**
- * 502 Bad Gateway
- */
-class BadGateway
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
  * 400 Bad Request
  */
 class BadRequest
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * Error description
- */
-class CreateReaderCheckoutError
 {
     /**
      *
@@ -205,167 +152,6 @@ class CreateReaderCheckoutResponse
 }
 
 /**
- * Unprocessable entity
- */
-class CreateReaderCheckoutUnprocessableEntity
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * Error description
- */
-class CreateReaderTerminateError
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * Unprocessable entity
- */
-class CreateReaderTerminateUnprocessableEntity
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * 504 Gateway Timeout
- */
-class GatewayTimeout
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * 500 Internal Server Error
- */
-class InternalServerError
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * 404 Not Found
- */
-class NotFound
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
-
-}
-
-/**
- * A physical card reader device that can accept in-person payments.
- */
-class Reader
-{
-    /**
-     * Unique identifier of the object.
-     * Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
-     *
-     * @var string
-     */
-    public string $id;
-
-    /**
-     * Custom human-readable, user-defined name for easier identification of the reader.
-     *
-     * @var string
-     */
-    public string $name;
-
-    /**
-     * The status of the reader object gives information about the current state of the reader.
-     * Possible values:
-     * - `unknown` - The reader status is unknown.
-     * - `processing` - The reader is created and waits for the physical device to confirm the pairing.
-     * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
-     * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
-     *
-     * @var ReaderStatus
-     */
-    public ReaderStatus $status;
-
-    /**
-     * Information about the underlying physical device.
-     *
-     * @var ReaderDevice
-     */
-    public ReaderDevice $device;
-
-    /**
-     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
-     *
-     * @var array|null
-     */
-    public ?array $metadata = null;
-
-    /**
-     * The timestamp of when the reader was created.
-     *
-     * @var string
-     */
-    public string $createdAt;
-
-    /**
-     * The timestamp of when the reader was last updated.
-     *
-     * @var string
-     */
-    public string $updatedAt;
-
-}
-
-/**
- * Information about the underlying physical device.
- */
-class ReaderDevice
-{
-    /**
-     * A unique identifier of the physical device (e.g. serial number).
-     *
-     * @var string
-     */
-    public string $identifier;
-
-    /**
-     * Identifier of the model of the device.
-     *
-     * @var ReaderDeviceModel
-     */
-    public ReaderDeviceModel $model;
-
-}
-
-/**
  * Status of a device
  */
 class StatusResponse
@@ -375,19 +161,6 @@ class StatusResponse
      * @var array
      */
     public array $data;
-
-}
-
-/**
- * 401 Unauthorized
- */
-class Unauthorized
-{
-    /**
-     *
-     * @var array
-     */
-    public array $errors;
 
 }
 
@@ -437,7 +210,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Readers\Reader
+     * @return \SumUp\Types\Reader
      */
     public function create($merchantCode, $body = null)
     {
@@ -451,7 +224,7 @@ class Readers implements SumUpService
         $response = $this->client->send('POST', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '201' => ['type' => 'class', 'class' => \SumUp\Readers\Reader::class],
+            '201' => ['type' => 'class', 'class' => \SumUp\Types\Reader::class],
         ]);
     }
 
@@ -507,7 +280,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
      *
-     * @return \SumUp\Readers\Reader
+     * @return \SumUp\Types\Reader
      */
     public function get($merchantCode, $id)
     {
@@ -517,7 +290,7 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Readers\Reader::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
     }
 
     /**
@@ -591,7 +364,7 @@ class Readers implements SumUpService
      * @param string $id The unique identifier of the reader.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Readers\Reader
+     * @return \SumUp\Types\Reader
      */
     public function update($merchantCode, $id, $body = null)
     {
@@ -604,6 +377,6 @@ class Readers implements SumUpService
 
         $response = $this->client->send('PATCH', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Readers\Reader::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
     }
 }

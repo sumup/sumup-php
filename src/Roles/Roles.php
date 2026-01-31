@@ -4,70 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Roles;
 
-/**
- * A custom role that can be used to assign set of permissions to members.
- */
-class Role
-{
-    /**
-     * Unique identifier of the role.
-     *
-     * @var string
-     */
-    public string $id;
-
-    /**
-     * User-defined name of the role.
-     *
-     * @var string
-     */
-    public string $name;
-
-    /**
-     * User-defined description of the role.
-     *
-     * @var string|null
-     */
-    public ?string $description = null;
-
-    /**
-     * List of permission granted by this role.
-     *
-     * @var string[]
-     */
-    public array $permissions;
-
-    /**
-     * True if the role is provided by SumUp.
-     *
-     * @var bool
-     */
-    public bool $isPredefined;
-
-    /**
-     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
-     *
-     * @var array|null
-     */
-    public ?array $metadata = null;
-
-    /**
-     * The timestamp of when the role was created.
-     *
-     * @var string
-     */
-    public string $createdAt;
-
-    /**
-     * The timestamp of when the role was last updated.
-     *
-     * @var string
-     */
-    public string $updatedAt;
-
-}
-
-
 namespace SumUp\Services;
 
 use SumUp\HttpClients\SumUpHttpClientInterface;
@@ -113,7 +49,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Roles\Role
+     * @return \SumUp\Types\Role
      */
     public function create($merchantCode, $body = null)
     {
@@ -127,7 +63,7 @@ class Roles implements SumUpService
         $response = $this->client->send('POST', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '201' => ['type' => 'class', 'class' => \SumUp\Roles\Role::class],
+            '201' => ['type' => 'class', 'class' => \SumUp\Types\Role::class],
         ]);
     }
 
@@ -158,7 +94,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      *
-     * @return \SumUp\Roles\Role
+     * @return \SumUp\Types\Role
      */
     public function get($merchantCode, $roleId)
     {
@@ -168,7 +104,7 @@ class Roles implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Roles\Role::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Role::class);
     }
 
     /**
@@ -198,7 +134,7 @@ class Roles implements SumUpService
      * @param string $roleId The ID of the role to retrieve.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Roles\Role
+     * @return \SumUp\Types\Role
      */
     public function update($merchantCode, $roleId, $body = null)
     {
@@ -211,6 +147,6 @@ class Roles implements SumUpService
 
         $response = $this->client->send('PATCH', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Roles\Role::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Role::class);
     }
 }

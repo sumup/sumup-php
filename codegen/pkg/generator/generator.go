@@ -18,6 +18,9 @@ const (
 	sharedTagKey         = "__shared"
 	sharedTagDisplayName = "Shared"
 	sharedTagNamespace   = "SumUp\\Shared"
+	typesTagKey          = "__types"
+	typesTagDisplayName  = "Types"
+	typesNamespace       = "SumUp\\Types"
 )
 
 // Config defines generator options.
@@ -108,6 +111,13 @@ func (g *Generator) Build() error {
 		operations := g.operationsByTag[tagKey]
 
 		if len(schemas) == 0 && len(operations) == 0 {
+			continue
+		}
+
+		if tagKey == typesTagKey {
+			if err := g.writeTypeModels(schemas); err != nil {
+				return err
+			}
 			continue
 		}
 
@@ -267,6 +277,9 @@ func (g *Generator) displayTagName(tagKey string) string {
 	if tagKey == sharedTagKey {
 		return sharedTagDisplayName
 	}
+	if tagKey == typesTagKey {
+		return typesTagDisplayName
+	}
 
 	if tag, ok := g.tagLookup[tagKey]; ok && tag != nil && tag.Name != "" {
 		return sanitizeTagName(tag.Name)
@@ -278,6 +291,9 @@ func (g *Generator) displayTagName(tagKey string) string {
 func (g *Generator) namespaceForTag(tagKey string) string {
 	if tagKey == sharedTagKey {
 		return sharedTagNamespace
+	}
+	if tagKey == typesTagKey {
+		return typesNamespace
 	}
 
 	tagName := g.displayTagName(tagKey)
@@ -329,7 +345,7 @@ func (g *Generator) buildPHPEnum(enum enumDefinition) string {
 }
 
 func (g *Generator) shouldIncludeService(tagKey string, operations []*operation) bool {
-	return tagKey != sharedTagKey && len(operations) > 0
+	return tagKey != sharedTagKey && tagKey != typesTagKey && len(operations) > 0
 }
 
 func (g *Generator) collectEnums() (map[string][]enumDefinition, map[string]string) {

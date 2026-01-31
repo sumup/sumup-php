@@ -4,108 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Subaccounts;
 
-enum OperatorAccountType: string
-{
-    case OPERATOR = 'operator';
-    case NORMAL = 'normal';
-}
-
-/**
- * Operator account for a merchant.
- */
-class Operator
-{
-    /**
-     *
-     * @var int
-     */
-    public int $id;
-
-    /**
-     *
-     * @var string
-     */
-    public string $username;
-
-    /**
-     *
-     * @var string|null
-     */
-    public ?string $nickname = null;
-
-    /**
-     *
-     * @var bool
-     */
-    public bool $disabled;
-
-    /**
-     * The timestamp of when the operator was created.
-     *
-     * @var string
-     */
-    public string $createdAt;
-
-    /**
-     * The timestamp of when the operator was last updated.
-     *
-     * @var string
-     */
-    public string $updatedAt;
-
-    /**
-     * Permissions assigned to an operator or user.
-     *
-     * @var Permissions
-     */
-    public Permissions $permissions;
-
-    /**
-     *
-     * @var OperatorAccountType
-     */
-    public OperatorAccountType $accountType;
-
-}
-
-/**
- * Permissions assigned to an operator or user.
- */
-class Permissions
-{
-    /**
-     *
-     * @var bool
-     */
-    public bool $createMotoPayments;
-
-    /**
-     *
-     * @var bool
-     */
-    public bool $createReferral;
-
-    /**
-     *
-     * @var bool
-     */
-    public bool $fullTransactionHistoryView;
-
-    /**
-     *
-     * @var bool
-     */
-    public bool $refundTransactions;
-
-    /**
-     *
-     * @var bool
-     */
-    public bool $admin;
-
-}
-
-
 namespace SumUp\Services;
 
 use SumUp\HttpClients\SumUpHttpClientInterface;
@@ -150,7 +48,7 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      *
-     * @return \SumUp\Subaccounts\Operator
+     * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
@@ -162,7 +60,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
 
     /**
@@ -170,7 +68,7 @@ class Subaccounts implements SumUpService
      *
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Subaccounts\Operator
+     * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
@@ -185,7 +83,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
 
     /**
@@ -193,7 +91,7 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      *
-     * @return \SumUp\Subaccounts\Operator
+     * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
@@ -205,7 +103,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
 
     /**
@@ -213,7 +111,7 @@ class Subaccounts implements SumUpService
      *
      * @param array $queryParams Optional query string parameters
      *
-     * @return \SumUp\Subaccounts\Operator[]
+     * @return \SumUp\Types\Operator[]
      *
      * @deprecated
      */
@@ -232,7 +130,7 @@ class Subaccounts implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Subaccounts\Operator::class]],
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\Operator::class]],
         ]);
     }
 
@@ -242,7 +140,7 @@ class Subaccounts implements SumUpService
      * @param string $operatorId The unique identifier for the operator.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Subaccounts\Operator
+     * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
@@ -257,6 +155,6 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Subaccounts\Operator::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
 }

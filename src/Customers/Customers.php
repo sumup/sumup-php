@@ -5,50 +5,11 @@ declare(strict_types=1);
 namespace SumUp\Customers;
 
 /**
- * Issuing card network of the payment card used for the transaction.
- */
-enum ModelType: string
-{
-    case AMEX = 'AMEX';
-    case CUP = 'CUP';
-    case DINERS = 'DINERS';
-    case DISCOVER = 'DISCOVER';
-    case ELO = 'ELO';
-    case ELV = 'ELV';
-    case HIPERCARD = 'HIPERCARD';
-    case JCB = 'JCB';
-    case MAESTRO = 'MAESTRO';
-    case MASTERCARD = 'MASTERCARD';
-    case VISA = 'VISA';
-    case VISA_ELECTRON = 'VISA_ELECTRON';
-    case VISA_VPAY = 'VISA_VPAY';
-    case UNKNOWN = 'UNKNOWN';
-}
-
-/**
  * Type of the payment instrument.
  */
 enum PaymentInstrumentResponseType: string
 {
     case CARD = 'card';
-}
-
-class Customer
-{
-    /**
-     * Unique ID of the customer.
-     *
-     * @var string
-     */
-    public string $customerId;
-
-    /**
-     * Personal details for the customer.
-     *
-     * @var \SumUp\Shared\PersonalDetails|null
-     */
-    public ?\SumUp\Shared\PersonalDetails $personalDetails = null;
-
 }
 
 /**
@@ -87,9 +48,9 @@ class PaymentInstrumentResponse
     /**
      * Created mandate
      *
-     * @var \SumUp\Shared\MandateResponse|null
+     * @var \SumUp\Types\MandateResponse|null
      */
-    public ?\SumUp\Shared\MandateResponse $mandate = null;
+    public ?\SumUp\Types\MandateResponse $mandate = null;
 
     /**
      * Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
@@ -145,7 +106,7 @@ class Customers implements SumUpService
      *
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Customers\Customer
+     * @return \SumUp\Types\Customer
      */
     public function create($body = null)
     {
@@ -159,7 +120,7 @@ class Customers implements SumUpService
         $response = $this->client->send('POST', $path, $payload, $headers);
 
         return ResponseDecoder::decode($response, [
-            '201' => ['type' => 'class', 'class' => \SumUp\Customers\Customer::class],
+            '201' => ['type' => 'class', 'class' => \SumUp\Types\Customer::class],
         ]);
     }
 
@@ -189,7 +150,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      *
-     * @return \SumUp\Customers\Customer
+     * @return \SumUp\Types\Customer
      */
     public function get($customerId)
     {
@@ -199,7 +160,7 @@ class Customers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Customers\Customer::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Customer::class);
     }
 
     /**
@@ -228,7 +189,7 @@ class Customers implements SumUpService
      * @param string $customerId Unique ID of the saved customer resource.
      * @param array|null $body Optional request payload
      *
-     * @return \SumUp\Customers\Customer
+     * @return \SumUp\Types\Customer
      */
     public function update($customerId, $body = null)
     {
@@ -241,6 +202,6 @@ class Customers implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, \SumUp\Customers\Customer::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\Customer::class);
     }
 }

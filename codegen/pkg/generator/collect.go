@@ -76,8 +76,8 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 			tagNames = append(tagNames, tag)
 		}
 
-		targetTag := sharedTagKey
-		if len(tagNames) == 1 {
+		targetTag := typesTagKey
+		if isServiceLocalSchemaName(schemaName) && len(tagNames) == 1 {
 			targetTag = tagNames[0]
 		}
 

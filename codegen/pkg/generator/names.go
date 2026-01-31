@@ -98,3 +98,28 @@ func phpEnumCaseName(value string) string {
 
 	return value
 }
+
+func isServiceLocalSchemaName(name string) bool {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return false
+	}
+
+	suffixes := []string{
+		"Request",
+		"RequestBody",
+		"Response",
+		"ResponseBody",
+		"Params",
+		"Param",
+		"Parameters",
+	}
+
+	for _, suffix := range suffixes {
+		if strings.HasSuffix(name, suffix) {
+			return true
+		}
+	}
+
+	return false
+}

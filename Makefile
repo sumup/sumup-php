@@ -10,11 +10,11 @@ vendor: composer.json ## Install dependencies
 
 .PHONY: fmt
 fmt: vendor ## Format code using php-cs-fixer
-	PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix -v --using-cache=no
+	vendor/bin/php-cs-fixer fix -v --using-cache=no
 
 .PHONY: fmtcheck
 fmtcheck: vendor ## Check code formatting
-	PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix -v --using-cache=no --dry-run 
+	vendor/bin/php-cs-fixer fix -v --using-cache=no --dry-run
 
 .PHONY: docs
 docs: vendor ## Generate API reference using phpDocumentor
