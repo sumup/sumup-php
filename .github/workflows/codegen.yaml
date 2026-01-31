@@ -22,7 +22,7 @@ defaults:
     working-directory: ./codegen
 
 env:
-  GOLANGCI_LINT_VERSION: v2.1.5
+  GOLANGCI_LINT_VERSION: v2.8.0
 
 jobs:
   lint:
