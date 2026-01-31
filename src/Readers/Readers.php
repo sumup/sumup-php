@@ -170,6 +170,16 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Reader[]
+     */
+    public array $items;
+
+}
+
 /**
  * Class Readers
  *
@@ -326,7 +336,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      *
-     * @return array
+     * @return \SumUp\Services\ListResponse
      */
     public function list($merchantCode)
     {
@@ -338,9 +348,7 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
 
     /**

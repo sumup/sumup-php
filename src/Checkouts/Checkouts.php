@@ -156,6 +156,16 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListAvailablePaymentMethodsResponse
+{
+    /**
+     *
+     * @var array[]|null
+     */
+    public ?array $availablePaymentMethods = null;
+
+}
+
 /**
  * Query parameters for CheckoutsListParams.
  *
@@ -333,7 +343,7 @@ class Checkouts implements SumUpService
      * @param string $merchantCode The SumUp merchant code.
      * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
      *
-     * @return array
+     * @return \SumUp\Services\ListAvailablePaymentMethodsResponse
      */
     public function listAvailablePaymentMethods($merchantCode, $queryParams = null)
     {
@@ -360,9 +370,7 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListAvailablePaymentMethodsResponse::class);
     }
 
     /**

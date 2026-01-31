@@ -31,6 +31,38 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListDeprecatedResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\TransactionHistory[]|null
+     */
+    public ?array $items = null;
+
+    /**
+     *
+     * @var \SumUp\Types\Link[]|null
+     */
+    public ?array $links = null;
+
+}
+
+class ListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\TransactionHistory[]|null
+     */
+    public ?array $items = null;
+
+    /**
+     *
+     * @var \SumUp\Types\Link[]|null
+     */
+    public ?array $links = null;
+
+}
+
 /**
  * Query parameters for TransactionsGetParams.
  *
@@ -415,7 +447,7 @@ class Transactions implements SumUpService
      * @param string $merchantCode
      * @param TransactionsListParams|null $queryParams Optional query string parameters
      *
-     * @return array
+     * @return \SumUp\Services\ListResponse
      */
     public function list($merchantCode, $queryParams = null)
     {
@@ -472,9 +504,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
 
     /**
@@ -482,7 +512,7 @@ class Transactions implements SumUpService
      *
      * @param TransactionsListDeprecatedParams|null $queryParams Optional query string parameters
      *
-     * @return array
+     * @return \SumUp\Services\ListDeprecatedResponse
      *
      * @deprecated
      */
@@ -541,9 +571,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListDeprecatedResponse::class);
     }
 
     /**

@@ -10,6 +10,22 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Membership[]
+     */
+    public array $items;
+
+    /**
+     *
+     * @var int
+     */
+    public int $totalCount;
+
+}
+
 /**
  * Query parameters for MembershipsListParams.
  *
@@ -129,7 +145,7 @@ class Memberships implements SumUpService
      *
      * @param MembershipsListParams|null $queryParams Optional query string parameters
      *
-     * @return array
+     * @return \SumUp\Services\ListResponse
      */
     public function list($queryParams = null)
     {
@@ -180,8 +196,6 @@ class Memberships implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
 }

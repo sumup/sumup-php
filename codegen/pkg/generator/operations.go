@@ -59,6 +59,8 @@ type responseType struct {
 	ClassName  string
 	ScalarType string
 	ArrayItems *responseType
+	InlineClassName string
+	InlineSchema    *base.SchemaProxy
 }
 
 func (g *Generator) collectOperations() map[string][]*operation {
@@ -179,7 +181,7 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 		HasQuery:    len(queryParams) > 0,
 		HasBody:     hasBody,
 		Deprecated:  deprecated,
-		Responses:   g.collectOperationResponses(op),
+		Responses:   g.collectOperationResponses(op, operationID),
 	}, nil
 }
 
@@ -195,7 +197,7 @@ func (op *operation) methodName() string {
 	return strcase.ToLowerCamel(op.ID)
 }
 
-func (g *Generator) collectOperationResponses(op *v3.Operation) []*operationResponse {
+func (g *Generator) collectOperationResponses(op *v3.Operation, operationID string) []*operationResponse {
 	if op == nil || op.Responses == nil || op.Responses.Codes.Len() == 0 {
 		return nil
 	}
@@ -207,7 +209,7 @@ func (g *Generator) collectOperationResponses(op *v3.Operation) []*operationResp
 			continue
 		}
 
-		respType := g.responseTypeForResponse(response, "SumUp\\Services")
+		respType := g.responseTypeForResponse(response, "SumUp\\Services", operationID, status)
 		if respType == nil {
 			continue
 		}
@@ -234,7 +236,7 @@ func isSuccessStatus(code string) bool {
 	return statusCode >= 200 && statusCode < 300
 }
 
-func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace string) *responseType {
+func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace string, operationID string, statusCode string) *responseType {
 	if resp == nil {
 		return &responseType{Kind: responseTypeVoid}
 	}
@@ -266,10 +268,10 @@ func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace 
 		return &responseType{Kind: responseTypeVoid}
 	}
 
-	return g.buildResponseType(schema, currentNamespace)
+	return g.buildResponseType(schema, currentNamespace, inlineResponseClassName(operationID, statusCode))
 }
 
-func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace string) *responseType {
+func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace string, inlineBaseName string) *responseType {
 	if schema == nil {
 		return nil
 	}
@@ -292,7 +294,36 @@ func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace
 		}
 	}
 
-	return g.buildResponseTypeFromSpec(schema.Schema(), currentNamespace)
+	spec := schema.Schema()
+	if spec == nil {
+		return nil
+	}
+
+	if hasSchemaType(spec, "array") {
+		var itemType *responseType
+		if spec.Items != nil && spec.Items.A != nil {
+			itemInlineName := ""
+			if inlineBaseName != "" {
+				itemInlineName = inlineBaseName + "Item"
+			}
+			itemType = g.buildResponseType(spec.Items.A, currentNamespace, itemInlineName)
+		}
+		return &responseType{
+			Kind:       responseTypeArray,
+			ArrayItems: itemType,
+		}
+	}
+
+	if hasSchemaType(spec, "object") && inlineBaseName != "" {
+		return &responseType{
+			Kind:            responseTypeClass,
+			ClassName:       fmt.Sprintf("\\SumUp\\Services\\%s", inlineBaseName),
+			InlineClassName: inlineBaseName,
+			InlineSchema:    schema,
+		}
+	}
+
+	return g.buildResponseTypeFromSpec(spec, currentNamespace)
 }
 
 func (g *Generator) buildResponseTypeFromSpec(spec *base.Schema, currentNamespace string) *responseType {
@@ -319,7 +350,7 @@ func (g *Generator) buildResponseTypeFromSpec(spec *base.Schema, currentNamespac
 	case hasSchemaType(spec, "array"):
 		var itemType *responseType
 		if spec.Items != nil && spec.Items.A != nil {
-			itemType = g.buildResponseType(spec.Items.A, currentNamespace)
+			itemType = g.buildResponseType(spec.Items.A, currentNamespace, "")
 		}
 		return &responseType{
 			Kind:       responseTypeArray,
@@ -335,4 +366,17 @@ func (g *Generator) buildResponseTypeFromSpec(spec *base.Schema, currentNamespac
 	}
 
 	return &responseType{Kind: responseTypeMixed}
+}
+
+func inlineResponseClassName(operationID string, statusCode string) string {
+	if operationID == "" {
+		return ""
+	}
+
+	base := strcase.ToCamel(operationID) + "Response"
+	if statusCode != "" && statusCode != "200" {
+		base += statusCode
+	}
+
+	return base
 }

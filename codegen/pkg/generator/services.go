@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
+	"github.com/pb33f/libopenapi/datamodel/high/base"
+	"slices"
 )
 
 var pathParamRegexp = regexp.MustCompile(`\{([^}]+)\}`)
@@ -18,6 +20,19 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
 	buf.WriteString("use SumUp\\ResponseDecoder;\n")
 	buf.WriteString("use SumUp\\SdkInfo;\n\n")
+
+	inlineResponseSchemas := collectInlineResponseSchemas(operations)
+	if len(inlineResponseSchemas) > 0 {
+		inlineNames := make([]string, 0, len(inlineResponseSchemas))
+		for name := range inlineResponseSchemas {
+			inlineNames = append(inlineNames, name)
+		}
+		slices.Sort(inlineNames)
+		for _, name := range inlineNames {
+			buf.WriteString(g.buildPHPClass(name, inlineResponseSchemas[name], "SumUp\\Services"))
+			buf.WriteString("\n")
+		}
+	}
 
 	seenParams := make(map[string]struct{})
 	for _, op := range operations {
@@ -254,6 +269,36 @@ func renderQueryParamProperty(prop phpProperty) string {
 	}
 
 	return b.String()
+}
+
+func collectInlineResponseSchemas(operations []*operation) map[string]*base.SchemaProxy {
+	result := make(map[string]*base.SchemaProxy)
+	for _, op := range operations {
+		if op == nil {
+			continue
+		}
+		for _, resp := range op.Responses {
+			if resp == nil || resp.Type == nil {
+				continue
+			}
+			collectInlineResponseSchema(resp.Type, result)
+		}
+	}
+	return result
+}
+
+func collectInlineResponseSchema(rt *responseType, acc map[string]*base.SchemaProxy) {
+	if rt == nil {
+		return
+	}
+	if rt.InlineClassName != "" && rt.InlineSchema != nil {
+		if _, ok := acc[rt.InlineClassName]; !ok {
+			acc[rt.InlineClassName] = rt.InlineSchema
+		}
+	}
+	if rt.ArrayItems != nil {
+		collectInlineResponseSchema(rt.ArrayItems, acc)
+	}
 }
 
 func renderResponseTypeDescriptor(rt *responseType) string {

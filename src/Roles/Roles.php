@@ -10,6 +10,16 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Role[]
+     */
+    public array $items;
+
+}
+
 /**
  * Class Roles
  *
@@ -118,7 +128,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      *
-     * @return array
+     * @return \SumUp\Services\ListResponse
      */
     public function list($merchantCode)
     {
@@ -130,9 +140,7 @@ class Roles implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
 
     /**

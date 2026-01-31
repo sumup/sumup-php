@@ -10,6 +10,22 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class ListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Member[]
+     */
+    public array $items;
+
+    /**
+     *
+     * @var int|null
+     */
+    public ?int $totalCount = null;
+
+}
+
 /**
  * Query parameters for MembersListParams.
  *
@@ -177,7 +193,7 @@ class Members implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MembersListParams|null $queryParams Optional query string parameters
      *
-     * @return array
+     * @return \SumUp\Services\ListResponse
      */
     public function list($merchantCode, $queryParams = null)
     {
@@ -219,9 +235,7 @@ class Members implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers);
 
-        return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'object'],
-        ]);
+        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
 
     /**
