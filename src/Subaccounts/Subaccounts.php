@@ -11,6 +11,31 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for SubaccountsListSubAccountsParams.
+ *
+ * @package SumUp\Services
+ */
+class SubaccountsListSubAccountsParams
+{
+    /**
+     * Search query used to filter users that match given query term.
+     * Current implementation allow querying only over the email address.
+     * All operators whos email address contains the query string are returned.
+     *
+     * @var string|null
+     */
+    public ?string $query = null;
+
+    /**
+     * If true the list of operators will include also the primary user.
+     *
+     * @var bool|null
+     */
+    public ?bool $includePrimary = null;
+
+}
+
+/**
  * Class Subaccounts
  *
  * @package SumUp\Services
@@ -115,19 +140,28 @@ class Subaccounts implements SumUpService
     /**
      * List operators
      *
-     * @param array $queryParams Optional query string parameters
+     * @param SubaccountsListSubAccountsParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Types\Operator[]
      *
      * @deprecated
      */
-    public function listSubAccounts($queryParams = [])
+    public function listSubAccounts($queryParams = null)
     {
         $path = '/v0.1/me/accounts';
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->query)) {
+                $queryParamsData['query'] = $queryParams->query;
+            }
+            if (isset($queryParams->includePrimary)) {
+                $queryParamsData['include_primary'] = $queryParams->includePrimary;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];

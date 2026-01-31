@@ -157,6 +157,45 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for CheckoutsListParams.
+ *
+ * @package SumUp\Services
+ */
+class CheckoutsListParams
+{
+    /**
+     * Filters the list of checkout resources by the unique ID of the checkout.
+     *
+     * @var string|null
+     */
+    public ?string $checkoutReference = null;
+
+}
+
+/**
+ * Query parameters for CheckoutsListAvailablePaymentMethodsParams.
+ *
+ * @package SumUp\Services
+ */
+class CheckoutsListAvailablePaymentMethodsParams
+{
+    /**
+     * The amount for which the payment methods should be eligible, in major units. Note that currency must also be provided when filtering by amount.
+     *
+     * @var float|null
+     */
+    public ?float $amount = null;
+
+    /**
+     * The currency for which the payment methods should be eligible.
+     *
+     * @var string|null
+     */
+    public ?string $currency = null;
+
+}
+
+/**
  * Class Checkouts
  *
  * @package SumUp\Services
@@ -257,17 +296,23 @@ class Checkouts implements SumUpService
     /**
      * List checkouts
      *
-     * @param array $queryParams Optional query string parameters
+     * @param CheckoutsListParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Types\CheckoutSuccess[]
      */
-    public function list($queryParams = [])
+    public function list($queryParams = null)
     {
         $path = '/v0.1/checkouts';
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->checkoutReference)) {
+                $queryParamsData['checkout_reference'] = $queryParams->checkoutReference;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];
@@ -286,17 +331,26 @@ class Checkouts implements SumUpService
      * Get available payment methods
      *
      * @param string $merchantCode The SumUp merchant code.
-     * @param array $queryParams Optional query string parameters
+     * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
      *
      * @return array
      */
-    public function listAvailablePaymentMethods($merchantCode, $queryParams = [])
+    public function listAvailablePaymentMethods($merchantCode, $queryParams = null)
     {
         $path = sprintf('/v0.1/merchants/%s/payment-methods', rawurlencode((string) $merchantCode));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->amount)) {
+                $queryParamsData['amount'] = $queryParams->amount;
+            }
+            if (isset($queryParams->currency)) {
+                $queryParamsData['currency'] = $queryParams->currency;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];

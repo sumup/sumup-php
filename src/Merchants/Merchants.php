@@ -21,6 +21,54 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for MerchantsGetParams.
+ *
+ * @package SumUp\Services
+ */
+class MerchantsGetParams
+{
+    /**
+     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+     *
+     * @var string|null
+     */
+    public ?string $version = null;
+
+}
+
+/**
+ * Query parameters for MerchantsGetPersonParams.
+ *
+ * @package SumUp\Services
+ */
+class MerchantsGetPersonParams
+{
+    /**
+     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+     *
+     * @var string|null
+     */
+    public ?string $version = null;
+
+}
+
+/**
+ * Query parameters for MerchantsListPersonsParams.
+ *
+ * @package SumUp\Services
+ */
+class MerchantsListPersonsParams
+{
+    /**
+     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+     *
+     * @var string|null
+     */
+    public ?string $version = null;
+
+}
+
+/**
  * Class Merchants
  *
  * @package SumUp\Services
@@ -57,17 +105,23 @@ class Merchants implements SumUpService
      * Retrieve a Merchant
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array $queryParams Optional query string parameters
+     * @param MerchantsGetParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Types\Merchant
      */
-    public function get($merchantCode, $queryParams = [])
+    public function get($merchantCode, $queryParams = null)
     {
         $path = sprintf('/v1/merchants/%s', rawurlencode((string) $merchantCode));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->version)) {
+                $queryParamsData['version'] = $queryParams->version;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];
@@ -85,17 +139,23 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $personId Person ID
-     * @param array $queryParams Optional query string parameters
+     * @param MerchantsGetPersonParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Types\Person
      */
-    public function getPerson($merchantCode, $personId, $queryParams = [])
+    public function getPerson($merchantCode, $personId, $queryParams = null)
     {
         $path = sprintf('/v1/merchants/%s/persons/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $personId));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->version)) {
+                $queryParamsData['version'] = $queryParams->version;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];
@@ -112,17 +172,23 @@ class Merchants implements SumUpService
      * List Persons
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array $queryParams Optional query string parameters
+     * @param MerchantsListPersonsParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Merchants\ListPersonsResponseBody
      */
-    public function listPersons($merchantCode, $queryParams = [])
+    public function listPersons($merchantCode, $queryParams = null)
     {
         $path = sprintf('/v1/merchants/%s/persons', rawurlencode((string) $merchantCode));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->version)) {
+                $queryParamsData['version'] = $queryParams->version;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];

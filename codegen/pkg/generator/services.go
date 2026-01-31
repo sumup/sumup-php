@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/iancoleman/strcase"
 )
 
 var pathParamRegexp = regexp.MustCompile(`\{([^}]+)\}`)
@@ -16,6 +18,21 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
 	buf.WriteString("use SumUp\\ResponseDecoder;\n")
 	buf.WriteString("use SumUp\\SdkInfo;\n\n")
+
+	seenParams := make(map[string]struct{})
+	for _, op := range operations {
+		if op == nil || !op.HasQuery {
+			continue
+		}
+		paramsClass := queryParamsClassName(className, op)
+		if _, ok := seenParams[paramsClass]; ok {
+			continue
+		}
+		seenParams[paramsClass] = struct{}{}
+		buf.WriteString(buildQueryParamsClass(paramsClass, op.QueryParams))
+		buf.WriteString("\n")
+	}
+
 	fmt.Fprintf(&buf, "/**\n * Class %s\n *\n * @package SumUp\\Services\n */\n", className)
 	fmt.Fprintf(&buf, "class %s implements SumUpService\n{\n", className)
 	buf.WriteString("    /**\n")
@@ -45,7 +62,7 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("    }\n\n")
 
 	for idx, op := range operations {
-		buf.WriteString(g.renderServiceMethod(op))
+		buf.WriteString(g.renderServiceMethod(className, op))
 		if idx < len(operations)-1 {
 			buf.WriteString("\n")
 		}
@@ -56,7 +73,7 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	return buf.String()
 }
 
-func (g *Generator) renderServiceMethod(op *operation) string {
+func (g *Generator) renderServiceMethod(serviceClass string, op *operation) string {
 	var buf strings.Builder
 
 	methodName := op.methodName()
@@ -87,7 +104,7 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 	}
 
 	if op.HasQuery {
-		buf.WriteString("     * @param array $queryParams Optional query string parameters\n")
+		fmt.Fprintf(&buf, "     * @param %s|null $queryParams Optional query string parameters\n", queryParamsClassName(serviceClass, op))
 	}
 
 	if op.HasBody {
@@ -109,7 +126,7 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 		args = append(args, "$"+param.VarName)
 	}
 	if op.HasQuery {
-		args = append(args, "$queryParams = []")
+		args = append(args, "$queryParams = null")
 	}
 	if op.HasBody {
 		args = append(args, "$body = null")
@@ -125,10 +142,21 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 	buf.WriteString(renderPathAssignment(op))
 
 	if op.HasQuery {
-		buf.WriteString("        if (!empty($queryParams)) {\n")
-		buf.WriteString("            $queryString = http_build_query($queryParams);\n")
-		buf.WriteString("            if (!empty($queryString)) {\n")
-		buf.WriteString("                $path .= '?' . $queryString;\n")
+		buf.WriteString("        if ($queryParams !== null) {\n")
+		buf.WriteString("            $queryParamsData = [];\n")
+		for _, qp := range op.QueryParams {
+			if qp.VarName == "" || qp.OriginalName == "" {
+				continue
+			}
+			fmt.Fprintf(&buf, "            if (isset($queryParams->%s)) {\n", qp.VarName)
+			fmt.Fprintf(&buf, "                $queryParamsData['%s'] = $queryParams->%s;\n", qp.OriginalName, qp.VarName)
+			buf.WriteString("            }\n")
+		}
+		buf.WriteString("            if (!empty($queryParamsData)) {\n")
+		buf.WriteString("                $queryString = http_build_query($queryParamsData);\n")
+		buf.WriteString("                if (!empty($queryString)) {\n")
+		buf.WriteString("                    $path .= '?' . $queryString;\n")
+		buf.WriteString("                }\n")
 		buf.WriteString("            }\n")
 		buf.WriteString("        }\n")
 	}
@@ -152,6 +180,80 @@ func (g *Generator) renderServiceMethod(op *operation) string {
 	buf.WriteString("    }\n")
 
 	return buf.String()
+}
+
+func queryParamsClassName(serviceClass string, op *operation) string {
+	methodName := op.methodName()
+	if methodName == "" {
+		methodName = "Operation"
+	}
+	if serviceClass != "" {
+		return fmt.Sprintf("%s%sParams", serviceClass, strcase.ToCamel(methodName))
+	}
+	return fmt.Sprintf("%sParams", strcase.ToCamel(methodName))
+}
+
+func buildQueryParamsClass(className string, params []operationParam) string {
+	var buf strings.Builder
+	fmt.Fprintf(&buf, "/**\n * Query parameters for %s.\n *\n * @package SumUp\\Services\n */\n", className)
+	fmt.Fprintf(&buf, "class %s\n{\n", className)
+
+	for _, param := range params {
+		prop := phpProperty{
+			Name:        param.VarName,
+			Type:        param.Type,
+			DocType:     param.DocType,
+			Optional:    !param.Required,
+			Description: param.Description,
+		}
+		buf.WriteString(renderQueryParamProperty(prop))
+	}
+
+	buf.WriteString("}\n")
+	return buf.String()
+}
+
+func renderQueryParamProperty(prop phpProperty) string {
+	var b strings.Builder
+
+	b.WriteString("    /**\n")
+	if prop.Description != "" {
+		for _, line := range strings.Split(prop.Description, "\n") {
+			line = strings.TrimSpace(line)
+			if line == "" {
+				continue
+			}
+			b.WriteString("     * ")
+			b.WriteString(line)
+			b.WriteString("\n")
+		}
+	}
+	b.WriteString("     *\n")
+	docType := prop.DocType
+	if prop.Optional {
+		if !strings.Contains(docType, "null") {
+			docType += "|null"
+		}
+	}
+	fmt.Fprintf(&b, "     * @var %s\n", docType)
+	b.WriteString("     */\n")
+
+	propertyType := prop.Type
+	if prop.Optional && propertyType != "mixed" && !strings.HasPrefix(propertyType, "?") {
+		propertyType = "?" + propertyType
+	}
+
+	if propertyType == "" {
+		propertyType = "mixed"
+	}
+
+	if prop.Optional {
+		fmt.Fprintf(&b, "    public %s $%s = null;\n\n", propertyType, prop.Name)
+	} else {
+		fmt.Fprintf(&b, "    public %s $%s;\n\n", propertyType, prop.Name)
+	}
+
+	return b.String()
 }
 
 func renderResponseTypeDescriptor(rt *responseType) string {
@@ -194,7 +296,7 @@ func formatClassReference(name string) string {
 
 func renderOperationReturnDoc(op *operation) string {
 	if op == nil || len(op.Responses) == 0 {
-		return "\\SumUp\\HttpClients\\Response"
+		return "\\SumUp\\HttpClient\\Response"
 	}
 
 	docTypes := make([]string, 0, len(op.Responses))
@@ -216,7 +318,7 @@ func renderOperationReturnDoc(op *operation) string {
 	}
 
 	if len(docTypes) == 0 {
-		return "\\SumUp\\HttpClients\\Response"
+		return "\\SumUp\\HttpClient\\Response"
 	}
 
 	return strings.Join(docTypes, "|")

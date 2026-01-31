@@ -11,6 +11,64 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for MembersListParams.
+ *
+ * @package SumUp\Services
+ */
+class MembersListParams
+{
+    /**
+     * Offset of the first member to return.
+     *
+     * @var int|null
+     */
+    public ?int $offset = null;
+
+    /**
+     * Maximum number of members to return.
+     *
+     * @var int|null
+     */
+    public ?int $limit = null;
+
+    /**
+     * Indicates to skip count query.
+     *
+     * @var bool|null
+     */
+    public ?bool $scroll = null;
+
+    /**
+     * Filter the returned members by email address prefix.
+     *
+     * @var string|null
+     */
+    public ?string $email = null;
+
+    /**
+     * Search for a member by user id.
+     *
+     * @var string|null
+     */
+    public ?string $userId = null;
+
+    /**
+     * Filter the returned members by the membership status.
+     *
+     * @var string|null
+     */
+    public ?string $status = null;
+
+    /**
+     * Filter the returned members by role.
+     *
+     * @var string[]|null
+     */
+    public ?array $roles = null;
+
+}
+
+/**
  * Class Members
  *
  * @package SumUp\Services
@@ -117,17 +175,41 @@ class Members implements SumUpService
      * List members
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array $queryParams Optional query string parameters
+     * @param MembersListParams|null $queryParams Optional query string parameters
      *
      * @return array
      */
-    public function list($merchantCode, $queryParams = [])
+    public function list($merchantCode, $queryParams = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->offset)) {
+                $queryParamsData['offset'] = $queryParams->offset;
+            }
+            if (isset($queryParams->limit)) {
+                $queryParamsData['limit'] = $queryParams->limit;
+            }
+            if (isset($queryParams->scroll)) {
+                $queryParamsData['scroll'] = $queryParams->scroll;
+            }
+            if (isset($queryParams->email)) {
+                $queryParamsData['email'] = $queryParams->email;
+            }
+            if (isset($queryParams->userId)) {
+                $queryParamsData['user.id'] = $queryParams->userId;
+            }
+            if (isset($queryParams->status)) {
+                $queryParamsData['status'] = $queryParams->status;
+            }
+            if (isset($queryParams->roles)) {
+                $queryParamsData['roles'] = $queryParams->roles;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];

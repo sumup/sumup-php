@@ -21,6 +21,7 @@ type operation struct {
 	Method      string
 	Path        string
 	PathParams  []operationParam
+	QueryParams []operationParam
 	HasQuery    bool
 	HasBody     bool
 	Deprecated  bool
@@ -31,6 +32,9 @@ type operationParam struct {
 	OriginalName string
 	VarName      string
 	Description  string
+	Type         string
+	DocType       string
+	Required     bool
 }
 
 type operationResponse struct {
@@ -128,7 +132,7 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 	}
 
 	pathParams := make([]operationParam, 0)
-	hasQuery := false
+	queryParams := make([]operationParam, 0)
 	for _, param := range params {
 		if param == nil {
 			continue
@@ -142,7 +146,19 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 				Description:  param.Description,
 			})
 		case "query":
-			hasQuery = true
+			required := false
+			if param.Required != nil {
+				required = *param.Required
+			}
+			paramType, paramDocType := g.resolvePHPType(param.Schema, "SumUp\\Services", "", "")
+			queryParams = append(queryParams, operationParam{
+				OriginalName: param.Name,
+				VarName:      phpPropertyName(param.Name),
+				Description:  param.Description,
+				Type:         paramType,
+				DocType:       paramDocType,
+				Required:     required,
+			})
 		}
 	}
 
@@ -159,7 +175,8 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 		Method:      method,
 		Path:        path,
 		PathParams:  pathParams,
-		HasQuery:    hasQuery,
+		QueryParams: queryParams,
+		HasQuery:    len(queryParams) > 0,
 		HasBody:     hasBody,
 		Deprecated:  deprecated,
 		Responses:   g.collectOperationResponses(op),

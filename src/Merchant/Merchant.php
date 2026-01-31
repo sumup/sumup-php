@@ -11,6 +11,22 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for MerchantGetParams.
+ *
+ * @package SumUp\Services
+ */
+class MerchantGetParams
+{
+    /**
+     * A list of additional information you want to receive for the user. By default only personal and merchant profile information will be returned.
+     *
+     * @var string[]|null
+     */
+    public ?array $includeList = null;
+
+}
+
+/**
  * Class Merchant
  *
  * @package SumUp\Services
@@ -46,19 +62,25 @@ class Merchant implements SumUpService
     /**
      * Retrieve a profile
      *
-     * @param array $queryParams Optional query string parameters
+     * @param MerchantGetParams|null $queryParams Optional query string parameters
      *
      * @return \SumUp\Types\MerchantAccount
      *
      * @deprecated
      */
-    public function get($queryParams = [])
+    public function get($queryParams = null)
     {
         $path = '/v0.1/me';
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->includeList)) {
+                $queryParamsData['include[]'] = $queryParams->includeList;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];

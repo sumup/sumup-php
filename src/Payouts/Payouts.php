@@ -11,6 +11,88 @@ use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
 /**
+ * Query parameters for PayoutsListParams.
+ *
+ * @package SumUp\Services
+ */
+class PayoutsListParams
+{
+    /**
+     * Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     *
+     * @var string
+     */
+    public string $startDate;
+
+    /**
+     * End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     *
+     * @var string
+     */
+    public string $endDate;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $format = null;
+
+    /**
+     *
+     * @var int|null
+     */
+    public ?int $limit = null;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $order = null;
+
+}
+
+/**
+ * Query parameters for PayoutsListDeprecatedParams.
+ *
+ * @package SumUp\Services
+ */
+class PayoutsListDeprecatedParams
+{
+    /**
+     * Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     *
+     * @var string
+     */
+    public string $startDate;
+
+    /**
+     * End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     *
+     * @var string
+     */
+    public string $endDate;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $format = null;
+
+    /**
+     *
+     * @var int|null
+     */
+    public ?int $limit = null;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $order = null;
+
+}
+
+/**
  * Class Payouts
  *
  * @package SumUp\Services
@@ -47,17 +129,35 @@ class Payouts implements SumUpService
      * List payouts
      *
      * @param string $merchantCode
-     * @param array $queryParams Optional query string parameters
+     * @param PayoutsListParams|null $queryParams Optional query string parameters
      *
      * @return array[]
      */
-    public function list($merchantCode, $queryParams = [])
+    public function list($merchantCode, $queryParams = null)
     {
         $path = sprintf('/v1.0/merchants/%s/payouts', rawurlencode((string) $merchantCode));
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->startDate)) {
+                $queryParamsData['start_date'] = $queryParams->startDate;
+            }
+            if (isset($queryParams->endDate)) {
+                $queryParamsData['end_date'] = $queryParams->endDate;
+            }
+            if (isset($queryParams->format)) {
+                $queryParamsData['format'] = $queryParams->format;
+            }
+            if (isset($queryParams->limit)) {
+                $queryParamsData['limit'] = $queryParams->limit;
+            }
+            if (isset($queryParams->order)) {
+                $queryParamsData['order'] = $queryParams->order;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];
@@ -75,19 +175,37 @@ class Payouts implements SumUpService
     /**
      * List payouts
      *
-     * @param array $queryParams Optional query string parameters
+     * @param PayoutsListDeprecatedParams|null $queryParams Optional query string parameters
      *
      * @return array[]
      *
      * @deprecated
      */
-    public function listDeprecated($queryParams = [])
+    public function listDeprecated($queryParams = null)
     {
         $path = '/v0.1/me/financials/payouts';
-        if (!empty($queryParams)) {
-            $queryString = http_build_query($queryParams);
-            if (!empty($queryString)) {
-                $path .= '?' . $queryString;
+        if ($queryParams !== null) {
+            $queryParamsData = [];
+            if (isset($queryParams->startDate)) {
+                $queryParamsData['start_date'] = $queryParams->startDate;
+            }
+            if (isset($queryParams->endDate)) {
+                $queryParamsData['end_date'] = $queryParams->endDate;
+            }
+            if (isset($queryParams->format)) {
+                $queryParamsData['format'] = $queryParams->format;
+            }
+            if (isset($queryParams->limit)) {
+                $queryParamsData['limit'] = $queryParams->limit;
+            }
+            if (isset($queryParams->order)) {
+                $queryParamsData['order'] = $queryParams->order;
+            }
+            if (!empty($queryParamsData)) {
+                $queryString = http_build_query($queryParamsData);
+                if (!empty($queryString)) {
+                    $path .= '?' . $queryString;
+                }
             }
         }
         $payload = [];
