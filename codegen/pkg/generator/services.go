@@ -5,9 +5,10 @@ import (
 	"regexp"
 	"strings"
 
+	"slices"
+
 	"github.com/iancoleman/strcase"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
-	"slices"
 )
 
 var pathParamRegexp = regexp.MustCompile(`\{([^}]+)\}`)

@@ -33,7 +33,7 @@ type operationParam struct {
 	VarName      string
 	Description  string
 	Type         string
-	DocType       string
+	DocType      string
 	Required     bool
 }
 
@@ -55,10 +55,10 @@ const (
 )
 
 type responseType struct {
-	Kind       responseTypeKind
-	ClassName  string
-	ScalarType string
-	ArrayItems *responseType
+	Kind            responseTypeKind
+	ClassName       string
+	ScalarType      string
+	ArrayItems      *responseType
 	InlineClassName string
 	InlineSchema    *base.SchemaProxy
 }
@@ -158,7 +158,7 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 				VarName:      phpPropertyName(param.Name),
 				Description:  param.Description,
 				Type:         paramType,
-				DocType:       paramDocType,
+				DocType:      paramDocType,
 				Required:     required,
 			})
 		}
