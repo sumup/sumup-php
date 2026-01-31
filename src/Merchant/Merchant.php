@@ -63,12 +63,13 @@ class Merchant implements SumUpService
      * Retrieve a profile
      *
      * @param MerchantGetParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\MerchantAccount
      *
      * @deprecated
      */
-    public function get($queryParams = null)
+    public function get($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/me';
         if ($queryParams !== null) {
@@ -88,7 +89,7 @@ class Merchant implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\MerchantAccount::class);
     }
@@ -96,12 +97,13 @@ class Merchant implements SumUpService
     /**
      * Retrieve DBA
      *
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\DoingBusinessAsLegacy
      *
      * @deprecated
      */
-    public function getDoingBusinessAs()
+    public function getDoingBusinessAs($requestOptions = null)
     {
         $path = '/v0.1/me/merchant-profile/doing-business-as';
         $payload = [];
@@ -109,7 +111,7 @@ class Merchant implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\DoingBusinessAsLegacy::class);
     }
@@ -117,12 +119,13 @@ class Merchant implements SumUpService
     /**
      * Retrieve a merchant profile
      *
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\MerchantProfileLegacy
      *
      * @deprecated
      */
-    public function getMerchantProfile()
+    public function getMerchantProfile($requestOptions = null)
     {
         $path = '/v0.1/me/merchant-profile';
         $payload = [];
@@ -130,7 +133,7 @@ class Merchant implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\MerchantProfileLegacy::class);
     }
@@ -138,12 +141,13 @@ class Merchant implements SumUpService
     /**
      * Retrieve a personal profile
      *
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\PersonalProfileLegacy
      *
      * @deprecated
      */
-    public function getPersonalProfile()
+    public function getPersonalProfile($requestOptions = null)
     {
         $path = '/v0.1/me/personal-profile';
         $payload = [];
@@ -151,7 +155,7 @@ class Merchant implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\PersonalProfileLegacy::class);
     }

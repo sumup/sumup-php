@@ -64,34 +64,60 @@ class CurlClient implements HttpClientInterface
      * @throws \SumUp\Exception\ValidationException
      * @throws SDKException
      */
-    public function send($method, $url, $body, $headers = [])
+    public function send($method, $url, $body, $headers = [], $options = null)
     {
         $reqHeaders = array_merge($headers, $this->customHeaders);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->formatHeaders($reqHeaders));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if (!empty($body)) {
-            $payload = json_encode($body);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        }
+        $requestOptions = is_array($options) ? $options : [];
+        $retries = isset($requestOptions['retries']) ? (int) $requestOptions['retries'] : 0;
+        $backoffMs = isset($requestOptions['retry_backoff_ms']) ? (int) $requestOptions['retry_backoff_ms'] : 0;
 
-        if (!empty($this->caBundlePath)) {
-            curl_setopt($ch, CURLOPT_CAINFO, $this->caBundlePath);
-        }
+        $attempt = 0;
+        do {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+            curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->formatHeaders($reqHeaders));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if (!empty($body)) {
+                $payload = json_encode($body);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            }
 
-        $response = curl_exec($ch);
-        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if (!empty($this->caBundlePath)) {
+                curl_setopt($ch, CURLOPT_CAINFO, $this->caBundlePath);
+            }
 
-        $error = curl_error($ch);
-        if ($error) {
+            if (isset($requestOptions['timeout'])) {
+                curl_setopt($ch, CURLOPT_TIMEOUT, (int) $requestOptions['timeout']);
+            }
+
+            if (isset($requestOptions['connect_timeout'])) {
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, (int) $requestOptions['connect_timeout']);
+            }
+
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            $error = curl_error($ch);
+            if ($error) {
+                $this->closeHandle($ch);
+                if ($attempt < $retries) {
+                    $this->sleepBackoff($backoffMs, $attempt);
+                    $attempt++;
+                    continue;
+                }
+                throw new ConnectionException($error, $code);
+            }
+
             $this->closeHandle($ch);
-            throw new ConnectionException($error, $code);
-        }
+            if ($code >= 500 && $attempt < $retries) {
+                $this->sleepBackoff($backoffMs, $attempt);
+                $attempt++;
+                continue;
+            }
 
-        $this->closeHandle($ch);
-        return new Response($code, $this->parseBody($response));
+            return new Response($code, $this->parseBody($response));
+        } while (true);
     }
 
     /**
@@ -141,6 +167,20 @@ class CurlClient implements HttpClientInterface
         if (PHP_VERSION_ID < 80000 && is_resource($handle)) {
             curl_close($handle);
         }
+    }
+
+    /**
+     * @param int $backoffMs
+     * @param int $attempt
+     */
+    private function sleepBackoff($backoffMs, $attempt)
+    {
+        if ($backoffMs <= 0) {
+            return;
+        }
+
+        $delay = $backoffMs * (int) pow(2, $attempt);
+        usleep($delay * 1000);
     }
 
     /**

@@ -361,10 +361,11 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsGetParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
      */
-    public function get($merchantCode, $queryParams = null)
+    public function get($merchantCode, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v2.1/merchants/%s/transactions', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -396,7 +397,7 @@ class Transactions implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\TransactionFull::class);
     }
@@ -405,12 +406,13 @@ class Transactions implements SumUpService
      * Retrieve a transaction
      *
      * @param TransactionsGetDeprecatedParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
      *
      * @deprecated
      */
-    public function getDeprecated($queryParams = null)
+    public function getDeprecated($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/me/transactions';
         if ($queryParams !== null) {
@@ -436,7 +438,7 @@ class Transactions implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\TransactionFull::class);
     }
@@ -446,10 +448,11 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsListParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $queryParams = null)
+    public function list($merchantCode, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v2.1/merchants/%s/transactions/history', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -502,7 +505,7 @@ class Transactions implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
@@ -511,12 +514,13 @@ class Transactions implements SumUpService
      * List transactions
      *
      * @param TransactionsListDeprecatedParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListDeprecatedResponse
      *
      * @deprecated
      */
-    public function listDeprecated($queryParams = null)
+    public function listDeprecated($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/me/transactions/history';
         if ($queryParams !== null) {
@@ -569,7 +573,7 @@ class Transactions implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListDeprecatedResponse::class);
     }
@@ -579,10 +583,11 @@ class Transactions implements SumUpService
      *
      * @param string $txnId Unique ID of the transaction.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function refund($txnId, $body = null)
+    public function refund($txnId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/me/refund/%s', rawurlencode((string) $txnId));
         $payload = [];
@@ -593,7 +598,7 @@ class Transactions implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '204' => ['type' => 'void'],

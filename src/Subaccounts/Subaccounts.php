@@ -72,12 +72,13 @@ class Subaccounts implements SumUpService
      * Retrieve an operator
      *
      * @param string $operatorId The unique identifier for the operator.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function compatGetOperator($operatorId)
+    public function compatGetOperator($operatorId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -85,7 +86,7 @@ class Subaccounts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
@@ -94,12 +95,13 @@ class Subaccounts implements SumUpService
      * Create an operator
      *
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function createSubAccount($body = null)
+    public function createSubAccount($body = null, $requestOptions = null)
     {
         $path = '/v0.1/me/accounts';
         $payload = [];
@@ -110,7 +112,7 @@ class Subaccounts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
@@ -119,12 +121,13 @@ class Subaccounts implements SumUpService
      * Disable an operator.
      *
      * @param string $operatorId The unique identifier for the operator.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function deactivateSubAccount($operatorId)
+    public function deactivateSubAccount($operatorId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -132,7 +135,7 @@ class Subaccounts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }
@@ -141,12 +144,13 @@ class Subaccounts implements SumUpService
      * List operators
      *
      * @param SubaccountsListSubAccountsParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator[]
      *
      * @deprecated
      */
-    public function listSubAccounts($queryParams = null)
+    public function listSubAccounts($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/me/accounts';
         if ($queryParams !== null) {
@@ -169,7 +173,7 @@ class Subaccounts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\Operator::class]],
@@ -181,12 +185,13 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function updateSubAccount($operatorId, $body = null)
+    public function updateSubAccount($operatorId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -197,7 +202,7 @@ class Subaccounts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
     }

@@ -71,10 +71,11 @@ class Receipts implements SumUpService
      *
      * @param string $id SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.
      * @param ReceiptsGetParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Receipt
      */
-    public function get($id, $queryParams = null)
+    public function get($id, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v1.1/receipts/%s', rawurlencode((string) $id));
         if ($queryParams !== null) {
@@ -97,7 +98,7 @@ class Receipts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Receipt::class);
     }

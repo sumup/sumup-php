@@ -144,10 +144,11 @@ class Memberships implements SumUpService
      * List memberships
      *
      * @param MembershipsListParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($queryParams = null)
+    public function list($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/memberships';
         if ($queryParams !== null) {
@@ -194,7 +195,7 @@ class Memberships implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }

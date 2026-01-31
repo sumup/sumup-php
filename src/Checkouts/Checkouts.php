@@ -242,10 +242,11 @@ class Checkouts implements SumUpService
      * Create a checkout
      *
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Checkout
      */
-    public function create($body = null)
+    public function create($body = null, $requestOptions = null)
     {
         $path = '/v0.1/checkouts';
         $payload = [];
@@ -256,7 +257,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Checkout::class],
@@ -267,10 +268,11 @@ class Checkouts implements SumUpService
      * Deactivate a checkout
      *
      * @param string $id Unique ID of the checkout resource.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Checkout
      */
-    public function deactivate($id)
+    public function deactivate($id, $requestOptions = null)
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
@@ -278,7 +280,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Checkout::class);
     }
@@ -287,10 +289,11 @@ class Checkouts implements SumUpService
      * Retrieve a checkout
      *
      * @param string $id Unique ID of the checkout resource.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess
      */
-    public function get($id)
+    public function get($id, $requestOptions = null)
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
@@ -298,7 +301,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\CheckoutSuccess::class);
     }
@@ -307,10 +310,11 @@ class Checkouts implements SumUpService
      * List checkouts
      *
      * @param CheckoutsListParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess[]
      */
-    public function list($queryParams = null)
+    public function list($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/checkouts';
         if ($queryParams !== null) {
@@ -330,7 +334,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class]],
@@ -342,10 +346,11 @@ class Checkouts implements SumUpService
      *
      * @param string $merchantCode The SumUp merchant code.
      * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListAvailablePaymentMethodsResponse
      */
-    public function listAvailablePaymentMethods($merchantCode, $queryParams = null)
+    public function listAvailablePaymentMethods($merchantCode, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/payment-methods', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -368,7 +373,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListAvailablePaymentMethodsResponse::class);
     }
@@ -378,10 +383,11 @@ class Checkouts implements SumUpService
      *
      * @param string $id Unique ID of the checkout resource.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
      */
-    public function process($id, $body = null)
+    public function process($id, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
@@ -392,7 +398,7 @@ class Checkouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class],

@@ -125,6 +125,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	if op.HasBody {
 		buf.WriteString("     * @param array|null $body Optional request payload\n")
 	}
+	buf.WriteString("     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)\n")
 
 	buf.WriteString("     *\n")
 	fmt.Fprintf(&buf, "     * @return %s\n", renderOperationReturnDoc(op))
@@ -146,6 +147,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	if op.HasBody {
 		args = append(args, "$body = null")
 	}
+	args = append(args, "$requestOptions = null")
 
 	buf.WriteString("    public function ")
 	buf.WriteString(methodName)
@@ -186,7 +188,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	buf.WriteString("        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];\n")
 	buf.WriteString("        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());\n")
 	buf.WriteString("        $headers['Authorization'] = 'Bearer ' . $this->accessToken;\n\n")
-	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers);\n\n", strings.ToUpper(op.Method))
+	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers, $requestOptions);\n\n", strings.ToUpper(op.Method))
 	if descriptor := renderOperationResponseDescriptor(op); descriptor != "" {
 		fmt.Fprintf(&buf, "        return ResponseDecoder::decode($response, %s);\n", descriptor)
 	} else {

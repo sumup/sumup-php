@@ -218,10 +218,11 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      */
-    public function create($merchantCode, $body = null)
+    public function create($merchantCode, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -232,7 +233,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Reader::class],
@@ -245,10 +246,11 @@ class Readers implements SumUpService
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Readers\CreateReaderCheckoutResponse
      */
-    public function createCheckout($merchantCode, $readerId, $body = null)
+    public function createCheckout($merchantCode, $readerId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -259,7 +261,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Readers\CreateReaderCheckoutResponse::class],
@@ -271,10 +273,11 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function delete($merchantCode, $id)
+    public function delete($merchantCode, $id, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -282,7 +285,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'void'],
@@ -294,10 +297,11 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      */
-    public function get($merchantCode, $id)
+    public function get($merchantCode, $id, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -305,7 +309,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
     }
@@ -315,10 +319,11 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Readers\StatusResponse
      */
-    public function getStatus($merchantCode, $readerId)
+    public function getStatus($merchantCode, $readerId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/status', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -326,7 +331,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Readers\StatusResponse::class);
     }
@@ -335,10 +340,11 @@ class Readers implements SumUpService
      * List Readers
      *
      * @param string $merchantCode Short unique identifier for the merchant.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode)
+    public function list($merchantCode, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -346,7 +352,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
@@ -357,10 +363,11 @@ class Readers implements SumUpService
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function terminateCheckout($merchantCode, $readerId, $body = null)
+    public function terminateCheckout($merchantCode, $readerId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -371,7 +378,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '202' => ['type' => 'void'],
@@ -384,10 +391,11 @@ class Readers implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      */
-    public function update($merchantCode, $id, $body = null)
+    public function update($merchantCode, $id, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -398,7 +406,7 @@ class Readers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PATCH', $path, $payload, $headers);
+        $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
     }

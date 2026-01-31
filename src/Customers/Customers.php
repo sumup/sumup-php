@@ -104,10 +104,11 @@ class Customers implements SumUpService
      * Create a customer
      *
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      */
-    public function create($body = null)
+    public function create($body = null, $requestOptions = null)
     {
         $path = '/v0.1/customers';
         $payload = [];
@@ -118,7 +119,7 @@ class Customers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Customer::class],
@@ -130,10 +131,11 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function deactivatePaymentInstrument($customerId, $token)
+    public function deactivatePaymentInstrument($customerId, $token, $requestOptions = null)
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments/%s', rawurlencode((string) $customerId), rawurlencode((string) $token));
         $payload = [];
@@ -141,7 +143,7 @@ class Customers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '204' => ['type' => 'void'],
@@ -152,10 +154,11 @@ class Customers implements SumUpService
      * Retrieve a customer
      *
      * @param string $customerId Unique ID of the saved customer resource.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      */
-    public function get($customerId)
+    public function get($customerId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
@@ -163,7 +166,7 @@ class Customers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Customer::class);
     }
@@ -172,10 +175,11 @@ class Customers implements SumUpService
      * List payment instruments
      *
      * @param string $customerId Unique ID of the saved customer resource.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Customers\PaymentInstrumentResponse[]
      */
-    public function listPaymentInstruments($customerId)
+    public function listPaymentInstruments($customerId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments', rawurlencode((string) $customerId));
         $payload = [];
@@ -183,7 +187,7 @@ class Customers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Customers\PaymentInstrumentResponse::class]],
@@ -195,10 +199,11 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      */
-    public function update($customerId, $body = null)
+    public function update($customerId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
@@ -209,7 +214,7 @@ class Customers implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Customer::class);
     }

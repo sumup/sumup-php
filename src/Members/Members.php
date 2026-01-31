@@ -122,10 +122,11 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      */
-    public function create($merchantCode, $body = null)
+    public function create($merchantCode, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -136,7 +137,7 @@ class Members implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Member::class],
@@ -148,10 +149,11 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function delete($merchantCode, $memberId)
+    public function delete($merchantCode, $memberId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -159,7 +161,7 @@ class Members implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'void'],
@@ -171,10 +173,11 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      */
-    public function get($merchantCode, $memberId)
+    public function get($merchantCode, $memberId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -182,7 +185,7 @@ class Members implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Member::class);
     }
@@ -192,10 +195,11 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MembersListParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $queryParams = null)
+    public function list($merchantCode, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -233,7 +237,7 @@ class Members implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
@@ -244,10 +248,11 @@ class Members implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      */
-    public function update($merchantCode, $memberId, $body = null)
+    public function update($merchantCode, $memberId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -258,7 +263,7 @@ class Members implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PUT', $path, $payload, $headers);
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Member::class);
     }

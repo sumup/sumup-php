@@ -130,10 +130,11 @@ class Payouts implements SumUpService
      *
      * @param string $merchantCode
      * @param PayoutsListParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return array[]
      */
-    public function list($merchantCode, $queryParams = null)
+    public function list($merchantCode, $queryParams = null, $requestOptions = null)
     {
         $path = sprintf('/v1.0/merchants/%s/payouts', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -165,7 +166,7 @@ class Payouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],
@@ -176,12 +177,13 @@ class Payouts implements SumUpService
      * List payouts
      *
      * @param PayoutsListDeprecatedParams|null $queryParams Optional query string parameters
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return array[]
      *
      * @deprecated
      */
-    public function listDeprecated($queryParams = null)
+    public function listDeprecated($queryParams = null, $requestOptions = null)
     {
         $path = '/v0.1/me/financials/payouts';
         if ($queryParams !== null) {
@@ -213,7 +215,7 @@ class Payouts implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],

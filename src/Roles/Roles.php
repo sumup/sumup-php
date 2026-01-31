@@ -58,10 +58,11 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      */
-    public function create($merchantCode, $body = null)
+    public function create($merchantCode, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -72,7 +73,7 @@ class Roles implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('POST', $path, $payload, $headers);
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Role::class],
@@ -84,10 +85,11 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function delete($merchantCode, $roleId)
+    public function delete($merchantCode, $roleId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -95,7 +97,7 @@ class Roles implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('DELETE', $path, $payload, $headers);
+        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
             '200' => ['type' => 'void'],
@@ -107,10 +109,11 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      */
-    public function get($merchantCode, $roleId)
+    public function get($merchantCode, $roleId, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -118,7 +121,7 @@ class Roles implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Role::class);
     }
@@ -127,10 +130,11 @@ class Roles implements SumUpService
      * List roles
      *
      * @param string $merchantCode Short unique identifier for the merchant.
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode)
+    public function list($merchantCode, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -138,7 +142,7 @@ class Roles implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('GET', $path, $payload, $headers);
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
     }
@@ -149,10 +153,11 @@ class Roles implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      * @param array|null $body Optional request payload
+     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      */
-    public function update($merchantCode, $roleId, $body = null)
+    public function update($merchantCode, $roleId, $body = null, $requestOptions = null)
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -163,7 +168,7 @@ class Roles implements SumUpService
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
 
-        $response = $this->client->send('PATCH', $path, $payload, $headers);
+        $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, \SumUp\Types\Role::class);
     }
