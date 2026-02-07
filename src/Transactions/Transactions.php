@@ -187,6 +187,13 @@ class TransactionsListParams
     public ?array $paymentTypes = null;
 
     /**
+     * Filters the returned results by the specified list of entry modes.
+     *
+     * @var string[]|null
+     */
+    public ?array $entryModesList = null;
+
+    /**
      * Filters the returned results by the specified list of transaction types.
      *
      * @var string[]|null
@@ -474,6 +481,9 @@ class Transactions implements SumUpService
             }
             if (isset($queryParams->paymentTypes)) {
                 $queryParamsData['payment_types'] = $queryParams->paymentTypes;
+            }
+            if (isset($queryParams->entryModesList)) {
+                $queryParamsData['entry_modes[]'] = $queryParams->entryModesList;
             }
             if (isset($queryParams->types)) {
                 $queryParamsData['types'] = $queryParams->types;

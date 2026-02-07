@@ -37,9 +37,9 @@ class ReceiptEvent
     /**
      * Amount of the event.
      *
-     * @var float|null
+     * @var string|null
      */
-    public ?float $amount = null;
+    public ?string $amount = null;
 
     /**
      * Date and time of the transaction event.
