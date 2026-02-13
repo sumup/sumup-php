@@ -51,6 +51,15 @@ class Reader
     public ?array $metadata = null;
 
     /**
+     * Identifier of the system-managed service account associated with this reader.
+     * Present only for readers that are already paired.
+     * This field is currently in beta and may change.
+     *
+     * @var string|null
+     */
+    public ?string $serviceAccountId = null;
+
+    /**
      * The timestamp of when the reader was created.
      *
      * @var string
