@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.2](https://github.com/sumup/sumup-php/compare/v0.0.1...v0.0.2) (2026-02-21)
+
+
+### Features
+
+* **cd:** auto-generate SDK ([442dfeb](https://github.com/sumup/sumup-php/commit/442dfeb20a9c81e155b62a5aa8438139d740db69))
+* provide guzzle client out of the box ([f8f70df](https://github.com/sumup/sumup-php/commit/f8f70dfcb249d818c1a7f0536bd5b78f538d6eef))
+
+
+### Bug Fixes
+
+* **cd:** generate workflow write permission ([6697c8e](https://github.com/sumup/sumup-php/commit/6697c8ed58c15ab5d9454510c685e0d0f130bbe1))
+* **docs:** README badges ([35570c5](https://github.com/sumup/sumup-php/commit/35570c59bb1fda27d23e4eec56e0991c3be4b899))
+
+
+### Miscellaneous Chores
+
+* **cd:** adjust generate workflow ([12b6107](https://github.com/sumup/sumup-php/commit/12b6107c6280f704dda56702f141c150b3747a84))
+* synced file(s) with sumup/apis ([#5](https://github.com/sumup/sumup-php/issues/5)) ([ca75c20](https://github.com/sumup/sumup-php/commit/ca75c207ef4874145278fa55ccec42973cb7433f))
+* synced file(s) with sumup/apis ([#8](https://github.com/sumup/sumup-php/issues/8)) ([3891105](https://github.com/sumup/sumup-php/commit/38911057e1ec3de920134894bc7c947d483c8a50))
+
 ## 0.0.1 (2026-01-31)
 
 
