@@ -35,14 +35,14 @@ if (!$merchantCode) {
  */
 class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
 {
-    private $wrappedClient;
+    private \SumUp\HttpClient\HttpClientInterface $wrappedClient;
 
     public function __construct(\SumUp\HttpClient\HttpClientInterface $wrappedClient)
     {
         $this->wrappedClient = $wrappedClient;
     }
 
-    public function send($method, $url, $body, $headers, $options = null)
+    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): \SumUp\HttpClient\Response
     {
         // Log the request
         echo "[HTTP Request] {$method} {$url}\n";
@@ -54,7 +54,7 @@ class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
         $response = $this->wrappedClient->send($method, $url, $body, $headers, $options);
 
         // Log the response
-        echo "[HTTP Response] Status: " . $response->getHttpStatusCode() . "\n";
+        echo "[HTTP Response] Status: " . $response->getHttpResponseCode() . "\n";
 
         return $response;
     }
@@ -83,7 +83,7 @@ $sumup = new \SumUp\SumUp([
 
 // Use the SDK normally - all requests will be logged
 try {
-    $merchant = $sumup->merchants->get($merchantCode);
+    $merchant = $sumup->merchants()->get($merchantCode);
     echo "\nMerchant retrieved successfully!\n";
     echo "Merchant code: " . $merchant->merchantCode . "\n";
 } catch (\SumUp\Exception\SDKException $e) {

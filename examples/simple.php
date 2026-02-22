@@ -33,7 +33,7 @@ $sumup = new \SumUp\SumUp($apiKey);
 // $sumup->setDefaultAccessToken('your-token-here');
 
 // Use services with the default token
-$merchant = $sumup->merchants->get($merchantCode);
+$merchant = $sumup->merchants()->get($merchantCode);
 print_r($merchant);
 
 // Override the default token by creating a new client instance instead.

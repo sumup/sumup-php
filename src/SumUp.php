@@ -2,7 +2,6 @@
 
 namespace SumUp;
 
-use SumUp\Exception\ArgumentException;
 use SumUp\Exception\ConfigurationException;
 use SumUp\Exception\SDKException;
 use SumUp\HttpClient\CurlClient;
@@ -18,7 +17,6 @@ use SumUp\Services\Readers;
 use SumUp\Services\Receipts;
 use SumUp\Services\Roles;
 use SumUp\Services\Subaccounts;
-use SumUp\Services\SumUpService;
 use SumUp\Services\Transactions;
 
 /**
@@ -26,18 +24,6 @@ use SumUp\Services\Transactions;
  *
  * @package SumUp
  *
- * @property Checkouts $checkouts
- * @property Customers $customers
- * @property Members $members
- * @property Memberships $memberships
- * @property Merchant $merchant
- * @property Merchants $merchants
- * @property Payouts $payouts
- * @property Readers $readers
- * @property Receipts $receipts
- * @property Roles $roles
- * @property Subaccounts $subaccounts
- * @property Transactions $transactions
  */
 class SumUp
 {
@@ -52,28 +38,6 @@ class SumUp
      * @var HttpClientInterface
      */
     protected HttpClientInterface $client;
-
-    /**
-     * Map of property names to service classes.
-     *
-     * @var array<string, string>
-     */
-    private static array $serviceClassMap = [
-        'checkouts' => Checkouts::class,
-        'customers' => Customers::class,
-        'members' => Members::class,
-        'memberships' => Memberships::class,
-        'merchant' => Merchant::class,
-        'merchants' => Merchants::class,
-        'payouts' => Payouts::class,
-        'readers' => Readers::class,
-        'receipts' => Receipts::class,
-        'roles' => Roles::class,
-        'subaccounts' => Subaccounts::class,
-        'transactions' => Transactions::class,
-    ];
-
-
 
     /**
      * SumUp constructor.
@@ -192,102 +156,63 @@ class SumUp
         return $config;
     }
 
-    /**
-     * Proxy access to services via properties.
-     *
-     * @param string $name
-     *
-     * @return SumUpService
-     *
-     * @throws ArgumentException
-     */
-    public function __get(string $name): SumUpService
-    {
-        return $this->getService($name);
-    }
-
     public function checkouts(): Checkouts
     {
-        return $this->getService('checkouts');
+        return new Checkouts($this->client, $this->resolveAccessToken());
     }
 
     public function customers(): Customers
     {
-        return $this->getService('customers');
+        return new Customers($this->client, $this->resolveAccessToken());
     }
 
     public function members(): Members
     {
-        return $this->getService('members');
+        return new Members($this->client, $this->resolveAccessToken());
     }
 
     public function memberships(): Memberships
     {
-        return $this->getService('memberships');
+        return new Memberships($this->client, $this->resolveAccessToken());
     }
 
     public function merchant(): Merchant
     {
-        return $this->getService('merchant');
+        return new Merchant($this->client, $this->resolveAccessToken());
     }
 
     public function merchants(): Merchants
     {
-        return $this->getService('merchants');
+        return new Merchants($this->client, $this->resolveAccessToken());
     }
 
     public function payouts(): Payouts
     {
-        return $this->getService('payouts');
+        return new Payouts($this->client, $this->resolveAccessToken());
     }
 
     public function readers(): Readers
     {
-        return $this->getService('readers');
+        return new Readers($this->client, $this->resolveAccessToken());
     }
 
     public function receipts(): Receipts
     {
-        return $this->getService('receipts');
+        return new Receipts($this->client, $this->resolveAccessToken());
     }
 
     public function roles(): Roles
     {
-        return $this->getService('roles');
+        return new Roles($this->client, $this->resolveAccessToken());
     }
 
     public function subaccounts(): Subaccounts
     {
-        return $this->getService('subaccounts');
+        return new Subaccounts($this->client, $this->resolveAccessToken());
     }
 
     public function transactions(): Transactions
     {
-        return $this->getService('transactions');
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return SumUpService
-     *
-     * @throws ArgumentException
-     */
-    private function getService(string $name): SumUpService
-    {
-        if (!array_key_exists($name, self::$serviceClassMap)) {
-            throw new ArgumentException(
-                sprintf(
-                    'Unknown service "%s". Available services: %s',
-                    $name,
-                    implode(', ', array_keys(self::$serviceClassMap))
-                )
-            );
-        }
-
-        $token = $this->resolveAccessToken();
-        $serviceClass = self::$serviceClassMap[$name];
-
-        return new $serviceClass($this->client, $token);
+        return new Transactions($this->client, $this->resolveAccessToken());
     }
 }

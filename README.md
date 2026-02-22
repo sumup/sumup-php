@@ -37,7 +37,7 @@ try {
     // SDK automatically uses SUMUP_API_KEY environment variable
     $sumup = new \SumUp\SumUp();
 
-    $checkout = $sumup->checkouts->create([
+    $checkout = $sumup->checkouts()->create([
         'amount' => 10.00,
         'currency' => 'EUR',
         'checkout_reference' => 'your-checkout-ref',
@@ -119,7 +119,7 @@ $sumup = new \SumUp\SumUp([
 
 ## API Reference
 
-For a full list of available services and methods, explore the `src/Services/` directory or check the inline documentation in the code.
+For a full list of available services and methods, explore the service files under `src/*/*.php` (for example `src/Checkouts/Checkouts.php`) or check the inline documentation in the code.
 
 ## License
 

@@ -86,7 +86,7 @@ $sumup = new \SumUp\SumUp();
 $sumup->setDefaultAccessToken($accessToken);
 
 // Use the SDK normally
-$checkout = $sumup->checkouts->create([
+$checkout = $sumup->checkouts()->create([
     'amount' => 10.00,
     'currency' => 'EUR',
     'checkout_reference' => 'order-123',

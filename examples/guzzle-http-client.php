@@ -35,7 +35,7 @@ $sumup = new \SumUp\SumUp([
 ]);
 
 try {
-    $merchant = $sumup->merchants->get($merchantCode);
+    $merchant = $sumup->merchants()->get($merchantCode);
     echo "\nMerchant retrieved successfully!\n";
     echo "Merchant code: " . $merchant->merchantCode . "\n";
 } catch (\SumUp\Exception\SDKException $e) {

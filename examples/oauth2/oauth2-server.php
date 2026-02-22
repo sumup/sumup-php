@@ -154,7 +154,7 @@ function handleCallback(GenericProvider $provider): void
         if ($defaultMerchantCode) {
             echo '<h2>Merchant Information:</h2>';
             try {
-                $merchant = $sumup->merchants->get($defaultMerchantCode);
+                $merchant = $sumup->merchants()->get($defaultMerchantCode);
                 echo '<pre>' . htmlspecialchars(json_encode($merchant, JSON_PRETTY_PRINT)) . '</pre>';
             } catch (Exception $e) {
                 echo '<p style="color: red;">Error fetching merchant: ' . htmlspecialchars($e->getMessage()) . '</p>';
@@ -177,7 +177,7 @@ $sumup = new \SumUp\SumUp([
     \'access_token\' => \'' . $accessToken->getToken() . '\',
 ]);
 
-$checkout = $sumup->checkouts->create([
+$checkout = $sumup->checkouts()->create([
     \'amount\' => 10.00,
     \'currency\' => \'EUR\',
     \'checkout_reference\' => \'my-order-123\',

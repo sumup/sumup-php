@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/iancoleman/strcase"
 )
@@ -51,13 +50,7 @@ namespace SumUp;
  * Class SumUp
  *
  * @package SumUp
-`)
-
-	if propertyDocs := renderSumUpPropertyDocs(services); propertyDocs != "" {
-		buf.WriteString(propertyDocs)
-	}
-
-	buf.WriteString(` */
+ */
 class SumUp
 {
     /**
@@ -74,12 +67,7 @@ class SumUp
 
 `)
 
-	if serviceMap := renderSumUpServiceMap(services); serviceMap != "" {
-		buf.WriteString(serviceMap)
-	}
-
 	buf.WriteString(`
-
     /**
      * SumUp constructor.
      *
@@ -160,30 +148,20 @@ class SumUp
         return $config;
     }
 
-    /**
-     * Proxy access to services via properties.
-     *
-     * @param string $name
-     *
-     * @return SumUpService|null
-     */
-    public function __get($name)
-    {
-        if (!array_key_exists($name, self::$serviceClassMap)) {
-            trigger_error('Undefined property: ' . static::class . '::$' . $name);
+`)
 
-            return null;
-        }
+	for _, service := range services {
+		method := strcase.ToLowerCamel(service)
+		fmt.Fprintf(&buf, "    public function %s()\n", method)
+		buf.WriteString("    {\n")
+		buf.WriteString("        if (empty($this->accessToken)) {\n")
+		buf.WriteString("            throw new ConfigurationException('No access token provided');\n")
+		buf.WriteString("        }\n\n")
+		fmt.Fprintf(&buf, "        return new %s($this->client, $this->accessToken);\n", service)
+		buf.WriteString("    }\n\n")
+	}
 
-        if (empty($this->accessToken)) {
-            throw new ConfigurationException('No access token provided');
-        }
-
-        $token = $this->accessToken;
-        $serviceClass = self::$serviceClassMap[$name];
-
-        return new $serviceClass($this->client, $token);
-    }
+	buf.WriteString(`
 }
 `)
 
@@ -236,7 +214,6 @@ func sumUpUseStatements(serviceNames []string) []string {
 	}
 
 	serviceSet := map[string]struct{}{
-		"SumUp\\Services\\SumUpService": {},
 	}
 
 	for _, name := range serviceNames {
@@ -247,40 +224,4 @@ func sumUpUseStatements(serviceNames []string) []string {
 	slices.Sort(serviceUses)
 
 	return append(uses, serviceUses...)
-}
-
-//nolint:unused // helper for generating the SumUp class docblocks
-func renderSumUpPropertyDocs(serviceNames []string) string {
-	if len(serviceNames) == 0 {
-		return ""
-	}
-
-	var buf strings.Builder
-	buf.WriteString(" *\n")
-	for _, service := range serviceNames {
-		fmt.Fprintf(&buf, " * @property %s $%s\n", service, strcase.ToLowerCamel(service))
-	}
-
-	return buf.String()
-}
-
-//nolint:unused // helper for generating the SumUp class service map
-func renderSumUpServiceMap(serviceNames []string) string {
-	if len(serviceNames) == 0 {
-		return ""
-	}
-
-	var buf strings.Builder
-	buf.WriteString("    /**\n")
-	buf.WriteString("     * Map of property names to service classes.\n")
-	buf.WriteString("     *\n")
-	buf.WriteString("     * @var array<string, string>\n")
-	buf.WriteString("     */\n")
-	buf.WriteString("    private static $serviceClassMap = [\n")
-	for _, service := range serviceNames {
-		fmt.Fprintf(&buf, "        '%s' => %s::class,\n", strcase.ToLowerCamel(service), service)
-	}
-	buf.WriteString("    ];\n\n")
-
-	return buf.String()
 }
