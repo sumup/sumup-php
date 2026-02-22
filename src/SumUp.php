@@ -2,6 +2,7 @@
 
 namespace SumUp;
 
+use SumUp\Exception\ArgumentException;
 use SumUp\Exception\ConfigurationException;
 use SumUp\Exception\SDKException;
 use SumUp\HttpClient\CurlClient;
@@ -45,19 +46,19 @@ class SumUp
      *
      * @var string|null
      */
-    protected $accessToken;
+    protected ?string $accessToken = null;
 
     /**
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * Map of property names to service classes.
      *
      * @var array<string, string>
      */
-    private static $serviceClassMap = [
+    private static array $serviceClassMap = [
         'checkouts' => Checkouts::class,
         'customers' => Customers::class,
         'members' => Members::class,
@@ -81,7 +82,7 @@ class SumUp
      *
      * @throws SDKException
      */
-    public function __construct($configOrApiKey = null)
+    public function __construct(string|array|null $configOrApiKey = null)
     {
         $config = [];
         if (is_string($configOrApiKey) && $configOrApiKey !== '') {
@@ -118,7 +119,7 @@ class SumUp
      *
      * @return string|null
      */
-    public function getDefaultAccessToken()
+    public function getDefaultAccessToken(): ?string
     {
         return $this->accessToken;
     }
@@ -130,7 +131,7 @@ class SumUp
      *
      * @return void
      */
-    public function setDefaultAccessToken($accessToken)
+    public function setDefaultAccessToken(string $accessToken): void
     {
         $this->accessToken = $accessToken;
     }
@@ -144,7 +145,7 @@ class SumUp
      *
      * @throws ConfigurationException
      */
-    protected function resolveAccessToken($accessToken = null)
+    protected function resolveAccessToken(?string $accessToken = null): string
     {
         if (!empty($accessToken)) {
             return $accessToken;
@@ -166,7 +167,7 @@ class SumUp
      *
      * @throws ConfigurationException
      */
-    private function normalizeConfig(array $config)
+    private function normalizeConfig(array $config): array
     {
         $config = array_merge([
             'api_key' => null,
@@ -196,14 +197,92 @@ class SumUp
      *
      * @param string $name
      *
-     * @return SumUpService|null
+     * @return SumUpService
+     *
+     * @throws ArgumentException
      */
-    public function __get($name)
+    public function __get(string $name): SumUpService
+    {
+        return $this->getService($name);
+    }
+
+    public function checkouts(): Checkouts
+    {
+        return $this->getService('checkouts');
+    }
+
+    public function customers(): Customers
+    {
+        return $this->getService('customers');
+    }
+
+    public function members(): Members
+    {
+        return $this->getService('members');
+    }
+
+    public function memberships(): Memberships
+    {
+        return $this->getService('memberships');
+    }
+
+    public function merchant(): Merchant
+    {
+        return $this->getService('merchant');
+    }
+
+    public function merchants(): Merchants
+    {
+        return $this->getService('merchants');
+    }
+
+    public function payouts(): Payouts
+    {
+        return $this->getService('payouts');
+    }
+
+    public function readers(): Readers
+    {
+        return $this->getService('readers');
+    }
+
+    public function receipts(): Receipts
+    {
+        return $this->getService('receipts');
+    }
+
+    public function roles(): Roles
+    {
+        return $this->getService('roles');
+    }
+
+    public function subaccounts(): Subaccounts
+    {
+        return $this->getService('subaccounts');
+    }
+
+    public function transactions(): Transactions
+    {
+        return $this->getService('transactions');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return SumUpService
+     *
+     * @throws ArgumentException
+     */
+    private function getService(string $name): SumUpService
     {
         if (!array_key_exists($name, self::$serviceClassMap)) {
-            trigger_error('Undefined property: ' . static::class . '::$' . $name);
-
-            return null;
+            throw new ArgumentException(
+                sprintf(
+                    'Unknown service "%s". Available services: %s',
+                    $name,
+                    implode(', ', array_keys(self::$serviceClassMap))
+                )
+            );
         }
 
         $token = $this->resolveAccessToken();
@@ -211,5 +290,4 @@ class SumUp
 
         return new $serviceClass($this->client, $token);
     }
-
 }

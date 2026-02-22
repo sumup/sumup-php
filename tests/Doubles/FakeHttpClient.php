@@ -27,7 +27,7 @@ class FakeHttpClient implements HttpClientInterface
      */
     private $failOnCall;
 
-    public function __construct(Response $response, $failOnCall = false)
+    public function __construct(Response $response, bool $failOnCall = false)
     {
         $this->response = $response;
         $this->failOnCall = $failOnCall;
@@ -36,7 +36,7 @@ class FakeHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function send($method, $url, $body, $headers, $options = null)
+    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): Response
     {
         if ($this->failOnCall) {
             throw new RuntimeException('HTTP client should not have been called.');

@@ -3,6 +3,7 @@
 namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SumUp\Exception\ArgumentException;
 use SumUp\SumUp;
 
 class SumUpTest extends TestCase
@@ -78,5 +79,21 @@ class SumUpTest extends TestCase
 
         $checkouts = $sumup->checkouts;
         $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
+    }
+
+    public function testMethodAccessUsesDefaultToken()
+    {
+        $sumup = new SumUp('test-key');
+
+        $checkouts = $sumup->checkouts();
+        $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
+    }
+
+    public function testUnknownPropertyThrowsArgumentException()
+    {
+        $sumup = new SumUp('test-key');
+
+        $this->expectException(ArgumentException::class);
+        $unused = $sumup->unknownService;
     }
 }

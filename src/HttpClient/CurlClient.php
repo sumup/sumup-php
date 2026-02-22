@@ -18,14 +18,14 @@ class CurlClient implements HttpClientInterface
      *
      * @var $baseUrl
      */
-    private $baseUrl;
+    private string $baseUrl;
 
     /**
      * Custom headers for every request.
      *
      * @var $customHeaders
      */
-    private $customHeaders;
+    private array $customHeaders;
 
     /**
      * The CA bundle path used to verify HTTPS calls.
@@ -41,7 +41,7 @@ class CurlClient implements HttpClientInterface
      * @param array $customHeaders
      * @param string|null $caBundlePath
      */
-    public function __construct($baseUrl, $customHeaders = [], $caBundlePath = null)
+    public function __construct(string $baseUrl, array $customHeaders = [], ?string $caBundlePath = null)
     {
         $this->baseUrl = $baseUrl;
         $this->customHeaders = $customHeaders;
@@ -64,7 +64,7 @@ class CurlClient implements HttpClientInterface
      * @throws \SumUp\Exception\ValidationException
      * @throws SDKException
      */
-    public function send($method, $url, $body, $headers = [], $options = null)
+    public function send(string $method, string $url, array $body, array $headers = [], ?array $options = null): Response
     {
         $reqHeaders = array_merge($headers, $this->customHeaders);
         $requestOptions = is_array($options) ? $options : [];
@@ -127,10 +127,10 @@ class CurlClient implements HttpClientInterface
      *
      * @return array
      */
-    private function formatHeaders($headers = null)
+    private function formatHeaders(?array $headers = null): array
     {
-        if (count($headers) == 0) {
-            return $headers;
+        if (empty($headers)) {
+            return [];
         }
 
         $keys = array_keys($headers);
@@ -148,7 +148,7 @@ class CurlClient implements HttpClientInterface
      *
      * @return mixed
      */
-    private function parseBody($response)
+    private function parseBody(string $response)
     {
         $jsonBody = json_decode($response, true);
         if (isset($jsonBody)) {
@@ -162,7 +162,7 @@ class CurlClient implements HttpClientInterface
      *
      * @param resource|\CurlHandle $handle
      */
-    private function closeHandle($handle)
+    private function closeHandle($handle): void
     {
         if (PHP_VERSION_ID < 80000 && is_resource($handle)) {
             curl_close($handle);
@@ -173,7 +173,7 @@ class CurlClient implements HttpClientInterface
      * @param int $backoffMs
      * @param int $attempt
      */
-    private function sleepBackoff($backoffMs, $attempt)
+    private function sleepBackoff(int $backoffMs, int $attempt): void
     {
         if ($backoffMs <= 0) {
             return;
@@ -192,7 +192,7 @@ class CurlClient implements HttpClientInterface
      *
      * @throws ConfigurationException
      */
-    private function normalizeCABundlePath($caBundlePath)
+    private function normalizeCABundlePath($caBundlePath): ?string
     {
         if ($caBundlePath === null || $caBundlePath === '') {
             return null;
@@ -214,7 +214,7 @@ class CurlClient implements HttpClientInterface
      *
      * @return string|null
      */
-    private function getDefaultCABundlePath()
+    private function getDefaultCABundlePath(): ?string
     {
         $path = realpath(__DIR__ . '/../../resources/ca-bundle.crt');
         if ($path && is_readable($path)) {

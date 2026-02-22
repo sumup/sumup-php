@@ -13,12 +13,12 @@ class GuzzleClient implements HttpClientInterface
     /**
      * @var string
      */
-    private $baseUrl;
+    private string $baseUrl;
 
     /**
      * @var array
      */
-    private $customHeaders;
+    private array $customHeaders;
 
     /**
      * @var string|null
@@ -34,7 +34,7 @@ class GuzzleClient implements HttpClientInterface
      *
      * @throws ConfigurationException
      */
-    public function __construct($baseUrl, $customHeaders = [], $caBundlePath = null)
+    public function __construct(string $baseUrl, array $customHeaders = [], ?string $caBundlePath = null)
     {
         $this->ensureGuzzleInstalled();
 
@@ -57,7 +57,7 @@ class GuzzleClient implements HttpClientInterface
      * @throws \SumUp\Exception\ValidationException
      * @throws \SumUp\Exception\SDKException
      */
-    public function send($method, $url, $body, $headers, $options = null)
+    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): Response
     {
         $this->ensureGuzzleInstalled();
 
@@ -133,7 +133,7 @@ class GuzzleClient implements HttpClientInterface
      *
      * @return mixed
      */
-    private function parseBody($response)
+    private function parseBody(string $response)
     {
         $jsonBody = json_decode($response, true);
         if (isset($jsonBody)) {
@@ -145,7 +145,7 @@ class GuzzleClient implements HttpClientInterface
     /**
      * @throws ConfigurationException
      */
-    private function ensureGuzzleInstalled()
+    private function ensureGuzzleInstalled(): void
     {
         if (!class_exists('\\GuzzleHttp\\Client')) {
             throw new ConfigurationException(

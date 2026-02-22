@@ -18,5 +18,5 @@ interface HttpClientInterface
      *
      * @return Response|mixed
      */
-    public function send($method, $url, $body, $headers, $options = null);
+    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): Response;
 }
