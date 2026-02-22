@@ -113,7 +113,37 @@ class Hydrator
             }
         }
 
+        if (enum_exists($typeName)) {
+            return self::castEnumValue($value, $typeName);
+        }
+
         return self::hydrate($value, $typeName);
+    }
+
+    /**
+     * @param mixed $value
+     * @param string $enumClass
+     *
+     * @return mixed
+     */
+    private static function castEnumValue($value, $enumClass)
+    {
+        if ($value instanceof $enumClass) {
+            return $value;
+        }
+
+        if (method_exists($enumClass, 'tryFrom')) {
+            $enum = $enumClass::tryFrom($value);
+            if ($enum !== null) {
+                return $enum;
+            }
+        }
+
+        if (method_exists($enumClass, 'from')) {
+            return $enumClass::from($value);
+        }
+
+        return $value;
     }
 
     /**
