@@ -4,27 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Transactions;
 
-/**
- * Details of the payment card.
- */
-class CardResponse
-{
-    /**
-     * Last 4 digits of the payment card number.
-     *
-     * @var string|null
-     */
-    public ?string $last4Digits = null;
-
-    /**
-     * Issuing card network of the payment card used for the transaction.
-     *
-     * @var \SumUp\Types\CardResponseType|null
-     */
-    public ?\SumUp\Types\CardResponseType $type = null;
-
-}
-
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;

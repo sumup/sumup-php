@@ -71,15 +71,7 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 	namespaceBySchema := make(map[string]string)
 
 	for schemaName, info := range usage {
-		tagNames := make([]string, 0, len(info.tags))
-		for tag := range info.tags {
-			tagNames = append(tagNames, tag)
-		}
-
 		targetTag := typesTagKey
-		if isServiceLocalSchemaName(schemaName) && len(tagNames) == 1 {
-			targetTag = tagNames[0]
-		}
 
 		// Skip schemas that are additionalProperties-only (they'll be treated as arrays)
 		if schemaIsAdditionalPropertiesOnly(info.schema) {

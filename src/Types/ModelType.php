@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Type of the transaction for the registered user specified in the `user` property.
+ * Key indicating type of error
  */
 enum ModelType: string
 {
-    case PAYMENT = 'PAYMENT';
-    case REFUND = 'REFUND';
-    case CHARGE_BACK = 'CHARGE_BACK';
+    case INVALID_BEARER_TOKEN = 'INVALID_BEARER_TOKEN';
+    case INVALID_USER_AGENT = 'INVALID_USER_AGENT';
+    case NOT_ENOUGH_UNPAID_PAYOUTS = 'NOT_ENOUGH_UNPAID_PAYOUTS';
+    case DUPLICATE_HEADERS = 'DUPLICATE_HEADERS';
 }

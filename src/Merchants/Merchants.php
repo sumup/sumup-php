@@ -4,16 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Merchants;
 
-class ListPersonsResponseBody
-{
-    /**
-     *
-     * @var \SumUp\Types\Person[]
-     */
-    public array $items;
-
-}
-
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
@@ -177,9 +167,9 @@ class Merchants implements SumUpService
      * @param MerchantsListPersonsParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Merchants\ListPersonsResponseBody
+     * @return \SumUp\Types\ListPersonsResponseBody
      */
-    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Merchants\ListPersonsResponseBody
+    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
     {
         $path = sprintf('/v1/merchants/%s/persons', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -201,6 +191,6 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Merchants\ListPersonsResponseBody::class);
+        return ResponseDecoder::decode($response, \SumUp\Types\ListPersonsResponseBody::class);
     }
 }

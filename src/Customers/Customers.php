@@ -4,63 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Customers;
 
-/**
- * Type of the payment instrument.
- */
-enum PaymentInstrumentResponseType: string
-{
-    case CARD = 'card';
-}
-
-/**
- * Payment Instrument Response
- */
-class PaymentInstrumentResponse
-{
-    /**
-     * Unique token identifying the saved payment card for a customer.
-     *
-     * @var string|null
-     */
-    public ?string $token = null;
-
-    /**
-     * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
-     *
-     * @var bool|null
-     */
-    public ?bool $active = null;
-
-    /**
-     * Type of the payment instrument.
-     *
-     * @var PaymentInstrumentResponseType|null
-     */
-    public ?PaymentInstrumentResponseType $type = null;
-
-    /**
-     * Details of the payment card.
-     *
-     * @var array|null
-     */
-    public ?array $card = null;
-
-    /**
-     * Created mandate
-     *
-     * @var \SumUp\Types\MandateResponse|null
-     */
-    public ?\SumUp\Types\MandateResponse $mandate = null;
-
-    /**
-     * Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
-     *
-     * @var string|null
-     */
-    public ?string $createdAt = null;
-
-}
-
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
@@ -177,7 +120,7 @@ class Customers implements SumUpService
      * @param string $customerId Unique ID of the saved customer resource.
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Customers\PaymentInstrumentResponse[]
+     * @return \SumUp\Types\PaymentInstrumentResponse[]
      */
     public function listPaymentInstruments(string $customerId, ?array $requestOptions = null): array
     {
@@ -190,7 +133,7 @@ class Customers implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decode($response, [
-            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Customers\PaymentInstrumentResponse::class]],
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\PaymentInstrumentResponse::class]],
         ]);
     }
 

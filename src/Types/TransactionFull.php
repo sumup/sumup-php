@@ -177,9 +177,9 @@ class TransactionFull
     /**
      * Details of the payment card.
      *
-     * @var \SumUp\Transactions\CardResponse|null
+     * @var CardResponse|null
      */
-    public ?\SumUp\Transactions\CardResponse $card = null;
+    public ?CardResponse $card = null;
 
     /**
      * Local date and time of the creation of the transaction.
