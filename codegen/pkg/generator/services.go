@@ -56,22 +56,22 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("     *\n")
 	buf.WriteString("     * @var HttpClientInterface\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    protected $client;\n\n")
+	buf.WriteString("    protected HttpClientInterface $client;\n\n")
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * The access token needed for authentication for the services.\n")
 	buf.WriteString("     *\n")
 	buf.WriteString("     * @var string\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    protected $accessToken;\n\n")
+	buf.WriteString("    protected string $accessToken;\n\n")
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * ")
 	buf.WriteString(className)
 	buf.WriteString(" constructor.\n")
 	buf.WriteString("     *\n")
 	buf.WriteString("     * @param HttpClientInterface $client\n")
-	buf.WriteString("     * @param $accessToken\n")
+	buf.WriteString("     * @param string $accessToken\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    public function __construct(HttpClientInterface $client, $accessToken)\n")
+	buf.WriteString("    public function __construct(HttpClientInterface $client, string $accessToken)\n")
 	buf.WriteString("    {\n")
 	buf.WriteString("        $this->client = $client;\n")
 	buf.WriteString("        $this->accessToken = $accessToken;\n")
@@ -140,21 +140,26 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 
 	args := make([]string, 0, len(op.PathParams)+2)
 	for _, param := range op.PathParams {
-		args = append(args, "$"+param.VarName)
+		args = append(args, "string $"+param.VarName)
 	}
 	if op.HasQuery {
-		args = append(args, "$queryParams = null")
+		args = append(args, fmt.Sprintf("?%s $queryParams = null", queryParamsClassName(serviceClass, op)))
 	}
 	if op.HasBody {
-		args = append(args, "$body = null")
+		args = append(args, "?array $body = null")
 	}
-	args = append(args, "$requestOptions = null")
+	args = append(args, "?array $requestOptions = null")
 
 	buf.WriteString("    public function ")
 	buf.WriteString(methodName)
 	buf.WriteString("(")
 	buf.WriteString(strings.Join(args, ", "))
-	buf.WriteString(")\n")
+	buf.WriteString(")")
+	if returnType := renderOperationReturnTypeHint(op); returnType != "" {
+		buf.WriteString(": ")
+		buf.WriteString(returnType)
+	}
+	buf.WriteString("\n")
 	buf.WriteString("    {\n")
 
 	buf.WriteString(renderPathAssignment(op))
@@ -370,6 +375,68 @@ func renderOperationReturnDoc(op *operation) string {
 	}
 
 	return strings.Join(docTypes, "|")
+}
+
+func renderOperationReturnTypeHint(op *operation) string {
+	if op == nil || len(op.Responses) == 0 {
+		return ""
+	}
+
+	typeHints := make([]string, 0, len(op.Responses))
+	seen := make(map[string]struct{})
+
+	for _, resp := range op.Responses {
+		if resp == nil || resp.Type == nil {
+			continue
+		}
+
+		typeHint, ok := renderResponseTypeHint(resp.Type)
+		if !ok || typeHint == "" {
+			return ""
+		}
+
+		if _, exists := seen[typeHint]; exists {
+			continue
+		}
+		seen[typeHint] = struct{}{}
+		typeHints = append(typeHints, typeHint)
+	}
+
+	if len(typeHints) == 0 {
+		return ""
+	}
+
+	if len(typeHints) == 1 {
+		return typeHints[0]
+	}
+
+	return strings.Join(typeHints, "|")
+}
+
+func renderResponseTypeHint(rt *responseType) (string, bool) {
+	if rt == nil {
+		return "", false
+	}
+
+	switch rt.Kind {
+	case responseTypeClass:
+		return formatClassReference(rt.ClassName), true
+	case responseTypeArray:
+		return "array", true
+	case responseTypeScalar:
+		switch rt.ScalarType {
+		case "string", "int", "float", "bool":
+			return rt.ScalarType, true
+		default:
+			return "", false
+		}
+	case responseTypeObject:
+		return "array", true
+	case responseTypeVoid:
+		return "null", true
+	default:
+		return "", false
+	}
 }
 
 func renderResponseDocType(rt *responseType) string {

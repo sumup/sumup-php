@@ -32,22 +32,22 @@ class Roles implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Roles constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -62,7 +62,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      */
-    public function create($merchantCode, $body = null, $requestOptions = null)
+    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -89,7 +89,7 @@ class Roles implements SumUpService
      *
      * @return null
      */
-    public function delete($merchantCode, $roleId, $requestOptions = null)
+    public function delete(string $merchantCode, string $roleId, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -113,7 +113,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      */
-    public function get($merchantCode, $roleId, $requestOptions = null)
+    public function get(string $merchantCode, string $roleId, ?array $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -134,7 +134,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $requestOptions = null)
+    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -157,7 +157,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      */
-    public function update($merchantCode, $roleId, $body = null, $requestOptions = null)
+    public function update(string $merchantCode, string $roleId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];

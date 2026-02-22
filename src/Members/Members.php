@@ -96,22 +96,22 @@ class Members implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Members constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -126,7 +126,7 @@ class Members implements SumUpService
      *
      * @return \SumUp\Types\Member
      */
-    public function create($merchantCode, $body = null, $requestOptions = null)
+    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -153,7 +153,7 @@ class Members implements SumUpService
      *
      * @return null
      */
-    public function delete($merchantCode, $memberId, $requestOptions = null)
+    public function delete(string $merchantCode, string $memberId, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -177,7 +177,7 @@ class Members implements SumUpService
      *
      * @return \SumUp\Types\Member
      */
-    public function get($merchantCode, $memberId, $requestOptions = null)
+    public function get(string $merchantCode, string $memberId, ?array $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -199,7 +199,7 @@ class Members implements SumUpService
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $queryParams = null, $requestOptions = null)
+    public function list(string $merchantCode, ?MembersListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -252,7 +252,7 @@ class Members implements SumUpService
      *
      * @return \SumUp\Types\Member
      */
-    public function update($merchantCode, $memberId, $body = null, $requestOptions = null)
+    public function update(string $merchantCode, string $memberId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];

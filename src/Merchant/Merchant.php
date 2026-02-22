@@ -38,22 +38,22 @@ class Merchant implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Merchant constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -69,7 +69,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function get($queryParams = null, $requestOptions = null)
+    public function get(?MerchantGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\MerchantAccount
     {
         $path = '/v0.1/me';
         if ($queryParams !== null) {
@@ -103,7 +103,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getDoingBusinessAs($requestOptions = null)
+    public function getDoingBusinessAs(?array $requestOptions = null): \SumUp\Types\DoingBusinessAsLegacy
     {
         $path = '/v0.1/me/merchant-profile/doing-business-as';
         $payload = [];
@@ -125,7 +125,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getMerchantProfile($requestOptions = null)
+    public function getMerchantProfile(?array $requestOptions = null): \SumUp\Types\MerchantProfileLegacy
     {
         $path = '/v0.1/me/merchant-profile';
         $payload = [];
@@ -147,7 +147,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getPersonalProfile($requestOptions = null)
+    public function getPersonalProfile(?array $requestOptions = null): \SumUp\Types\PersonalProfileLegacy
     {
         $path = '/v0.1/me/personal-profile';
         $payload = [];

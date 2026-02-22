@@ -342,22 +342,22 @@ class Transactions implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Transactions constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -372,7 +372,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Types\TransactionFull
      */
-    public function get($merchantCode, $queryParams = null, $requestOptions = null)
+    public function get(string $merchantCode, ?TransactionsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\TransactionFull
     {
         $path = sprintf('/v2.1/merchants/%s/transactions', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -419,7 +419,7 @@ class Transactions implements SumUpService
      *
      * @deprecated
      */
-    public function getDeprecated($queryParams = null, $requestOptions = null)
+    public function getDeprecated(?TransactionsGetDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\TransactionFull
     {
         $path = '/v0.1/me/transactions';
         if ($queryParams !== null) {
@@ -459,7 +459,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $queryParams = null, $requestOptions = null)
+    public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListResponse
     {
         $path = sprintf('/v2.1/merchants/%s/transactions/history', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -530,7 +530,7 @@ class Transactions implements SumUpService
      *
      * @deprecated
      */
-    public function listDeprecated($queryParams = null, $requestOptions = null)
+    public function listDeprecated(?TransactionsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListDeprecatedResponse
     {
         $path = '/v0.1/me/transactions/history';
         if ($queryParams !== null) {
@@ -597,7 +597,7 @@ class Transactions implements SumUpService
      *
      * @return null
      */
-    public function refund($txnId, $body = null, $requestOptions = null)
+    public function refund(string $txnId, ?array $body = null, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/me/refund/%s', rawurlencode((string) $txnId));
         $payload = [];

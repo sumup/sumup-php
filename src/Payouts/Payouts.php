@@ -104,22 +104,22 @@ class Payouts implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Payouts constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -134,7 +134,7 @@ class Payouts implements SumUpService
      *
      * @return array[]
      */
-    public function list($merchantCode, $queryParams = null, $requestOptions = null)
+    public function list(string $merchantCode, ?PayoutsListParams $queryParams = null, ?array $requestOptions = null): array
     {
         $path = sprintf('/v1.0/merchants/%s/payouts', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -183,7 +183,7 @@ class Payouts implements SumUpService
      *
      * @deprecated
      */
-    public function listDeprecated($queryParams = null, $requestOptions = null)
+    public function listDeprecated(?PayoutsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): array
     {
         $path = '/v0.1/me/financials/payouts';
         if ($queryParams !== null) {

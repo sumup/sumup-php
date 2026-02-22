@@ -192,22 +192,22 @@ class Readers implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Readers constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -222,7 +222,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Types\Reader
      */
-    public function create($merchantCode, $body = null, $requestOptions = null)
+    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -250,7 +250,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Readers\CreateReaderCheckoutResponse
      */
-    public function createCheckout($merchantCode, $readerId, $body = null, $requestOptions = null)
+    public function createCheckout(string $merchantCode, string $readerId, ?array $body = null, ?array $requestOptions = null): \SumUp\Readers\CreateReaderCheckoutResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -277,7 +277,7 @@ class Readers implements SumUpService
      *
      * @return null
      */
-    public function delete($merchantCode, $id, $requestOptions = null)
+    public function delete(string $merchantCode, string $id, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -301,7 +301,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Types\Reader
      */
-    public function get($merchantCode, $id, $requestOptions = null)
+    public function get(string $merchantCode, string $id, ?array $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -323,7 +323,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Readers\StatusResponse
      */
-    public function getStatus($merchantCode, $readerId, $requestOptions = null)
+    public function getStatus(string $merchantCode, string $readerId, ?array $requestOptions = null): \SumUp\Readers\StatusResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/status', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -344,7 +344,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($merchantCode, $requestOptions = null)
+    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -367,7 +367,7 @@ class Readers implements SumUpService
      *
      * @return null
      */
-    public function terminateCheckout($merchantCode, $readerId, $body = null, $requestOptions = null)
+    public function terminateCheckout(string $merchantCode, string $readerId, ?array $body = null, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -395,7 +395,7 @@ class Readers implements SumUpService
      *
      * @return \SumUp\Types\Reader
      */
-    public function update($merchantCode, $id, $body = null, $requestOptions = null)
+    public function update(string $merchantCode, string $id, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];

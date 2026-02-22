@@ -47,22 +47,22 @@ class Subaccounts implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Subaccounts constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -78,7 +78,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function compatGetOperator($operatorId, $requestOptions = null)
+    public function compatGetOperator(string $operatorId, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -101,7 +101,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function createSubAccount($body = null, $requestOptions = null)
+    public function createSubAccount(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = '/v0.1/me/accounts';
         $payload = [];
@@ -127,7 +127,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function deactivateSubAccount($operatorId, $requestOptions = null)
+    public function deactivateSubAccount(string $operatorId, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -150,7 +150,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function listSubAccounts($queryParams = null, $requestOptions = null)
+    public function listSubAccounts(?SubaccountsListSubAccountsParams $queryParams = null, ?array $requestOptions = null): array
     {
         $path = '/v0.1/me/accounts';
         if ($queryParams !== null) {
@@ -191,7 +191,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function updateSubAccount($operatorId, $body = null, $requestOptions = null)
+    public function updateSubAccount(string $operatorId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];

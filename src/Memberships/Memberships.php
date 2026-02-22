@@ -119,22 +119,22 @@ class Memberships implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Memberships constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -148,7 +148,7 @@ class Memberships implements SumUpService
      *
      * @return \SumUp\Services\ListResponse
      */
-    public function list($queryParams = null, $requestOptions = null)
+    public function list(?MembershipsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListResponse
     {
         $path = '/v0.1/memberships';
         if ($queryParams !== null) {

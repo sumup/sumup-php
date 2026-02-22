@@ -80,22 +80,22 @@ class Merchants implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Merchants constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -110,7 +110,7 @@ class Merchants implements SumUpService
      *
      * @return \SumUp\Types\Merchant
      */
-    public function get($merchantCode, $queryParams = null, $requestOptions = null)
+    public function get(string $merchantCode, ?MerchantsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Merchant
     {
         $path = sprintf('/v1/merchants/%s', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -145,7 +145,7 @@ class Merchants implements SumUpService
      *
      * @return \SumUp\Types\Person
      */
-    public function getPerson($merchantCode, $personId, $queryParams = null, $requestOptions = null)
+    public function getPerson(string $merchantCode, string $personId, ?MerchantsGetPersonParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Person
     {
         $path = sprintf('/v1/merchants/%s/persons/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $personId));
         if ($queryParams !== null) {
@@ -179,7 +179,7 @@ class Merchants implements SumUpService
      *
      * @return \SumUp\Merchants\ListPersonsResponseBody
      */
-    public function listPersons($merchantCode, $queryParams = null, $requestOptions = null)
+    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Merchants\ListPersonsResponseBody
     {
         $path = sprintf('/v1/merchants/%s/persons', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {

@@ -45,22 +45,22 @@ class Receipts implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Receipts constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -75,7 +75,7 @@ class Receipts implements SumUpService
      *
      * @return \SumUp\Types\Receipt
      */
-    public function get($id, $queryParams = null, $requestOptions = null)
+    public function get(string $id, ?ReceiptsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Receipt
     {
         $path = sprintf('/v1.1/receipts/%s', rawurlencode((string) $id));
         if ($queryParams !== null) {

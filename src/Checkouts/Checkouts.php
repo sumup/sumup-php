@@ -217,22 +217,22 @@ class Checkouts implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Checkouts constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -246,7 +246,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\Checkout
      */
-    public function create($body = null, $requestOptions = null)
+    public function create(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Checkout
     {
         $path = '/v0.1/checkouts';
         $payload = [];
@@ -272,7 +272,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\Checkout
      */
-    public function deactivate($id, $requestOptions = null)
+    public function deactivate(string $id, ?array $requestOptions = null): \SumUp\Types\Checkout
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
@@ -293,7 +293,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess
      */
-    public function get($id, $requestOptions = null)
+    public function get(string $id, ?array $requestOptions = null): \SumUp\Types\CheckoutSuccess
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
@@ -314,7 +314,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess[]
      */
-    public function list($queryParams = null, $requestOptions = null)
+    public function list(?CheckoutsListParams $queryParams = null, ?array $requestOptions = null): array
     {
         $path = '/v0.1/checkouts';
         if ($queryParams !== null) {
@@ -350,7 +350,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Services\ListAvailablePaymentMethodsResponse
      */
-    public function listAvailablePaymentMethods($merchantCode, $queryParams = null, $requestOptions = null)
+    public function listAvailablePaymentMethods(string $merchantCode, ?CheckoutsListAvailablePaymentMethodsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListAvailablePaymentMethodsResponse
     {
         $path = sprintf('/v0.1/merchants/%s/payment-methods', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -387,7 +387,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
      */
-    public function process($id, $body = null, $requestOptions = null)
+    public function process(string $id, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];

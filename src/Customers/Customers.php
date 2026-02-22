@@ -79,22 +79,22 @@ class Customers implements SumUpService
      *
      * @var HttpClientInterface
      */
-    protected $client;
+    protected HttpClientInterface $client;
 
     /**
      * The access token needed for authentication for the services.
      *
      * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
      * Customers constructor.
      *
      * @param HttpClientInterface $client
-     * @param $accessToken
+     * @param string $accessToken
      */
-    public function __construct(HttpClientInterface $client, $accessToken)
+    public function __construct(HttpClientInterface $client, string $accessToken)
     {
         $this->client = $client;
         $this->accessToken = $accessToken;
@@ -108,7 +108,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      */
-    public function create($body = null, $requestOptions = null)
+    public function create(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Customer
     {
         $path = '/v0.1/customers';
         $payload = [];
@@ -135,7 +135,7 @@ class Customers implements SumUpService
      *
      * @return null
      */
-    public function deactivatePaymentInstrument($customerId, $token, $requestOptions = null)
+    public function deactivatePaymentInstrument(string $customerId, string $token, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments/%s', rawurlencode((string) $customerId), rawurlencode((string) $token));
         $payload = [];
@@ -158,7 +158,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      */
-    public function get($customerId, $requestOptions = null)
+    public function get(string $customerId, ?array $requestOptions = null): \SumUp\Types\Customer
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
@@ -179,7 +179,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Customers\PaymentInstrumentResponse[]
      */
-    public function listPaymentInstruments($customerId, $requestOptions = null)
+    public function listPaymentInstruments(string $customerId, ?array $requestOptions = null): array
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments', rawurlencode((string) $customerId));
         $payload = [];
@@ -203,7 +203,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      */
-    public function update($customerId, $body = null, $requestOptions = null)
+    public function update(string $customerId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Customer
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
