@@ -37,11 +37,12 @@ try {
     // SDK automatically uses SUMUP_API_KEY environment variable
     $sumup = new \SumUp\SumUp();
 
-    $request = new \SumUp\Types\CheckoutCreateRequest();
-    $request->amount = 10.00;
-    $request->currency = \SumUp\Types\CheckoutCreateRequestCurrency::EUR;
-    $request->checkoutReference = 'your-checkout-ref';
-    $request->merchantCode = 'YOUR-MERCHANT-CODE';
+    $request = new \SumUp\Types\CheckoutCreateRequest([
+        'amount' => 10.00,
+        'currency' => 'EUR', // or CheckoutCreateRequestCurrency::EUR
+        'checkout_reference' => 'your-checkout-ref',
+        'merchant_code' => 'YOUR-MERCHANT-CODE',
+    ]);
 
     $checkout = $sumup->checkouts()->create($request);
 
@@ -62,7 +63,7 @@ try {
 }
 ```
 
-For convenience, service methods still accept associative arrays as request payloads, but DTO objects from `\SumUp\Types\...` are the recommended and typed approach.
+Service methods also accept associative arrays as request payloads. For typed usage, prefer DTOs from `\SumUp\Types\...` with `new TypeName([...])`.
 
 ### Providing API Key Programmatically
 
@@ -135,6 +136,26 @@ $options = new \SumUp\HttpClient\RequestOptions(
 );
 
 $checkout = $sumup->checkouts()->get('checkout-id', $options);
+```
+
+## Examples
+
+The repository includes runnable examples:
+
+- `examples/simple.php` - basic SDK initialization and merchant fetch.
+  Run with: `php examples/simple.php`
+- `examples/checkout.php` - create and process a checkout.
+  Run with: `php examples/checkout.php`
+- `examples/custom-http-client.php` - wrap/customize HTTP behavior.
+  Run with: `php examples/custom-http-client.php`
+- `examples/guzzle-http-client.php` - use the built-in Guzzle client.
+  Run with: `php examples/guzzle-http-client.php`
+
+For checkout-related examples, set:
+
+```bash
+export SUMUP_API_KEY='your-api-key-here'
+export SUMUP_MERCHANT_CODE='your-merchant-code'
 ```
 
 ## API Reference
