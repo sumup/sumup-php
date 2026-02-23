@@ -11,7 +11,7 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ListResponse
+class ListV01MerchantsMerchantCodeReadersGetResponse
 {
     /**
      *
@@ -244,9 +244,9 @@ class Readers implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListResponse
+     * @return \SumUp\Services\ListV01MerchantsMerchantCodeReadersGetResponse
      */
-    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ListResponse
+    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ListV01MerchantsMerchantCodeReadersGetResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -256,7 +256,7 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, null, 'GET', $path);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListV01MerchantsMerchantCodeReadersGetResponse::class, null, 'GET', $path);
     }
 
     /**

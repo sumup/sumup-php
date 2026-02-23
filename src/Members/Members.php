@@ -11,7 +11,7 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ListResponse
+class ListV01MerchantsMerchantCodeMembersGetResponse
 {
     /**
      *
@@ -288,9 +288,9 @@ class Members implements SumUpService
      * @param MembersListParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListResponse
+     * @return \SumUp\Services\ListV01MerchantsMerchantCodeMembersGetResponse
      */
-    public function list(string $merchantCode, ?MembersListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListResponse
+    public function list(string $merchantCode, ?MembersListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListV01MerchantsMerchantCodeMembersGetResponse
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -330,7 +330,7 @@ class Members implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, [
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListV01MerchantsMerchantCodeMembersGetResponse::class, [
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
