@@ -213,8 +213,7 @@ func sumUpUseStatements(serviceNames []string) []string {
 		"SumUp\\SdkInfo",
 	}
 
-	serviceSet := map[string]struct{}{
-	}
+	serviceSet := map[string]struct{}{}
 
 	for _, name := range serviceNames {
 		serviceSet[fmt.Sprintf("SumUp\\Services\\%s", name)] = struct{}{}
