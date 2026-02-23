@@ -9,6 +9,8 @@ class UnexpectedApiException extends ApiException
 {
     private ErrorEnvelope $errorEnvelope;
 
+    private ?string $rawResponseBody;
+
     /**
      * @param array<string, mixed>|null $headers
      */
@@ -19,13 +21,15 @@ class UnexpectedApiException extends ApiException
         ?string $httpMethod = null,
         ?string $path = null,
         ?array $headers = null,
+        ?string $rawResponseBody = null,
         ?\Throwable $previous = null
     ) {
         parent::__construct($message, $statusCode, $responseBody, $httpMethod, $path, $previous);
+        $this->rawResponseBody = $rawResponseBody;
         $this->errorEnvelope = new ErrorEnvelope(
             $statusCode,
             $message,
-            $responseBody,
+            $rawResponseBody ?? $responseBody,
             self::normalizeHeaders($headers)
         );
     }
@@ -33,6 +37,11 @@ class UnexpectedApiException extends ApiException
     public function getErrorEnvelope(): ErrorEnvelope
     {
         return $this->errorEnvelope;
+    }
+
+    public function getRawResponseBody(): ?string
+    {
+        return $this->rawResponseBody;
     }
 
     /**

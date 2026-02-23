@@ -85,6 +85,7 @@ class CurlClient implements HttpClientInterface
             curl_setopt($ch, CURLOPT_URL, $requestUrl);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $this->formatHeaders($reqHeaders));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
             if (!empty($body)) {
                 $payload = json_encode($body);
                 if (!is_string($payload)) {
@@ -119,6 +120,8 @@ class CurlClient implements HttpClientInterface
                 throw new ConnectionException($error, $code);
             }
 
+            $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+
             $this->closeHandle($ch);
             if ($code >= 500 && $attempt < $retries) {
                 $this->sleepBackoff($backoffMs, $attempt);
@@ -130,7 +133,21 @@ class CurlClient implements HttpClientInterface
                 throw new ConnectionException('Unexpected empty response body from cURL request.', $code);
             }
 
-            return new Response($code, $this->parseBody($response));
+            $rawHeaders = '';
+            $rawBody = $response;
+            if ($headerSize > 0) {
+                $parsedHeaders = substr($response, 0, $headerSize);
+                $parsedBody = substr($response, $headerSize);
+                $rawHeaders = $parsedHeaders;
+                $rawBody = $parsedBody;
+            }
+
+            return new Response(
+                $code,
+                $this->parseBody($rawBody),
+                $this->parseHeaders($rawHeaders),
+                $rawBody
+            );
         } while (true);
     }
 
@@ -169,6 +186,50 @@ class CurlClient implements HttpClientInterface
             return $jsonBody;
         }
         return $response;
+    }
+
+    /**
+     * Parse raw HTTP header text into normalized header map.
+     *
+     * @param string $rawHeaders
+     *
+     * @return array<string, array<int, string>>
+     */
+    private function parseHeaders(string $rawHeaders): array
+    {
+        if ($rawHeaders === '') {
+            return [];
+        }
+
+        $headers = [];
+        $lines = preg_split("/\r\n|\n|\r/", $rawHeaders);
+        if (!is_array($lines)) {
+            return [];
+        }
+
+        foreach ($lines as $line) {
+            if ($line === '' || strpos($line, ':') === false) {
+                continue;
+            }
+
+            $parts = explode(':', $line, 2);
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            $name = trim($parts[0]);
+            $value = trim($parts[1]);
+            if ($name === '' || $value === '') {
+                continue;
+            }
+
+            if (!isset($headers[$name])) {
+                $headers[$name] = [];
+            }
+            $headers[$name][] = $value;
+        }
+
+        return $headers;
     }
 
     /**

@@ -143,6 +143,28 @@ class ResponseDecoderTest extends TestCase
         }
     }
 
+    public function testDecodeOrThrowUnexpectedExceptionIncludesHeadersAndRawBody()
+    {
+        $response = new Response(
+            429,
+            ['error' => 'rate limited'],
+            ['Retry-After' => ['30'], 'X-Trace-Id' => ['abc-123']],
+            '{"error":"rate limited"}'
+        );
+
+        try {
+            ResponseDecoder::decodeOrThrow($response, null, null, 'GET', '/v0.1/checkouts');
+            $this->fail('UnexpectedApiException was not thrown');
+        } catch (UnexpectedApiException $exception) {
+            $this->assertSame('{"error":"rate limited"}', $exception->getRawResponseBody());
+            $this->assertSame([
+                'Retry-After' => ['30'],
+                'X-Trace-Id' => ['abc-123'],
+            ], $exception->getErrorEnvelope()->getHeaders());
+            $this->assertSame('{"error":"rate limited"}', $exception->getErrorEnvelope()->getRaw());
+        }
+    }
+
     public function testDecodeOrThrowUsesKnownErrorDescriptorFromOpenApi()
     {
         $response = new Response(404, [

@@ -24,16 +24,38 @@ class Response
     protected mixed $body;
 
     /**
+     * Normalized response headers.
+     *
+     * @var array<string, array<int, string>>
+     */
+    protected array $headers;
+
+    /**
+     * Raw response body before parsing, when available.
+     *
+     * @var string|null
+     */
+    protected ?string $rawBody;
+
+    /**
      * Response constructor.
      *
      * @param int $httpResponseCode
      * @param mixed $body
+     * @param array<string, array<int, string>> $headers
+     * @param string|null $rawBody
      *
      */
-    public function __construct(int $httpResponseCode, mixed $body)
-    {
+    public function __construct(
+        int $httpResponseCode,
+        mixed $body,
+        array $headers = [],
+        ?string $rawBody = null
+    ) {
         $this->httpResponseCode = $httpResponseCode;
         $this->body = $body;
+        $this->headers = $headers;
+        $this->rawBody = $rawBody;
     }
 
     /**
@@ -54,6 +76,26 @@ class Response
     public function getBody(): mixed
     {
         return $this->body;
+    }
+
+    /**
+     * Get normalized response headers.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Get raw response body before JSON decoding, when available.
+     *
+     * @return string|null
+     */
+    public function getRawBody(): ?string
+    {
+        return $this->rawBody;
     }
 
 }

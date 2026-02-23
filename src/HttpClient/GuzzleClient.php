@@ -121,8 +121,9 @@ class GuzzleClient implements HttpClientInterface
         $statusCode = $response->getStatusCode();
         $responseBody = (string) $response->getBody();
         $parsedBody = $this->parseBody($responseBody);
+        $headers = $this->normalizeHeaders($response->getHeaders());
 
-        return new Response($statusCode, $parsedBody);
+        return new Response($statusCode, $parsedBody, $headers, $responseBody);
     }
 
     /**
@@ -137,6 +138,33 @@ class GuzzleClient implements HttpClientInterface
             return $jsonBody;
         }
         return $response;
+    }
+
+    /**
+     * @param array<string, array<int, string>> $headers
+     *
+     * @return array<string, array<int, string>>
+     */
+    private function normalizeHeaders(array $headers): array
+    {
+        $normalized = [];
+        foreach ($headers as $name => $values) {
+            if ($name === '') {
+                continue;
+            }
+
+            $items = [];
+            foreach ($values as $value) {
+                if ($value !== '') {
+                    $items[] = $value;
+                }
+            }
+            if (!empty($items)) {
+                $normalized[$name] = $items;
+            }
+        }
+
+        return $normalized;
     }
 
     /**

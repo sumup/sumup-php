@@ -58,7 +58,9 @@ class ResponseDecoder
             $statusCode,
             $rawErrorBody,
             $httpMethod,
-            $path
+            $path,
+            $response->getHeaders(),
+            $response->getRawBody()
         );
     }
 
