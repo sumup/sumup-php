@@ -195,10 +195,38 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	buf.WriteString("        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());\n")
 	buf.WriteString("        $headers['Authorization'] = 'Bearer ' . $this->accessToken;\n\n")
 	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers, $requestOptions);\n\n", strings.ToUpper(op.Method))
-	if descriptor := renderOperationResponseDescriptor(op); descriptor != "" {
-		fmt.Fprintf(&buf, "        return ResponseDecoder::decode($response, %s);\n", descriptor)
-	} else {
-		buf.WriteString("        return ResponseDecoder::decode($response);\n")
+	successDescriptor := renderOperationSuccessResponseDescriptor(op)
+	errorDescriptor := renderOperationErrorResponseDescriptor(op)
+
+	switch {
+	case successDescriptor != "" && errorDescriptor != "":
+		fmt.Fprintf(
+			&buf,
+			"        return ResponseDecoder::decodeOrThrow($response, %s, %s, '%s', $path);\n",
+			successDescriptor,
+			errorDescriptor,
+			strings.ToUpper(op.Method),
+		)
+	case successDescriptor != "":
+		fmt.Fprintf(
+			&buf,
+			"        return ResponseDecoder::decodeOrThrow($response, %s, null, '%s', $path);\n",
+			successDescriptor,
+			strings.ToUpper(op.Method),
+		)
+	case errorDescriptor != "":
+		fmt.Fprintf(
+			&buf,
+			"        return ResponseDecoder::decodeOrThrow($response, null, %s, '%s', $path);\n",
+			errorDescriptor,
+			strings.ToUpper(op.Method),
+		)
+	default:
+		fmt.Fprintf(
+			&buf,
+			"        return ResponseDecoder::decodeOrThrow($response, null, null, '%s', $path);\n",
+			strings.ToUpper(op.Method),
+		)
 	}
 	buf.WriteString("    }\n")
 
@@ -356,7 +384,7 @@ func renderOperationReturnDoc(op *operation) string {
 	seen := make(map[string]struct{})
 
 	for _, resp := range op.Responses {
-		if resp == nil || resp.Type == nil {
+		if resp == nil || resp.Type == nil || !resp.IsSuccess {
 			continue
 		}
 		doc := renderResponseDocType(resp.Type)
@@ -386,7 +414,7 @@ func renderOperationReturnTypeHint(op *operation) string {
 	seen := make(map[string]struct{})
 
 	for _, resp := range op.Responses {
-		if resp == nil || resp.Type == nil {
+		if resp == nil || resp.Type == nil || !resp.IsSuccess {
 			continue
 		}
 
@@ -472,23 +500,63 @@ func renderResponseDocType(rt *responseType) string {
 	}
 }
 
-func renderOperationResponseDescriptor(op *operation) string {
+func renderOperationSuccessResponseDescriptor(op *operation) string {
 	if op == nil || len(op.Responses) == 0 {
 		return ""
 	}
 
+	successResponses := make([]*operationResponse, 0, len(op.Responses))
+	for _, resp := range op.Responses {
+		if resp != nil && resp.IsSuccess {
+			successResponses = append(successResponses, resp)
+		}
+	}
+
+	if len(successResponses) == 0 {
+		return ""
+	}
+
 	// Simplified approach: if there's a single 200 response with a class, just return the class name
-	if len(op.Responses) == 1 && op.Responses[0].StatusCode == "200" {
-		resp := op.Responses[0]
+	if len(successResponses) == 1 && successResponses[0].StatusCode == "200" {
+		resp := successResponses[0]
 		if resp.Type != nil && resp.Type.Kind == responseTypeClass && resp.Type.ClassName != "" {
 			return fmt.Sprintf("%s::class", formatClassReference(resp.Type.ClassName))
 		}
 	}
 
-	// For multiple status codes or non-200 responses, use descriptor array
+	// For multiple success status codes, use descriptor array
 	var buf strings.Builder
 	buf.WriteString("[\n")
+	for _, resp := range successResponses {
+		if resp == nil || resp.Type == nil {
+			continue
+		}
+		fmt.Fprintf(&buf, "            '%s' => %s,\n", resp.StatusCode, renderResponseTypeDescriptor(resp.Type))
+	}
+	buf.WriteString("        ]")
+
+	return buf.String()
+}
+
+func renderOperationErrorResponseDescriptor(op *operation) string {
+	if op == nil || len(op.Responses) == 0 {
+		return ""
+	}
+
+	errorResponses := make([]*operationResponse, 0, len(op.Responses))
 	for _, resp := range op.Responses {
+		if resp != nil && !resp.IsSuccess {
+			errorResponses = append(errorResponses, resp)
+		}
+	}
+
+	if len(errorResponses) == 0 {
+		return ""
+	}
+
+	var buf strings.Builder
+	buf.WriteString("[\n")
+	for _, resp := range errorResponses {
 		if resp == nil || resp.Type == nil {
 			continue
 		}

@@ -88,7 +88,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, null, 'GET', $path);
     }
 
     /**
@@ -114,7 +114,9 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, [
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -137,7 +139,7 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, null, 'DELETE', $path);
     }
 
     /**
@@ -175,9 +177,9 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\Operator::class]],
-        ]);
+        ], null, 'GET', $path);
     }
 
     /**
@@ -204,6 +206,8 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Operator::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'PUT', $path);
     }
 }

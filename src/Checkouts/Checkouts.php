@@ -113,9 +113,14 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Checkout::class],
-        ]);
+        ], [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -136,7 +141,11 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Checkout::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Checkout::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'DELETE', $path);
     }
 
     /**
@@ -157,7 +166,10 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\CheckoutSuccess::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\CheckoutSuccess::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -190,9 +202,11 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class]],
-        ]);
+        ], [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -229,7 +243,10 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListAvailablePaymentMethodsResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListAvailablePaymentMethodsResponse::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\DetailsError::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -254,9 +271,14 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class],
             '202' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutAccepted::class],
-        ]);
+        ], [
+            '400' => ['type' => 'mixed'],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'PUT', $path);
     }
 }

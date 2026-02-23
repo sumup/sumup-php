@@ -2,6 +2,9 @@
 
 namespace SumUp;
 
+use SumUp\Exception\ApiException;
+use SumUp\Exception\AuthenticationException;
+use SumUp\Exception\ValidationException;
 use SumUp\HttpClient\Response;
 
 /**
@@ -9,6 +12,56 @@ use SumUp\HttpClient\Response;
  */
 class ResponseDecoder
 {
+    /**
+     * Decode a response and throw typed exceptions for non-2xx statuses.
+     *
+     * @param Response $response
+     * @param array|string|null $successDescriptors
+     * @param array|string|null $errorDescriptors
+     * @param string|null $httpMethod
+     * @param string|null $path
+     *
+     * @return mixed
+     *
+     * @throws ApiException
+     * @throws AuthenticationException
+     * @throws ValidationException
+     */
+    public static function decodeOrThrow(
+        Response $response,
+        $successDescriptors = null,
+        $errorDescriptors = null,
+        ?string $httpMethod = null,
+        ?string $path = null
+    ) {
+        $statusCode = $response->getHttpResponseCode();
+        if ($statusCode >= 200 && $statusCode < 300) {
+            return self::decode($response, $successDescriptors);
+        }
+
+        $decodedErrorBody = self::decode($response, $errorDescriptors);
+        if ($authError = self::extractLegacyAuthError($decodedErrorBody)) {
+            throw new AuthenticationException($authError, $statusCode, $decodedErrorBody);
+        }
+
+        $invalidFields = self::extractLegacyValidationFields($decodedErrorBody);
+        if (!empty($invalidFields)) {
+            throw new ValidationException($invalidFields, $statusCode);
+        }
+
+        $knownFormat = self::hasDescriptorForStatus($errorDescriptors, $statusCode);
+        $message = self::extractErrorMessage($decodedErrorBody, self::defaultErrorMessage($statusCode));
+
+        throw new ApiException(
+            $message,
+            $statusCode,
+            $decodedErrorBody,
+            $httpMethod,
+            $path,
+            $knownFormat
+        );
+    }
+
     /**
      * Decode a response using the provided descriptor map or class name.
      *
@@ -111,5 +164,127 @@ class ResponseDecoder
             default:
                 return $value;
         }
+    }
+
+    /**
+     * @param mixed $descriptors
+     * @param int $statusCode
+     *
+     * @return bool
+     */
+    private static function hasDescriptorForStatus($descriptors, int $statusCode): bool
+    {
+        if (is_string($descriptors)) {
+            return true;
+        }
+
+        if (!is_array($descriptors) || empty($descriptors)) {
+            return false;
+        }
+
+        $status = (string) $statusCode;
+        return isset($descriptors[$status]) || isset($descriptors['default']);
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @return string
+     */
+    private static function defaultErrorMessage(int $statusCode): string
+    {
+        if ($statusCode >= 500) {
+            return 'Server error';
+        }
+
+        return 'Client error';
+    }
+
+    /**
+     * @param mixed $body
+     * @param string $defaultMessage
+     *
+     * @return string
+     */
+    private static function extractErrorMessage($body, string $defaultMessage): string
+    {
+        foreach (['message', 'error_message', 'error_description', 'error'] as $key) {
+            $value = self::readField($body, $key);
+            if (is_string($value) && $value !== '') {
+                return $value;
+            }
+        }
+
+        return $defaultMessage;
+    }
+
+    /**
+     * @param mixed $body
+     *
+     * @return string|null
+     */
+    private static function extractLegacyAuthError($body): ?string
+    {
+        $errorCode = self::readField($body, 'error_code');
+        if ($errorCode === 'NOT_AUTHORIZED') {
+            $message = self::readField($body, 'error_message');
+            if (is_string($message) && $message !== '') {
+                return $message;
+            }
+
+            return 'Not authorized';
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed $body
+     *
+     * @return array<int, string>
+     */
+    private static function extractLegacyValidationFields($body): array
+    {
+        $errorCode = self::readField($body, 'error_code');
+        if ($errorCode === 'MISSING' || $errorCode === 'INVALID') {
+            $param = self::readField($body, 'param');
+            return is_string($param) && $param !== '' ? [$param] : [];
+        }
+
+        if (!is_array($body)) {
+            return [];
+        }
+
+        $fields = [];
+        foreach ($body as $item) {
+            $itemCode = self::readField($item, 'error_code');
+            if ($itemCode !== 'MISSING' && $itemCode !== 'INVALID') {
+                return [];
+            }
+            $param = self::readField($item, 'param');
+            if (is_string($param) && $param !== '') {
+                $fields[] = $param;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @param mixed $payload
+     * @param string $key
+     *
+     * @return mixed
+     */
+    private static function readField($payload, string $key)
+    {
+        if (is_array($payload) && array_key_exists($key, $payload)) {
+            return $payload[$key];
+        }
+        if (is_object($payload) && isset($payload->{$key})) {
+            return $payload->{$key};
+        }
+
+        return null;
     }
 }

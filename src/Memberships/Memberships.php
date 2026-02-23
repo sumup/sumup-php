@@ -197,6 +197,6 @@ class Memberships implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, null, 'GET', $path);
     }
 }

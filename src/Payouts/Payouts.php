@@ -168,9 +168,11 @@ class Payouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],
-        ]);
+        ], [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -217,8 +219,10 @@ class Payouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],
-        ]);
+        ], [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 }

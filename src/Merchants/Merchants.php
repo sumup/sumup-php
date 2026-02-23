@@ -122,7 +122,9 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Merchant::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Merchant::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -157,7 +159,10 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Person::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Person::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -191,6 +196,9 @@ class Merchants implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\ListPersonsResponseBody::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\ListPersonsResponseBody::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 }

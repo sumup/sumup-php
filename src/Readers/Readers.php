@@ -75,9 +75,13 @@ class Readers implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Reader::class],
-        ]);
+        ], [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -103,9 +107,16 @@ class Readers implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutResponse::class],
-        ]);
+        ], [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutError::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutError::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutUnprocessableEntity::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutError::class],
+            '502' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutError::class],
+            '504' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutError::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -127,9 +138,11 @@ class Readers implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'void'],
-        ]);
+        ], [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'DELETE', $path);
     }
 
     /**
@@ -151,7 +164,9 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Reader::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -173,7 +188,14 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\StatusResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\StatusResponse::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\BadRequest::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Unauthorized::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\NotFound::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\InternalServerError::class],
+            '502' => ['type' => 'class', 'class' => \SumUp\Types\BadGateway::class],
+            '504' => ['type' => 'class', 'class' => \SumUp\Types\GatewayTimeout::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -194,7 +216,7 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, null, 'GET', $path);
     }
 
     /**
@@ -220,9 +242,16 @@ class Readers implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '202' => ['type' => 'void'],
-        ]);
+        ], [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateError::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateError::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateUnprocessableEntity::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateError::class],
+            '502' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateError::class],
+            '504' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderTerminateError::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -248,6 +277,9 @@ class Readers implements SumUpService
 
         $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Reader::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Reader::class, [
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'PATCH', $path);
     }
 }

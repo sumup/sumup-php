@@ -100,6 +100,9 @@ class Receipts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Receipt::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Receipt::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 }

@@ -40,6 +40,7 @@ type operationParam struct {
 type operationResponse struct {
 	StatusCode string
 	Type       *responseType
+	IsSuccess  bool
 }
 
 type responseTypeKind int
@@ -205,35 +206,24 @@ func (g *Generator) collectOperationResponses(op *v3.Operation, operationID stri
 	responses := make([]*operationResponse, 0, op.Responses.Codes.Len())
 
 	for status, response := range op.Responses.Codes.FromOldest() {
-		if !isSuccessStatus(status) {
+		respType := g.responseTypeForResponse(response, "SumUp\\Services", operationID, status)
+		if respType == nil {
 			continue
 		}
 
-		respType := g.responseTypeForResponse(response, "SumUp\\Services", operationID, status)
-		if respType == nil {
+		statusCode, err := strconv.Atoi(status)
+		if err != nil {
 			continue
 		}
 
 		responses = append(responses, &operationResponse{
 			StatusCode: status,
 			Type:       respType,
+			IsSuccess:  statusCode >= 200 && statusCode < 300,
 		})
 	}
 
 	return responses
-}
-
-func isSuccessStatus(code string) bool {
-	if code == "" {
-		return false
-	}
-
-	statusCode, err := strconv.Atoi(code)
-	if err != nil {
-		return false
-	}
-
-	return statusCode >= 200 && statusCode < 300
 }
 
 func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace string, operationID string, statusCode string) *responseType {

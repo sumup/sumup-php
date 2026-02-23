@@ -91,7 +91,9 @@ class Merchant implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\MerchantAccount::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\MerchantAccount::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -113,7 +115,9 @@ class Merchant implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\DoingBusinessAsLegacy::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\DoingBusinessAsLegacy::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -135,7 +139,10 @@ class Merchant implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\MerchantProfileLegacy::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\MerchantProfileLegacy::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -157,6 +164,8 @@ class Merchant implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\PersonalProfileLegacy::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\PersonalProfileLegacy::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 }

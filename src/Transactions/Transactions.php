@@ -385,7 +385,10 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\TransactionFull::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\TransactionFull::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -426,7 +429,10 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\TransactionFull::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\TransactionFull::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -496,7 +502,9 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -564,7 +572,9 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListDeprecatedResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListDeprecatedResponse::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -589,8 +599,11 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '204' => ['type' => 'void'],
-        ]);
+        ], [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'POST', $path);
     }
 }

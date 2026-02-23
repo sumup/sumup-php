@@ -139,9 +139,13 @@ class Members implements SumUpService
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Member::class],
-        ]);
+        ], [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '429' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'POST', $path);
     }
 
     /**
@@ -163,9 +167,11 @@ class Members implements SumUpService
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, [
+        return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'void'],
-        ]);
+        ], [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'DELETE', $path);
     }
 
     /**
@@ -187,7 +193,9 @@ class Members implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Member::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Member::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -239,7 +247,9 @@ class Members implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Services\ListResponse::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListResponse::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -265,6 +275,11 @@ class Members implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decode($response, \SumUp\Types\Member::class);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Member::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'PUT', $path);
     }
 }
