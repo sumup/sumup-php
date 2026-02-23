@@ -15,17 +15,21 @@ import (
 )
 
 type operation struct {
-	ID          string
-	Summary     string
-	Description string
-	Method      string
-	Path        string
-	PathParams  []operationParam
-	QueryParams []operationParam
-	HasQuery    bool
-	HasBody     bool
-	Deprecated  bool
-	Responses   []*operationResponse
+	ID           string
+	Summary      string
+	Description  string
+	Method       string
+	Path         string
+	PathParams   []operationParam
+	QueryParams  []operationParam
+	HasQuery     bool
+	HasBody      bool
+	BodyType     string
+	BodyDocType  string
+	BodySchema   *base.SchemaProxy
+	BodyRequired bool
+	Deprecated   bool
+	Responses    []*operationResponse
 }
 
 type operationParam struct {
@@ -166,24 +170,69 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 	}
 
 	hasBody := op.RequestBody != nil
+	bodyType, bodyDocType, bodyRequired, bodySchema := g.resolveOperationBody(op)
 	deprecated := false
 	if op.Deprecated != nil {
 		deprecated = *op.Deprecated
 	}
 
 	return &operation{
-		ID:          operationID,
-		Summary:     strings.TrimSpace(op.Summary),
-		Description: strings.TrimSpace(op.Description),
-		Method:      method,
-		Path:        path,
-		PathParams:  pathParams,
-		QueryParams: queryParams,
-		HasQuery:    len(queryParams) > 0,
-		HasBody:     hasBody,
-		Deprecated:  deprecated,
-		Responses:   g.collectOperationResponses(op, operationID),
+		ID:           operationID,
+		Summary:      strings.TrimSpace(op.Summary),
+		Description:  strings.TrimSpace(op.Description),
+		Method:       method,
+		Path:         path,
+		PathParams:   pathParams,
+		QueryParams:  queryParams,
+		HasQuery:     len(queryParams) > 0,
+		HasBody:      hasBody,
+		BodyType:     bodyType,
+		BodyDocType:  bodyDocType,
+		BodySchema:   bodySchema,
+		BodyRequired: bodyRequired,
+		Deprecated:   deprecated,
+		Responses:    g.collectOperationResponses(op, operationID),
 	}, nil
+}
+
+func (g *Generator) resolveOperationBody(op *v3.Operation) (string, string, bool, *base.SchemaProxy) {
+	if op == nil || op.RequestBody == nil {
+		return "", "", false, nil
+	}
+
+	required := false
+	if op.RequestBody.Required != nil && *op.RequestBody.Required {
+		required = true
+	}
+
+	var schema *base.SchemaProxy
+	if op.RequestBody.Content != nil {
+		if mediaType, ok := op.RequestBody.Content.Get("application/json"); ok && mediaType != nil {
+			schema = mediaType.Schema
+		}
+		if schema == nil {
+			for _, mediaType := range op.RequestBody.Content.FromOldest() {
+				if mediaType != nil && mediaType.Schema != nil {
+					schema = mediaType.Schema
+					break
+				}
+			}
+		}
+	}
+
+	if schema == nil {
+		return "array", "array", required, nil
+	}
+
+	bodyType, bodyDocType := g.resolvePHPType(schema, "SumUp\\Services", "", "")
+	if bodyType == "" {
+		bodyType = "array"
+	}
+	if bodyDocType == "" {
+		bodyDocType = "array"
+	}
+
+	return bodyType, bodyDocType, required, schema
 }
 
 func (op *operation) methodName() string {

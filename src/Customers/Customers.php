@@ -7,8 +7,20 @@ namespace SumUp\Customers;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
+
+class CustomersUpdateRequest
+{
+    /**
+     * Personal details for the customer.
+     *
+     * @var \SumUp\Types\PersonalDetails|null
+     */
+    public ?\SumUp\Types\PersonalDetails $personalDetails = null;
+
+}
 
 /**
  * Class Customers
@@ -46,18 +58,16 @@ class Customers implements SumUpService
     /**
      * Create a customer
      *
-     * @param array|null $body Optional request payload
+     * @param \SumUp\Types\Customer|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      */
-    public function create(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Customer
+    public function create(\SumUp\Types\Customer|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
     {
         $path = '/v0.1/customers';
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -157,18 +167,16 @@ class Customers implements SumUpService
      * Update a customer
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param array|null $body Optional request payload
+     * @param CustomersUpdateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      */
-    public function update(string $customerId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Customer
+    public function update(string $customerId, CustomersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

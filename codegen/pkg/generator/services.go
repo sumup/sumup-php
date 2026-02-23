@@ -19,6 +19,9 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
 	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
+	if serviceHasRequestBody(operations) {
+		buf.WriteString("use SumUp\\RequestEncoder;\n")
+	}
 	buf.WriteString("use SumUp\\ResponseDecoder;\n")
 	buf.WriteString("use SumUp\\SdkInfo;\n\n")
 
@@ -33,6 +36,26 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 			buf.WriteString(g.buildPHPClass(name, inlineResponseSchemas[name], "SumUp\\Services"))
 			buf.WriteString("\n")
 		}
+	}
+
+	seenRequestBodies := make(map[string]struct{})
+	for _, op := range operations {
+		if !shouldGenerateRequestBodyClass(op) {
+			continue
+		}
+
+		requestClass := requestBodyClassName(className, op)
+		if _, ok := seenRequestBodies[requestClass]; ok {
+			op.BodyType = requestClass
+			op.BodyDocType = requestClass
+			continue
+		}
+		seenRequestBodies[requestClass] = struct{}{}
+		op.BodyType = requestClass
+		op.BodyDocType = requestClass
+
+		buf.WriteString(g.buildPHPClass(requestClass, op.BodySchema, "SumUp\\Services"))
+		buf.WriteString("\n")
 	}
 
 	seenParams := make(map[string]struct{})
@@ -124,7 +147,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	}
 
 	if op.HasBody {
-		buf.WriteString("     * @param array|null $body Optional request payload\n")
+		fmt.Fprintf(&buf, "     * @param %s $body %s request payload\n", renderBodyDocType(op), renderBodyDocQualifier(op))
 	}
 	buf.WriteString("     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)\n")
 
@@ -146,7 +169,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 		args = append(args, fmt.Sprintf("?%s $queryParams = null", queryParamsClassName(serviceClass, op)))
 	}
 	if op.HasBody {
-		args = append(args, "?array $body = null")
+		args = append(args, renderBodyArgument(op))
 	}
 	args = append(args, "?array $requestOptions = null")
 
@@ -186,9 +209,13 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 
 	buf.WriteString("        $payload = [];\n")
 	if op.HasBody {
-		buf.WriteString("        if ($body !== null) {\n")
-		buf.WriteString("            $payload = $body;\n")
-		buf.WriteString("        }\n")
+		if op.BodyRequired {
+			buf.WriteString("        $payload = RequestEncoder::encode($body);\n")
+		} else {
+			buf.WriteString("        if ($body !== null) {\n")
+			buf.WriteString("            $payload = RequestEncoder::encode($body);\n")
+			buf.WriteString("        }\n")
+		}
 	}
 
 	buf.WriteString("        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];\n")
@@ -321,6 +348,45 @@ func collectInlineResponseSchemas(operations []*operation) map[string]*base.Sche
 		}
 	}
 	return result
+}
+
+func serviceHasRequestBody(operations []*operation) bool {
+	for _, op := range operations {
+		if op != nil && op.HasBody {
+			return true
+		}
+	}
+
+	return false
+}
+
+func shouldGenerateRequestBodyClass(op *operation) bool {
+	if op == nil || !op.HasBody || op.BodySchema == nil {
+		return false
+	}
+
+	if op.BodySchema.GetReference() != "" {
+		return false
+	}
+
+	if !schemaIsObject(op.BodySchema) {
+		return false
+	}
+
+	return !schemaIsAdditionalPropertiesOnly(op.BodySchema)
+}
+
+func requestBodyClassName(serviceClass string, op *operation) string {
+	methodName := op.methodName()
+	if methodName == "" {
+		methodName = "Operation"
+	}
+
+	if serviceClass != "" {
+		return fmt.Sprintf("%s%sRequest", serviceClass, strcase.ToCamel(methodName))
+	}
+
+	return fmt.Sprintf("%sRequest", strcase.ToCamel(methodName))
 }
 
 func collectInlineResponseSchema(rt *responseType, acc map[string]*base.SchemaProxy) {
@@ -596,4 +662,77 @@ func renderPathAssignment(op *operation) string {
 	builder.WriteString(");\n")
 
 	return builder.String()
+}
+
+func renderBodyDocQualifier(op *operation) string {
+	if op != nil && op.BodyRequired {
+		return "Required"
+	}
+
+	return "Optional"
+}
+
+func renderBodyDocType(op *operation) string {
+	if op == nil {
+		return "array|null"
+	}
+
+	baseType := op.BodyDocType
+	if baseType == "" {
+		baseType = "array"
+	}
+
+	if bodyTypeAllowsArray(op.BodyType) {
+		baseType = baseType + "|array"
+	}
+
+	if !op.BodyRequired && !strings.Contains(baseType, "null") {
+		baseType += "|null"
+	}
+
+	return baseType
+}
+
+func renderBodyArgument(op *operation) string {
+	if op == nil {
+		return "?array $body = null"
+	}
+
+	baseType := op.BodyType
+	if baseType == "" || baseType == "mixed" {
+		baseType = "array"
+	}
+
+	if bodyTypeAllowsArray(baseType) {
+		baseType = baseType + "|array"
+	}
+
+	if !op.BodyRequired {
+		if baseType == "array" {
+			return "?array $body = null"
+		}
+		if !strings.Contains(baseType, "null") {
+			baseType += "|null"
+		}
+		return fmt.Sprintf("%s $body = null", baseType)
+	}
+
+	return fmt.Sprintf("%s $body", baseType)
+}
+
+func bodyTypeAllowsArray(typeName string) bool {
+	if typeName == "" {
+		return false
+	}
+	typeName = strings.TrimPrefix(typeName, "?")
+	if strings.Contains(typeName, "|") {
+		return false
+	}
+
+	switch typeName {
+	case "array", "mixed", "string", "int", "float", "bool", "null", "void":
+		return false
+	default:
+		return true
+	}
 }

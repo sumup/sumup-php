@@ -7,6 +7,7 @@ namespace SumUp\Readers;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -17,6 +18,49 @@ class ListResponse
      * @var \SumUp\Types\Reader[]
      */
     public array $items;
+
+}
+
+class ReadersCreateRequest
+{
+    /**
+     * The pairing code is a 8 or 9 character alphanumeric string that is displayed on a SumUp Device after initiating the pairing. It is used to link the physical device to the created pairing.
+     *
+     * @var string
+     */
+    public string $pairingCode;
+
+    /**
+     * Custom human-readable, user-defined name for easier identification of the reader.
+     *
+     * @var string
+     */
+    public string $name;
+
+    /**
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+     *
+     * @var array|null
+     */
+    public ?array $metadata = null;
+
+}
+
+class ReadersUpdateRequest
+{
+    /**
+     * Custom human-readable, user-defined name for easier identification of the reader.
+     *
+     * @var string|null
+     */
+    public ?string $name = null;
+
+    /**
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+     *
+     * @var array|null
+     */
+    public ?array $metadata = null;
 
 }
 
@@ -57,18 +101,16 @@ class Readers implements SumUpService
      * Create a Reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array|null $body Optional request payload
+     * @param ReadersCreateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      */
-    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Reader
+    public function create(string $merchantCode, ReadersCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -89,18 +131,16 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param array|null $body Optional request payload
+     * @param \SumUp\Types\CreateReaderCheckoutRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CreateReaderCheckoutResponse
      */
-    public function createCheckout(string $merchantCode, string $readerId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
+    public function createCheckout(string $merchantCode, string $readerId, \SumUp\Types\CreateReaderCheckoutRequest|array $body, ?array $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -234,7 +274,7 @@ class Readers implements SumUpService
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
         if ($body !== null) {
-            $payload = $body;
+            $payload = RequestEncoder::encode($body);
         }
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
@@ -259,18 +299,16 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param array|null $body Optional request payload
+     * @param ReadersUpdateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      */
-    public function update(string $merchantCode, string $id, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Reader
+    public function update(string $merchantCode, string $id, ReadersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

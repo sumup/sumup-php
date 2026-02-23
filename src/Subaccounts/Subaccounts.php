@@ -7,8 +7,71 @@ namespace SumUp\Subaccounts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
+
+class SubaccountsCreateSubAccountRequest
+{
+    /**
+     *
+     * @var string
+     */
+    public string $username;
+
+    /**
+     *
+     * @var string
+     */
+    public string $password;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $nickname = null;
+
+    /**
+     *
+     * @var array|null
+     */
+    public ?array $permissions = null;
+
+}
+
+class SubaccountsUpdateSubAccountRequest
+{
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $password = null;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $username = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $disabled = null;
+
+    /**
+     *
+     * @var string|null
+     */
+    public ?string $nickname = null;
+
+    /**
+     *
+     * @var array|null
+     */
+    public ?array $permissions = null;
+
+}
 
 /**
  * Query parameters for SubaccountsListSubAccountsParams.
@@ -94,20 +157,18 @@ class Subaccounts implements SumUpService
     /**
      * Create an operator
      *
-     * @param array|null $body Optional request payload
+     * @param SubaccountsCreateSubAccountRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function createSubAccount(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function createSubAccount(SubaccountsCreateSubAccountRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = '/v0.1/me/accounts';
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -186,20 +247,18 @@ class Subaccounts implements SumUpService
      * Update an operator
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param array|null $body Optional request payload
+     * @param SubaccountsUpdateSubAccountRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      *
      * @deprecated
      */
-    public function updateSubAccount(string $operatorId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function updateSubAccount(string $operatorId, SubaccountsUpdateSubAccountRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

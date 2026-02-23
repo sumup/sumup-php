@@ -7,6 +7,7 @@ namespace SumUp\Roles;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -17,6 +18,63 @@ class ListResponse
      * @var \SumUp\Types\Role[]
      */
     public array $items;
+
+}
+
+class RolesCreateRequest
+{
+    /**
+     * User-defined name of the role.
+     *
+     * @var string
+     */
+    public string $name;
+
+    /**
+     * User's permissions.
+     *
+     * @var string[]
+     */
+    public array $permissions;
+
+    /**
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+     *
+     * @var array|null
+     */
+    public ?array $metadata = null;
+
+    /**
+     * User-defined description of the role.
+     *
+     * @var string|null
+     */
+    public ?string $description = null;
+
+}
+
+class RolesUpdateRequest
+{
+    /**
+     * User-defined name of the role.
+     *
+     * @var string|null
+     */
+    public ?string $name = null;
+
+    /**
+     * User's permissions.
+     *
+     * @var string[]|null
+     */
+    public ?array $permissions = null;
+
+    /**
+     * User-defined description of the role.
+     *
+     * @var string|null
+     */
+    public ?string $description = null;
 
 }
 
@@ -57,18 +115,16 @@ class Roles implements SumUpService
      * Create a role
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array|null $body Optional request payload
+     * @param RolesCreateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      */
-    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Role
+    public function create(string $merchantCode, RolesCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -162,18 +218,16 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param array|null $body Optional request payload
+     * @param RolesUpdateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      */
-    public function update(string $merchantCode, string $roleId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Role
+    public function update(string $merchantCode, string $roleId, RolesUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

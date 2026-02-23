@@ -7,6 +7,7 @@ namespace SumUp\Transactions;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -39,6 +40,20 @@ class ListResponse
      * @var \SumUp\Types\Link[]|null
      */
     public ?array $links = null;
+
+}
+
+/**
+ * Optional amount for partial refunds of transactions.
+ */
+class TransactionsRefundRequest
+{
+    /**
+     * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
+     *
+     * @var float|null
+     */
+    public ?float $amount = null;
 
 }
 
@@ -581,17 +596,17 @@ class Transactions implements SumUpService
      * Refund a transaction
      *
      * @param string $txnId Unique ID of the transaction.
-     * @param array|null $body Optional request payload
+     * @param TransactionsRefundRequest|array|null $body Optional request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function refund(string $txnId, ?array $body = null, ?array $requestOptions = null): null
+    public function refund(string $txnId, TransactionsRefundRequest|array|null $body = null, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/me/refund/%s', rawurlencode((string) $txnId));
         $payload = [];
         if ($body !== null) {
-            $payload = $body;
+            $payload = RequestEncoder::encode($body);
         }
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());

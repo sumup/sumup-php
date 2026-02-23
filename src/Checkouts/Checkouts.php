@@ -7,6 +7,7 @@ namespace SumUp\Checkouts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -95,18 +96,16 @@ class Checkouts implements SumUpService
     /**
      * Create a checkout
      *
-     * @param array|null $body Optional request payload
+     * @param \SumUp\Types\CheckoutCreateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Checkout
      */
-    public function create(?array $body = null, ?array $requestOptions = null): \SumUp\Types\Checkout
+    public function create(\SumUp\Types\CheckoutCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Checkout
     {
         $path = '/v0.1/checkouts';
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -253,18 +252,16 @@ class Checkouts implements SumUpService
      * Process a checkout
      *
      * @param string $id Unique ID of the checkout resource.
-     * @param array|null $body Optional request payload
+     * @param \SumUp\Types\ProcessCheckout|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
      */
-    public function process(string $id, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
+    public function process(string $id, \SumUp\Types\ProcessCheckout|array $body, ?array $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

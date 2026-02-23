@@ -7,6 +7,7 @@ namespace SumUp\Members;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -23,6 +24,90 @@ class ListResponse
      * @var int|null
      */
     public ?int $totalCount = null;
+
+}
+
+class MembersCreateRequest
+{
+    /**
+     * True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.
+     *
+     * @var bool|null
+     */
+    public ?bool $isManagedUser = null;
+
+    /**
+     * Email address of the member to add.
+     *
+     * @var string
+     */
+    public string $email;
+
+    /**
+     * Password of the member to add. Only used if `is_managed_user` is true. In the case of service accounts, the password is not used and can not be defined by the caller.
+     *
+     * @var string|null
+     */
+    public ?string $password = null;
+
+    /**
+     * Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
+     *
+     * @var string|null
+     */
+    public ?string $nickname = null;
+
+    /**
+     * List of roles to assign to the new member.
+     *
+     * @var string[]
+     */
+    public array $roles;
+
+    /**
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+     *
+     * @var array|null
+     */
+    public ?array $metadata = null;
+
+    /**
+     * Object attributes that are modifiable only by SumUp applications.
+     *
+     * @var array|null
+     */
+    public ?array $attributes = null;
+
+}
+
+class MembersUpdateRequest
+{
+    /**
+     *
+     * @var string[]|null
+     */
+    public ?array $roles = null;
+
+    /**
+     * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+     *
+     * @var array|null
+     */
+    public ?array $metadata = null;
+
+    /**
+     * Object attributes that are modifiable only by SumUp applications.
+     *
+     * @var array|null
+     */
+    public ?array $attributes = null;
+
+    /**
+     * Allows you to update user data of managed users.
+     *
+     * @var array|null
+     */
+    public ?array $user = null;
 
 }
 
@@ -121,18 +206,16 @@ class Members implements SumUpService
      * Create a member
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array|null $body Optional request payload
+     * @param MembersCreateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      */
-    public function create(string $merchantCode, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Member
+    public function create(string $merchantCode, MembersCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -257,18 +340,16 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param array|null $body Optional request payload
+     * @param MembersUpdateRequest|array $body Required request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      */
-    public function update(string $merchantCode, string $memberId, ?array $body = null, ?array $requestOptions = null): \SumUp\Types\Member
+    public function update(string $merchantCode, string $memberId, MembersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
-        if ($body !== null) {
-            $payload = $body;
-        }
+        $payload = RequestEncoder::encode($body);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
