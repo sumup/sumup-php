@@ -62,6 +62,11 @@ class Customers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function create(\SumUp\Types\Customer|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
     {
@@ -91,6 +96,11 @@ class Customers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function deactivatePaymentInstrument(string $customerId, string $token, ?array $requestOptions = null): null
     {
@@ -118,6 +128,11 @@ class Customers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function get(string $customerId, ?array $requestOptions = null): \SumUp\Types\Customer
     {
@@ -143,6 +158,11 @@ class Customers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function listPaymentInstruments(string $customerId, ?array $requestOptions = null): array
     {
@@ -171,6 +191,11 @@ class Customers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function update(string $customerId, CustomersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
     {

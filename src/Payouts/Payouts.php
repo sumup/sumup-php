@@ -133,6 +133,11 @@ class Payouts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return array[]
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function list(string $merchantCode, ?PayoutsListParams $queryParams = null, ?array $requestOptions = null): array
     {
@@ -182,6 +187,11 @@ class Payouts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return array[]
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */

@@ -114,6 +114,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function create(string $merchantCode, ReadersCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
     {
@@ -144,6 +149,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CreateReaderCheckoutResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function createCheckout(string $merchantCode, string $readerId, \SumUp\Types\CreateReaderCheckoutRequest|array $body, ?array $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
     {
@@ -176,6 +186,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function delete(string $merchantCode, string $id, ?array $requestOptions = null): null
     {
@@ -202,6 +217,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function get(string $merchantCode, string $id, ?array $requestOptions = null): \SumUp\Types\Reader
     {
@@ -226,6 +246,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\StatusResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function getStatus(string $merchantCode, string $readerId, ?array $requestOptions = null): \SumUp\Types\StatusResponse
     {
@@ -254,6 +279,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ReadersListResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ReadersListResponse
     {
@@ -277,6 +307,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function terminateCheckout(string $merchantCode, string $readerId, ReadersTerminateCheckoutRequest|array|null $body = null, ?array $requestOptions = null): null
     {
@@ -312,6 +347,11 @@ class Readers implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function update(string $merchantCode, string $id, ReadersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
     {

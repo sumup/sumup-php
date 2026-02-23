@@ -365,6 +365,11 @@ class Transactions implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function get(string $merchantCode, ?TransactionsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\TransactionFull
     {
@@ -413,6 +418,11 @@ class Transactions implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -458,6 +468,11 @@ class Transactions implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\TransactionsListResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\TransactionsListResponse
     {
@@ -529,6 +544,11 @@ class Transactions implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\TransactionsListDeprecatedResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -600,6 +620,11 @@ class Transactions implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function refund(string $txnId, TransactionsRefundRequest|array|null $body = null, ?array $requestOptions = null): null
     {

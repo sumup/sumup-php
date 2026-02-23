@@ -138,6 +138,11 @@ class Subaccounts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -161,6 +166,11 @@ class Subaccounts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -187,6 +197,11 @@ class Subaccounts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -210,6 +225,11 @@ class Subaccounts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator[]
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */
@@ -251,6 +271,11 @@ class Subaccounts implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      *
      * @deprecated
      */

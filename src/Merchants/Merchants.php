@@ -99,6 +99,11 @@ class Merchants implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Merchant
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function get(string $merchantCode, ?MerchantsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Merchant
     {
@@ -136,6 +141,11 @@ class Merchants implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Person
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function getPerson(string $merchantCode, string $personId, ?MerchantsGetPersonParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Person
     {
@@ -173,6 +183,11 @@ class Merchants implements SumUpService
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\ListPersonsResponseBody
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\AuthenticationException
+     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
      */
     public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
     {
