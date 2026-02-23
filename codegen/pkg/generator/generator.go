@@ -276,7 +276,29 @@ func (g *Generator) buildPHPClass(name string, schema *base.SchemaProxy, current
 		buf.WriteString(propCode)
 	}
 
+	if strings.HasSuffix(name, "Request") && name != "BadRequest" {
+		buf.WriteString(g.buildRequestArrayConstructor(properties))
+	}
+
 	buf.WriteString("}\n")
+	return buf.String()
+}
+
+func (g *Generator) buildRequestArrayConstructor(_ []phpProperty) string {
+	var buf strings.Builder
+
+	buf.WriteString("    /**\n")
+	buf.WriteString("     * Create request DTO from an associative array.\n")
+	buf.WriteString("     *\n")
+	buf.WriteString("     * @param array<string, mixed> $data\n")
+	buf.WriteString("     */\n")
+	buf.WriteString("    public function __construct(array $data = [])\n")
+	buf.WriteString("    {\n")
+	buf.WriteString("        if ($data !== []) {\n")
+	buf.WriteString("            \\SumUp\\Hydrator::hydrate($data, self::class, $this);\n")
+	buf.WriteString("        }\n")
+	buf.WriteString("    }\n\n")
+
 	return buf.String()
 }
 

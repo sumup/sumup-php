@@ -23,10 +23,11 @@ class Hydrator
      *
      * @param mixed $payload
      * @param string $className
+     * @param object|null $target Existing instance to hydrate.
      *
      * @return mixed
      */
-    public static function hydrate($payload, $className)
+    public static function hydrate($payload, $className, $target = null)
     {
         if ($payload === null || $className === '' || !class_exists($className)) {
             return $payload;
@@ -40,7 +41,7 @@ class Hydrator
             return $payload;
         }
 
-        $object = new $className();
+        $object = ($target instanceof $className) ? $target : new $className();
         $properties = self::getClassProperties($className);
 
         foreach ($payload as $key => $value) {

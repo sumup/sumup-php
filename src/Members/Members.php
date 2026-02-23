@@ -79,6 +79,18 @@ class MembersCreateRequest
      */
     public ?array $attributes = null;
 
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
+
 }
 
 class MembersUpdateRequest
@@ -109,6 +121,18 @@ class MembersUpdateRequest
      * @var array<string, mixed>|null
      */
     public ?array $user = null;
+
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
 
 }
 

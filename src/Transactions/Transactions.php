@@ -56,6 +56,18 @@ class TransactionsRefundRequest
      */
     public ?float $amount = null;
 
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
+
 }
 
 /**
