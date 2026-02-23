@@ -33,7 +33,17 @@ $sumup = new \SumUp\SumUp($apiKey);
 // $sumup->setDefaultAccessToken('your-token-here');
 
 // Use services with the default token
-$merchant = $sumup->merchants()->get($merchantCode);
-print_r($merchant);
+try {
+    $requestOptions = new \SumUp\HttpClient\RequestOptions(timeout: 30, connectTimeout: 10);
+    $merchant = $sumup->merchants()->get($merchantCode, null, $requestOptions);
+    print_r($merchant);
+} catch (\SumUp\Exception\ApiException $e) {
+    fwrite(STDERR, "API error: " . $e->getMessage() . "\n");
+} catch (\SumUp\Exception\UnexpectedApiException $e) {
+    fwrite(STDERR, "Unexpected API error: " . $e->getMessage() . "\n");
+    fwrite(STDERR, json_encode($e->getErrorEnvelope()->toArray(), JSON_PRETTY_PRINT) . "\n");
+} catch (\SumUp\Exception\SDKException $e) {
+    fwrite(STDERR, "SDK error: " . $e->getMessage() . "\n");
+}
 
 // Override the default token by creating a new client instance instead.

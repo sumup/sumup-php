@@ -7,6 +7,7 @@ namespace SumUp\Merchants;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -96,7 +97,7 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MerchantsGetParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Merchant
      * @throws \SumUp\Exception\ApiException
@@ -104,7 +105,7 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, ?MerchantsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Merchant
+    public function get(string $merchantCode, ?MerchantsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Merchant
     {
         $path = sprintf('/v1/merchants/%s', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -137,7 +138,7 @@ class Merchants implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $personId Person ID
      * @param MerchantsGetPersonParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Person
      * @throws \SumUp\Exception\ApiException
@@ -145,7 +146,7 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function getPerson(string $merchantCode, string $personId, ?MerchantsGetPersonParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Person
+    public function getPerson(string $merchantCode, string $personId, ?MerchantsGetPersonParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Person
     {
         $path = sprintf('/v1/merchants/%s/persons/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $personId));
         if ($queryParams !== null) {
@@ -178,7 +179,7 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MerchantsListPersonsParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\ListPersonsResponseBody
      * @throws \SumUp\Exception\ApiException
@@ -186,7 +187,7 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
+    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
     {
         $path = sprintf('/v1/merchants/%s/persons', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {

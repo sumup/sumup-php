@@ -37,12 +37,13 @@ try {
     // SDK automatically uses SUMUP_API_KEY environment variable
     $sumup = new \SumUp\SumUp();
 
-    $checkout = $sumup->checkouts()->create([
-        'amount' => 10.00,
-        'currency' => 'EUR',
-        'checkout_reference' => 'your-checkout-ref',
-        'merchant_code' => 'YOUR-MERCHANT-CODE',
-    ]);
+    $request = new \SumUp\Types\CheckoutCreateRequest();
+    $request->amount = 10.00;
+    $request->currency = \SumUp\Types\CheckoutCreateRequestCurrency::EUR;
+    $request->checkoutReference = 'your-checkout-ref';
+    $request->merchantCode = 'YOUR-MERCHANT-CODE';
+
+    $checkout = $sumup->checkouts()->create($request);
 
     $checkoutId = $checkout->id;
     // Pass the $checkoutId to the front-end to be processed
@@ -53,12 +54,15 @@ try {
 } catch (\SumUp\Exception\UnexpectedApiException $e) {
     echo 'Unexpected API error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
     // Body did not match an OpenAPI-described error shape.
-    var_dump($e->getResponseBody());
+    // Use the normalized envelope for stable logging/handling.
+    var_dump($e->getErrorEnvelope()->toArray());
 } catch (\SumUp\Exception\SDKException $e) {
     echo 'SumUp SDK error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
     // Covers connection/configuration and other non-API failures.
 }
 ```
+
+For convenience, service methods still accept associative arrays as request payloads, but DTO objects from `\SumUp\Types\...` are the recommended and typed approach.
 
 ### Providing API Key Programmatically
 
@@ -116,6 +120,21 @@ $sumup = new \SumUp\SumUp([
     'api_key' => 'your-api-key-here',
     'client' => $guzzleClient,
 ]);
+```
+
+### Request Options
+
+Service methods accept typed request options via `\SumUp\HttpClient\RequestOptions`:
+
+```php
+$options = new \SumUp\HttpClient\RequestOptions(
+    timeout: 30,
+    connectTimeout: 10,
+    retries: 2,
+    retryBackoffMs: 200
+);
+
+$checkout = $sumup->checkouts()->get('checkout-id', $options);
 ```
 
 ## API Reference

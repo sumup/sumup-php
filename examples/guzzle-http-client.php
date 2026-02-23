@@ -38,6 +38,11 @@ try {
     $merchant = $sumup->merchants()->get($merchantCode);
     echo "\nMerchant retrieved successfully!\n";
     echo "Merchant code: " . $merchant->merchantCode . "\n";
+} catch (\SumUp\Exception\ApiException $e) {
+    echo "API error: " . $e->getMessage() . "\n";
+} catch (\SumUp\Exception\UnexpectedApiException $e) {
+    echo "Unexpected API error: " . $e->getMessage() . "\n";
+    echo "Envelope: " . json_encode($e->getErrorEnvelope()->toArray()) . "\n";
 } catch (\SumUp\Exception\SDKException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }

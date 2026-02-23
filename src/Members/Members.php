@@ -7,6 +7,7 @@ namespace SumUp\Members;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -207,7 +208,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MembersCreateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException
@@ -215,7 +216,7 @@ class Members implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function create(string $merchantCode, MembersCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Member
+    public function create(string $merchantCode, MembersCreateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -240,7 +241,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -248,7 +249,7 @@ class Members implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function delete(string $merchantCode, string $memberId, ?array $requestOptions = null): null
+    public function delete(string $merchantCode, string $memberId, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -270,7 +271,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException
@@ -278,7 +279,7 @@ class Members implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, string $memberId, ?array $requestOptions = null): \SumUp\Types\Member
+    public function get(string $merchantCode, string $memberId, ?RequestOptions $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
@@ -298,7 +299,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MembersListParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\MembersListResponse
      * @throws \SumUp\Exception\ApiException
@@ -306,7 +307,7 @@ class Members implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(string $merchantCode, ?MembersListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\MembersListResponse
+    public function list(string $merchantCode, ?MembersListParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Services\MembersListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -357,7 +358,7 @@ class Members implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
      * @param MembersUpdateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException
@@ -365,7 +366,7 @@ class Members implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function update(string $merchantCode, string $memberId, MembersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Member
+    public function update(string $merchantCode, string $memberId, MembersUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Member
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];

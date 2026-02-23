@@ -7,6 +7,7 @@ namespace SumUp\Transactions;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -362,7 +363,7 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsGetParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
@@ -370,7 +371,7 @@ class Transactions implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, ?TransactionsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\TransactionFull
+    public function get(string $merchantCode, ?TransactionsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\TransactionFull
     {
         $path = sprintf('/v2.1/merchants/%s/transactions', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -414,7 +415,7 @@ class Transactions implements SumUpService
      * Retrieve a transaction
      *
      * @param TransactionsGetDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
@@ -424,7 +425,7 @@ class Transactions implements SumUpService
      *
      * @deprecated
      */
-    public function getDeprecated(?TransactionsGetDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\TransactionFull
+    public function getDeprecated(?TransactionsGetDeprecatedParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\TransactionFull
     {
         $path = '/v0.1/me/transactions';
         if ($queryParams !== null) {
@@ -463,7 +464,7 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsListParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\TransactionsListResponse
      * @throws \SumUp\Exception\ApiException
@@ -471,7 +472,7 @@ class Transactions implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\TransactionsListResponse
+    public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Services\TransactionsListResponse
     {
         $path = sprintf('/v2.1/merchants/%s/transactions/history', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -538,7 +539,7 @@ class Transactions implements SumUpService
      * List transactions
      *
      * @param TransactionsListDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\TransactionsListDeprecatedResponse
      * @throws \SumUp\Exception\ApiException
@@ -548,7 +549,7 @@ class Transactions implements SumUpService
      *
      * @deprecated
      */
-    public function listDeprecated(?TransactionsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\TransactionsListDeprecatedResponse
+    public function listDeprecated(?TransactionsListDeprecatedParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Services\TransactionsListDeprecatedResponse
     {
         $path = '/v0.1/me/transactions/history';
         if ($queryParams !== null) {
@@ -613,7 +614,7 @@ class Transactions implements SumUpService
      *
      * @param string $txnId Unique ID of the transaction.
      * @param TransactionsRefundRequest|array<string, mixed>|null $body Optional request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -621,7 +622,7 @@ class Transactions implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function refund(string $txnId, TransactionsRefundRequest|array|null $body = null, ?array $requestOptions = null): null
+    public function refund(string $txnId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/me/refund/%s', rawurlencode((string) $txnId));
         $payload = [];

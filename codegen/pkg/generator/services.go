@@ -20,6 +20,7 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
 	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
+	buf.WriteString("use SumUp\\HttpClient\\RequestOptions;\n")
 	if serviceHasRequestBody(operations) {
 		buf.WriteString("use SumUp\\RequestEncoder;\n")
 	}
@@ -196,7 +197,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	if op.HasBody {
 		fmt.Fprintf(&buf, "     * @param %s $body %s request payload\n", renderBodyDocType(op), renderBodyDocQualifier(op))
 	}
-	buf.WriteString("     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)\n")
+	buf.WriteString("     * @param RequestOptions|null $requestOptions Optional typed request options\n")
 
 	buf.WriteString("     *\n")
 	fmt.Fprintf(&buf, "     * @return %s\n", renderOperationReturnDoc(op))
@@ -222,7 +223,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	if op.HasBody {
 		args = append(args, renderBodyArgument(op))
 	}
-	args = append(args, "?array $requestOptions = null")
+	args = append(args, "?RequestOptions $requestOptions = null")
 
 	buf.WriteString("    public function ")
 	buf.WriteString(methodName)

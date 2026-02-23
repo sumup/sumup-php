@@ -7,6 +7,7 @@ namespace SumUp\Receipts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -71,7 +72,7 @@ class Receipts implements SumUpService
      *
      * @param string $id SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.
      * @param ReceiptsGetParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Receipt
      * @throws \SumUp\Exception\ApiException
@@ -79,7 +80,7 @@ class Receipts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $id, ?ReceiptsGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\Receipt
+    public function get(string $id, ?ReceiptsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Receipt
     {
         $path = sprintf('/v1.1/receipts/%s', rawurlencode((string) $id));
         if ($queryParams !== null) {

@@ -7,6 +7,7 @@ namespace SumUp\Subaccounts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -135,7 +136,7 @@ class Subaccounts implements SumUpService
      * Retrieve an operator
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -145,7 +146,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function compatGetOperator(string $operatorId, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function compatGetOperator(string $operatorId, ?RequestOptions $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -162,7 +163,7 @@ class Subaccounts implements SumUpService
      * Create an operator
      *
      * @param SubaccountsCreateSubAccountRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -172,7 +173,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function createSubAccount(SubaccountsCreateSubAccountRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function createSubAccount(SubaccountsCreateSubAccountRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Operator
     {
         $path = '/v0.1/me/accounts';
         $payload = [];
@@ -192,7 +193,7 @@ class Subaccounts implements SumUpService
      * Disable an operator.
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -202,7 +203,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function deactivateSubAccount(string $operatorId, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function deactivateSubAccount(string $operatorId, ?RequestOptions $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
@@ -219,7 +220,7 @@ class Subaccounts implements SumUpService
      * List operators
      *
      * @param SubaccountsListSubAccountsParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Operator[]
      * @throws \SumUp\Exception\ApiException
@@ -229,7 +230,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function listSubAccounts(?SubaccountsListSubAccountsParams $queryParams = null, ?array $requestOptions = null): array
+    public function listSubAccounts(?SubaccountsListSubAccountsParams $queryParams = null, ?RequestOptions $requestOptions = null): array
     {
         $path = '/v0.1/me/accounts';
         if ($queryParams !== null) {
@@ -264,7 +265,7 @@ class Subaccounts implements SumUpService
      *
      * @param string $operatorId The unique identifier for the operator.
      * @param SubaccountsUpdateSubAccountRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -274,7 +275,7 @@ class Subaccounts implements SumUpService
      *
      * @deprecated
      */
-    public function updateSubAccount(string $operatorId, SubaccountsUpdateSubAccountRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Operator
+    public function updateSubAccount(string $operatorId, SubaccountsUpdateSubAccountRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Operator
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];

@@ -42,8 +42,13 @@ class CustomLoggingHttpClient implements \SumUp\HttpClient\HttpClientInterface
         $this->wrappedClient = $wrappedClient;
     }
 
-    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): \SumUp\HttpClient\Response
-    {
+    public function send(
+        string $method,
+        string $url,
+        array $body,
+        array $headers,
+        ?\SumUp\HttpClient\RequestOptions $options = null
+    ): \SumUp\HttpClient\Response {
         // Log the request
         echo "[HTTP Request] {$method} {$url}\n";
         if (!empty($body)) {
@@ -86,6 +91,11 @@ try {
     $merchant = $sumup->merchants()->get($merchantCode);
     echo "\nMerchant retrieved successfully!\n";
     echo "Merchant code: " . $merchant->merchantCode . "\n";
+} catch (\SumUp\Exception\ApiException $e) {
+    echo "API error: " . $e->getMessage() . "\n";
+} catch (\SumUp\Exception\UnexpectedApiException $e) {
+    echo "Unexpected API error: " . $e->getMessage() . "\n";
+    echo "Envelope: " . json_encode($e->getErrorEnvelope()->toArray()) . "\n";
 } catch (\SumUp\Exception\SDKException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }

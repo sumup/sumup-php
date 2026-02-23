@@ -7,6 +7,7 @@ namespace SumUp\Payouts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -130,7 +131,7 @@ class Payouts implements SumUpService
      *
      * @param string $merchantCode
      * @param PayoutsListParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return array<string, mixed>[]
      * @throws \SumUp\Exception\ApiException
@@ -138,7 +139,7 @@ class Payouts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(string $merchantCode, ?PayoutsListParams $queryParams = null, ?array $requestOptions = null): array
+    public function list(string $merchantCode, ?PayoutsListParams $queryParams = null, ?RequestOptions $requestOptions = null): array
     {
         $path = sprintf('/v1.0/merchants/%s/payouts', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -183,7 +184,7 @@ class Payouts implements SumUpService
      * List payouts
      *
      * @param PayoutsListDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return array<string, mixed>[]
      * @throws \SumUp\Exception\ApiException
@@ -193,7 +194,7 @@ class Payouts implements SumUpService
      *
      * @deprecated
      */
-    public function listDeprecated(?PayoutsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): array
+    public function listDeprecated(?PayoutsListDeprecatedParams $queryParams = null, ?RequestOptions $requestOptions = null): array
     {
         $path = '/v0.1/me/financials/payouts';
         if ($queryParams !== null) {

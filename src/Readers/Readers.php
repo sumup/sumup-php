@@ -7,6 +7,7 @@ namespace SumUp\Readers;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -111,7 +112,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param ReadersCreateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException
@@ -119,7 +120,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function create(string $merchantCode, ReadersCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
+    public function create(string $merchantCode, ReadersCreateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -145,7 +146,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
      * @param \SumUp\Types\CreateReaderCheckoutRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\CreateReaderCheckoutResponse
      * @throws \SumUp\Exception\ApiException
@@ -153,7 +154,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function createCheckout(string $merchantCode, string $readerId, \SumUp\Types\CreateReaderCheckoutRequest|array $body, ?array $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
+    public function createCheckout(string $merchantCode, string $readerId, \SumUp\Types\CreateReaderCheckoutRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -181,7 +182,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -189,7 +190,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function delete(string $merchantCode, string $id, ?array $requestOptions = null): null
+    public function delete(string $merchantCode, string $id, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -211,7 +212,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException
@@ -219,7 +220,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, string $id, ?array $requestOptions = null): \SumUp\Types\Reader
+    public function get(string $merchantCode, string $id, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
@@ -239,7 +240,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\StatusResponse
      * @throws \SumUp\Exception\ApiException
@@ -247,7 +248,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function getStatus(string $merchantCode, string $readerId, ?array $requestOptions = null): \SumUp\Types\StatusResponse
+    public function getStatus(string $merchantCode, string $readerId, ?RequestOptions $requestOptions = null): \SumUp\Types\StatusResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/status', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -271,7 +272,7 @@ class Readers implements SumUpService
      * List Readers
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\ReadersListResponse
      * @throws \SumUp\Exception\ApiException
@@ -279,7 +280,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\ReadersListResponse
+    public function list(string $merchantCode, ?RequestOptions $requestOptions = null): \SumUp\Services\ReadersListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -298,7 +299,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
      * @param ReadersTerminateCheckoutRequest|array<string, mixed>|null $body Optional request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -306,7 +307,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function terminateCheckout(string $merchantCode, string $readerId, ReadersTerminateCheckoutRequest|array|null $body = null, ?array $requestOptions = null): null
+    public function terminateCheckout(string $merchantCode, string $readerId, ReadersTerminateCheckoutRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
@@ -337,7 +338,7 @@ class Readers implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
      * @param ReadersUpdateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException
@@ -345,7 +346,7 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function update(string $merchantCode, string $id, ReadersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Reader
+    public function update(string $merchantCode, string $id, ReadersUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];

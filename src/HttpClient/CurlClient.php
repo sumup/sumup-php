@@ -56,14 +56,14 @@ class CurlClient implements HttpClientInterface
      * @param string $url         The endpoint to send the request to.
      * @param array<int|string, mixed> $body        The body of the request.
      * @param array<string, string> $headers     The headers of the request.
-     * @param array<string, mixed>|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
+     * @param RequestOptions|null $options Optional typed request options.
      *
      * @return Response
      *
      * @throws ConnectionException
      * @throws SDKException
      */
-    public function send(string $method, string $url, array $body, array $headers = [], ?array $options = null): Response
+    public function send(string $method, string $url, array $body, array $headers = [], ?RequestOptions $options = null): Response
     {
         if ($method === '') {
             throw new SDKException('Request method cannot be empty.');
@@ -75,9 +75,8 @@ class CurlClient implements HttpClientInterface
         }
 
         $reqHeaders = array_merge($headers, $this->customHeaders);
-        $requestOptions = is_array($options) ? $options : [];
-        $retries = isset($requestOptions['retries']) ? (int) $requestOptions['retries'] : 0;
-        $backoffMs = isset($requestOptions['retry_backoff_ms']) ? (int) $requestOptions['retry_backoff_ms'] : 0;
+        $retries = $options !== null ? ($options->retries ?? 0) : 0;
+        $backoffMs = $options !== null ? ($options->retryBackoffMs ?? 0) : 0;
 
         $attempt = 0;
         do {
@@ -98,12 +97,12 @@ class CurlClient implements HttpClientInterface
                 curl_setopt($ch, CURLOPT_CAINFO, $this->caBundlePath);
             }
 
-            if (isset($requestOptions['timeout'])) {
-                curl_setopt($ch, CURLOPT_TIMEOUT, (int) $requestOptions['timeout']);
+            if ($options?->timeout !== null) {
+                curl_setopt($ch, CURLOPT_TIMEOUT, $options->timeout);
             }
 
-            if (isset($requestOptions['connect_timeout'])) {
-                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, (int) $requestOptions['connect_timeout']);
+            if ($options?->connectTimeout !== null) {
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $options->connectTimeout);
             }
 
             $response = curl_exec($ch);

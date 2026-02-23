@@ -4,6 +4,7 @@ namespace SumUp\Tests\Doubles;
 
 use RuntimeException;
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\HttpClient\Response;
 
 /**
@@ -36,7 +37,7 @@ class FakeHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function send(string $method, string $url, array $body, array $headers, ?array $options = null): Response
+    public function send(string $method, string $url, array $body, array $headers, ?RequestOptions $options = null): Response
     {
         if ($this->failOnCall) {
             throw new RuntimeException('HTTP client should not have been called.');

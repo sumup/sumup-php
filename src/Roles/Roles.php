@@ -7,6 +7,7 @@ namespace SumUp\Roles;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -116,7 +117,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param RolesCreateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
@@ -124,7 +125,7 @@ class Roles implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function create(string $merchantCode, RolesCreateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Role
+    public function create(string $merchantCode, RolesCreateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -148,7 +149,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -156,7 +157,7 @@ class Roles implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function delete(string $merchantCode, string $roleId, ?array $requestOptions = null): null
+    public function delete(string $merchantCode, string $roleId, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -179,7 +180,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
@@ -187,7 +188,7 @@ class Roles implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, string $roleId, ?array $requestOptions = null): \SumUp\Types\Role
+    public function get(string $merchantCode, string $roleId, ?RequestOptions $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
@@ -206,7 +207,7 @@ class Roles implements SumUpService
      * List roles
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\RolesListResponse
      * @throws \SumUp\Exception\ApiException
@@ -214,7 +215,7 @@ class Roles implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(string $merchantCode, ?array $requestOptions = null): \SumUp\Services\RolesListResponse
+    public function list(string $merchantCode, ?RequestOptions $requestOptions = null): \SumUp\Services\RolesListResponse
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
@@ -235,7 +236,7 @@ class Roles implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
      * @param RolesUpdateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
@@ -243,7 +244,7 @@ class Roles implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function update(string $merchantCode, string $roleId, RolesUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Role
+    public function update(string $merchantCode, string $roleId, RolesUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Role
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];

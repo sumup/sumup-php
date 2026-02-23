@@ -7,6 +7,7 @@ namespace SumUp\Customers;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
@@ -59,7 +60,7 @@ class Customers implements SumUpService
      * Create a customer
      *
      * @param \SumUp\Types\Customer|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
@@ -67,7 +68,7 @@ class Customers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function create(\SumUp\Types\Customer|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
+    public function create(\SumUp\Types\Customer|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Customer
     {
         $path = '/v0.1/customers';
         $payload = [];
@@ -92,7 +93,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -100,7 +101,7 @@ class Customers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function deactivatePaymentInstrument(string $customerId, string $token, ?array $requestOptions = null): null
+    public function deactivatePaymentInstrument(string $customerId, string $token, ?RequestOptions $requestOptions = null): null
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments/%s', rawurlencode((string) $customerId), rawurlencode((string) $token));
         $payload = [];
@@ -123,7 +124,7 @@ class Customers implements SumUpService
      * Retrieve a customer
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
@@ -131,7 +132,7 @@ class Customers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $customerId, ?array $requestOptions = null): \SumUp\Types\Customer
+    public function get(string $customerId, ?RequestOptions $requestOptions = null): \SumUp\Types\Customer
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
@@ -152,7 +153,7 @@ class Customers implements SumUpService
      * List payment instruments
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
      * @throws \SumUp\Exception\ApiException
@@ -160,7 +161,7 @@ class Customers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function listPaymentInstruments(string $customerId, ?array $requestOptions = null): array
+    public function listPaymentInstruments(string $customerId, ?RequestOptions $requestOptions = null): array
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments', rawurlencode((string) $customerId));
         $payload = [];
@@ -184,7 +185,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      * @param CustomersUpdateRequest|array<string, mixed> $body Required request payload
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
@@ -192,7 +193,7 @@ class Customers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function update(string $customerId, CustomersUpdateRequest|array $body, ?array $requestOptions = null): \SumUp\Types\Customer
+    public function update(string $customerId, CustomersUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Customer
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];

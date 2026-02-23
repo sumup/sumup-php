@@ -7,6 +7,7 @@ namespace SumUp\Memberships;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -144,7 +145,7 @@ class Memberships implements SumUpService
      * List memberships
      *
      * @param MembershipsListParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Services\MembershipsListResponse
      * @throws \SumUp\Exception\ApiException
@@ -152,7 +153,7 @@ class Memberships implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function list(?MembershipsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\MembershipsListResponse
+    public function list(?MembershipsListParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Services\MembershipsListResponse
     {
         $path = '/v0.1/memberships';
         if ($queryParams !== null) {

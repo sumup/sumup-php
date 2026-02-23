@@ -7,6 +7,7 @@ namespace SumUp\Merchant;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
@@ -63,7 +64,7 @@ class Merchant implements SumUpService
      * Retrieve a profile
      *
      * @param MerchantGetParams|null $queryParams Optional query string parameters
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\MerchantAccount
      * @throws \SumUp\Exception\ApiException
@@ -73,7 +74,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function get(?MerchantGetParams $queryParams = null, ?array $requestOptions = null): \SumUp\Types\MerchantAccount
+    public function get(?MerchantGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\MerchantAccount
     {
         $path = '/v0.1/me';
         if ($queryParams !== null) {
@@ -103,7 +104,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve DBA
      *
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\DoingBusinessAsLegacy
      * @throws \SumUp\Exception\ApiException
@@ -113,7 +114,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getDoingBusinessAs(?array $requestOptions = null): \SumUp\Types\DoingBusinessAsLegacy
+    public function getDoingBusinessAs(?RequestOptions $requestOptions = null): \SumUp\Types\DoingBusinessAsLegacy
     {
         $path = '/v0.1/me/merchant-profile/doing-business-as';
         $payload = [];
@@ -131,7 +132,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve a merchant profile
      *
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\MerchantProfileLegacy
      * @throws \SumUp\Exception\ApiException
@@ -141,7 +142,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getMerchantProfile(?array $requestOptions = null): \SumUp\Types\MerchantProfileLegacy
+    public function getMerchantProfile(?RequestOptions $requestOptions = null): \SumUp\Types\MerchantProfileLegacy
     {
         $path = '/v0.1/me/merchant-profile';
         $payload = [];
@@ -160,7 +161,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve a personal profile
      *
-     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\PersonalProfileLegacy
      * @throws \SumUp\Exception\ApiException
@@ -170,7 +171,7 @@ class Merchant implements SumUpService
      *
      * @deprecated
      */
-    public function getPersonalProfile(?array $requestOptions = null): \SumUp\Types\PersonalProfileLegacy
+    public function getPersonalProfile(?RequestOptions $requestOptions = null): \SumUp\Types\PersonalProfileLegacy
     {
         $path = '/v0.1/me/personal-profile';
         $payload = [];
