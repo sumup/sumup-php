@@ -54,7 +54,7 @@ class CurlClient implements HttpClientInterface
     /**
      * @param string $method      The request method.
      * @param string $url         The endpoint to send the request to.
-     * @param array<string, mixed> $body        The body of the request.
+     * @param array<int|string, mixed> $body        The body of the request.
      * @param array<string, string> $headers     The headers of the request.
      * @param array<string, mixed>|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
      *
@@ -65,6 +65,15 @@ class CurlClient implements HttpClientInterface
      */
     public function send(string $method, string $url, array $body, array $headers = [], ?array $options = null): Response
     {
+        if ($method === '') {
+            throw new SDKException('Request method cannot be empty.');
+        }
+
+        $requestUrl = $this->baseUrl . $url;
+        if ($requestUrl === '') {
+            throw new SDKException('Request URL cannot be empty.');
+        }
+
         $reqHeaders = array_merge($headers, $this->customHeaders);
         $requestOptions = is_array($options) ? $options : [];
         $retries = isset($requestOptions['retries']) ? (int) $requestOptions['retries'] : 0;
@@ -74,11 +83,14 @@ class CurlClient implements HttpClientInterface
         do {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-            curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
+            curl_setopt($ch, CURLOPT_URL, $requestUrl);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $this->formatHeaders($reqHeaders));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             if (!empty($body)) {
                 $payload = json_encode($body);
+                if (!is_string($payload)) {
+                    throw new SDKException('Failed to encode request body to JSON.');
+                }
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
             }
 
@@ -113,6 +125,10 @@ class CurlClient implements HttpClientInterface
                 $this->sleepBackoff($backoffMs, $attempt);
                 $attempt++;
                 continue;
+            }
+
+            if (!is_string($response)) {
+                throw new ConnectionException('Unexpected empty response body from cURL request.', $code);
             }
 
             return new Response($code, $this->parseBody($response));

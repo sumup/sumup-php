@@ -67,6 +67,10 @@ class Hydrator
             return self::$propertyCache[$className];
         }
 
+        if (!class_exists($className)) {
+            return [];
+        }
+
         $refClass = new ReflectionClass($className);
         $properties = [];
         foreach ($refClass->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {

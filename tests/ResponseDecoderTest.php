@@ -12,6 +12,90 @@ use SumUp\Types\Error;
 
 class ResponseDecoderTest extends TestCase
 {
+    public function testDecodeOrThrowHydratesNestedArrayItemsInDescriptorClass()
+    {
+        $response = new Response(400, [
+            'errors' => [
+                [
+                    'message' => 'invalid request',
+                    'error_code' => 'INVALID',
+                ],
+            ],
+        ]);
+
+        try {
+            ResponseDecoder::decodeOrThrow(
+                $response,
+                null,
+                [
+                    '400' => ['type' => 'class', 'class' => ResponseDecoderNestedErrorEnvelope::class],
+                ],
+                'POST',
+                '/v0.1/checkouts'
+            );
+            $this->fail('ApiException was not thrown');
+        } catch (ApiException $exception) {
+            $body = $exception->getResponseBody();
+            $this->assertInstanceOf(ResponseDecoderNestedErrorEnvelope::class, $body);
+            $this->assertIsArray($body->errors);
+            $this->assertInstanceOf(Error::class, $body->errors[0]);
+            $this->assertSame('invalid request', $body->errors[0]->message);
+            $this->assertSame('INVALID', $body->errors[0]->errorCode);
+        }
+    }
+
+    public function testDecodeOrThrowDecodesSuccessArrayDescriptorWithClassItems()
+    {
+        $response = new Response(200, [
+            ['message' => 'a', 'error_code' => 'ONE'],
+            ['message' => 'b', 'error_code' => 'TWO'],
+        ]);
+
+        $result = ResponseDecoder::decodeOrThrow(
+            $response,
+            [
+                '200' => [
+                    'type' => 'array',
+                    'items' => ['type' => 'class', 'class' => Error::class],
+                ],
+            ],
+            null,
+            'GET',
+            '/v0.1/errors'
+        );
+
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
+        $this->assertInstanceOf(Error::class, $result[0]);
+        $this->assertSame('ONE', $result[0]->errorCode);
+    }
+
+    public function testDecodeOrThrowUsesUnexpectedFallbackForUnknownStatusWithNestedPayload()
+    {
+        $rawBody = [
+            'error' => 'rate limited',
+            'meta' => ['retry_after' => 30],
+        ];
+        $response = new Response(429, $rawBody);
+
+        try {
+            ResponseDecoder::decodeOrThrow(
+                $response,
+                null,
+                [
+                    '400' => ['type' => 'class', 'class' => Error::class],
+                ],
+                'GET',
+                '/v0.1/checkouts'
+            );
+            $this->fail('UnexpectedApiException was not thrown');
+        } catch (UnexpectedApiException $exception) {
+            $this->assertSame('rate limited', $exception->getMessage());
+            $this->assertSame($rawBody, $exception->getErrorEnvelope()->getRaw());
+            $this->assertSame(429, $exception->getErrorEnvelope()->getStatus());
+        }
+    }
+
     public function testDecodeOrThrowUsesExpectedApiExceptionForKnownErrorDescriptor()
     {
         $response = new Response(401, [
@@ -123,4 +207,12 @@ class ResponseDecoderTest extends TestCase
             'retry-after' => ['30', '60'],
         ], $exception->getErrorEnvelope()->getHeaders());
     }
+}
+
+class ResponseDecoderNestedErrorEnvelope
+{
+    /**
+     * @var \SumUp\Types\Error[]|null
+     */
+    public ?array $errors = null;
 }
