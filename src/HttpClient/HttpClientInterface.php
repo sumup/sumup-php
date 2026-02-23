@@ -16,7 +16,7 @@ interface HttpClientInterface
      * @param array  $headers     The headers of the request.
      * @param array|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
      *
-     * @return Response|mixed
+     * @return Response
      */
     public function send(string $method, string $url, array $body, array $headers, ?array $options = null): Response;
 }

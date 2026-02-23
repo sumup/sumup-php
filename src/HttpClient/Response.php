@@ -12,7 +12,7 @@ class Response
     /**
      * The HTTP response code.
      *
-     * @var number
+     * @var int
      */
     protected int $httpResponseCode;
 
@@ -39,7 +39,7 @@ class Response
     /**
      * Get HTTP response code.
      *
-     * @return number
+     * @return int
      */
     public function getHttpResponseCode(): int
     {

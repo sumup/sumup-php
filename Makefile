@@ -5,28 +5,35 @@ help: ## Show help
 	@grep -Eh '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: vendor
-vendor: composer.json ## Install dependencies
+vendor: install ## Backward-compatible alias for install
+
+.PHONY: install
+install: composer.json composer.lock ## Install all project dependencies
 	composer install
 
 .PHONY: lock
 lock: ## Update the lockfile
-	composer update friendsofphp/php-cs-fixer --with-all-dependencies
+	composer update --with-all-dependencies
 
 .PHONY: fmt
-fmt: vendor ## Format code using php-cs-fixer
+fmt: install ## Format code using php-cs-fixer
 	vendor/bin/php-cs-fixer fix -v --using-cache=no
 
 .PHONY: fmtcheck
-fmtcheck: vendor ## Check code formatting
+fmtcheck: install ## Check code formatting
 	vendor/bin/php-cs-fixer fix -v --using-cache=no --dry-run
 
 .PHONY: docs
-docs: vendor ## Generate API reference using phpDocumentor
+docs: install ## Generate API reference using phpDocumentor
 	docker run --rm -v "$(CURDIR):/data" "phpdoc/phpdoc:3"
 
 .PHONY: test
-test: vendor ## Run PHPUnit test suite
+test: install ## Run PHPUnit test suite
 	composer test
+
+.PHONY: analyse
+analyse: install ## Run static analysis (PHPStan)
+	composer analyse
 
 .PHONY: generate
 generate: ## Generate SDK from the local OpenAPI specs

@@ -16,14 +16,14 @@ class CurlClient implements HttpClientInterface
     /**
      * The base URL.
      *
-     * @var $baseUrl
+     * @var string
      */
     private string $baseUrl;
 
     /**
      * Custom headers for every request.
      *
-     * @var $customHeaders
+     * @var array<string, string>
      */
     private array $customHeaders;
 
