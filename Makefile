@@ -33,7 +33,7 @@ test: install ## Run PHPUnit test suite
 
 .PHONY: analyse
 analyse: install ## Run static analysis (PHPStan)
-	PHPSTAN_DISABLE_PARALLEL=1 composer analyse
+	PHPSTAN_DISABLE_PARALLEL=1 vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=1G --debug
 
 .PHONY: generate
 generate: ## Generate SDK from the local OpenAPI specs
