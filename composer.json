@@ -28,7 +28,7 @@
 	},
 	"scripts": {
 		"cs": "php-cs-fixer fix --dry-run --diff",
-		"analyse": "phpstan analyse --configuration=phpstan.neon --no-progress",
+		"analyse": "phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=1G",
 		"test": "phpunit"
 	},
 	"require": {

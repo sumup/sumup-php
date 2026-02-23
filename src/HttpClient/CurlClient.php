@@ -158,15 +158,11 @@ class CurlClient implements HttpClientInterface
     }
 
     /**
-     * Close the cURL handle when running on PHP versions where it is required.
-     *
-     * @param resource|\CurlHandle $handle
+     * Close the cURL handle.
      */
-    private function closeHandle($handle): void
+    private function closeHandle(\CurlHandle $handle): void
     {
-        if (PHP_VERSION_ID < 80000 && is_resource($handle)) {
-            curl_close($handle);
-        }
+        curl_close($handle);
     }
 
     /**
@@ -192,14 +188,10 @@ class CurlClient implements HttpClientInterface
      *
      * @throws ConfigurationException
      */
-    private function normalizeCABundlePath($caBundlePath): ?string
+    private function normalizeCABundlePath(?string $caBundlePath): ?string
     {
         if ($caBundlePath === null || $caBundlePath === '') {
             return null;
-        }
-
-        if (!is_string($caBundlePath)) {
-            throw new ConfigurationException('Invalid value for "ca_bundle_path". Expected string path or null.');
         }
 
         if (!is_readable($caBundlePath)) {

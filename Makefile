@@ -33,7 +33,7 @@ test: install ## Run PHPUnit test suite
 
 .PHONY: analyse
 analyse: install ## Run static analysis (PHPStan)
-	composer analyse
+	PHPSTAN_DISABLE_PARALLEL=1 composer analyse
 
 .PHONY: generate
 generate: ## Generate SDK from the local OpenAPI specs
