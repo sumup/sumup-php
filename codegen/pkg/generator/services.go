@@ -54,7 +54,11 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 		op.BodyType = requestClass
 		op.BodyDocType = requestClass
 
-		buf.WriteString(g.buildPHPClass(requestClass, op.BodySchema, "SumUp\\Services"))
+		if op.BodySchema != nil {
+			buf.WriteString(g.buildPHPClass(requestClass, op.BodySchema, "SumUp\\Services"))
+		} else {
+			buf.WriteString(buildEmptyRequestBodyClass(requestClass))
+		}
 		buf.WriteString("\n")
 	}
 
@@ -361,8 +365,12 @@ func serviceHasRequestBody(operations []*operation) bool {
 }
 
 func shouldGenerateRequestBodyClass(op *operation) bool {
-	if op == nil || !op.HasBody || op.BodySchema == nil {
+	if op == nil || !op.HasBody {
 		return false
+	}
+
+	if op.BodySchema == nil {
+		return true
 	}
 
 	if op.BodySchema.GetReference() != "" {
@@ -374,6 +382,13 @@ func shouldGenerateRequestBodyClass(op *operation) bool {
 	}
 
 	return !schemaIsAdditionalPropertiesOnly(op.BodySchema)
+}
+
+func buildEmptyRequestBodyClass(className string) string {
+	var buf strings.Builder
+	fmt.Fprintf(&buf, "/**\n * Request payload for %s.\n *\n * @package SumUp\\Services\n */\n", className)
+	fmt.Fprintf(&buf, "class %s\n{\n}\n", className)
+	return buf.String()
 }
 
 func requestBodyClassName(serviceClass string, op *operation) string {

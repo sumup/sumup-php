@@ -46,6 +46,15 @@ class ReadersCreateRequest
 
 }
 
+/**
+ * Request payload for ReadersTerminateCheckoutRequest.
+ *
+ * @package SumUp\Services
+ */
+class ReadersTerminateCheckoutRequest
+{
+}
+
 class ReadersUpdateRequest
 {
     /**
@@ -264,12 +273,12 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param array|null $body Optional request payload
+     * @param ReadersTerminateCheckoutRequest|array|null $body Optional request payload
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      */
-    public function terminateCheckout(string $merchantCode, string $readerId, ?array $body = null, ?array $requestOptions = null): null
+    public function terminateCheckout(string $merchantCode, string $readerId, ReadersTerminateCheckoutRequest|array|null $body = null, ?array $requestOptions = null): null
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
