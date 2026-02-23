@@ -240,7 +240,7 @@ class TransactionFull
     /**
      * Details of the payment location as received from the payment terminal.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $location = null;
 

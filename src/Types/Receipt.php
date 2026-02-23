@@ -22,13 +22,13 @@ class Receipt
 
     /**
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $emvData = null;
 
     /**
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $acquirerData = null;
 

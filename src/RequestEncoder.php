@@ -10,7 +10,7 @@ class RequestEncoder
     /**
      * @param mixed $value
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public static function encode($value): array
     {

@@ -96,7 +96,7 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MerchantsGetParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Merchant
      * @throws \SumUp\Exception\ApiException
@@ -137,7 +137,7 @@ class Merchants implements SumUpService
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $personId Person ID
      * @param MerchantsGetPersonParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Person
      * @throws \SumUp\Exception\ApiException
@@ -178,7 +178,7 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MerchantsListPersonsParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\ListPersonsResponseBody
      * @throws \SumUp\Exception\ApiException

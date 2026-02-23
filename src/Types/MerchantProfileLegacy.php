@@ -89,7 +89,7 @@ class MerchantProfileLegacy
     /**
      * Business owners information.
      *
-     * @var array[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $businessOwners = null;
 

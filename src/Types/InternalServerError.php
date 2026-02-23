@@ -11,7 +11,7 @@ class InternalServerError
 {
     /**
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public array $errors;
 

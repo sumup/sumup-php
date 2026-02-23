@@ -150,7 +150,7 @@ class Hydrator
      * @param mixed $value
      * @param ReflectionProperty $property
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function castArrayValue($value, ReflectionProperty $property)
     {

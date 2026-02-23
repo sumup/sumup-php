@@ -38,7 +38,7 @@ class CurlClient implements HttpClientInterface
      * CurlClient constructor.
      *
      * @param string $baseUrl
-     * @param array $customHeaders
+     * @param array<string, string> $customHeaders
      * @param string|null $caBundlePath
      */
     public function __construct(string $baseUrl, array $customHeaders = [], ?string $caBundlePath = null)
@@ -54,8 +54,9 @@ class CurlClient implements HttpClientInterface
     /**
      * @param string $method      The request method.
      * @param string $url         The endpoint to send the request to.
-     * @param array  $body        The body of the request.
-     * @param array  $headers     The headers of the request.
+     * @param array<string, mixed> $body        The body of the request.
+     * @param array<string, string> $headers     The headers of the request.
+     * @param array<string, mixed>|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
      *
      * @return Response
      *
@@ -121,9 +122,9 @@ class CurlClient implements HttpClientInterface
     /**
      * Format the headers to be compatible with cURL.
      *
-     * @param array|null $headers
+     * @param array<string, string>|null $headers
      *
-     * @return array
+     * @return array<int, string>
      */
     private function formatHeaders(?array $headers = null): array
     {

@@ -12,7 +12,7 @@ class CheckoutAccepted
     /**
      * Required action processing 3D Secure payments.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $nextStep = null;
 

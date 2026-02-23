@@ -128,7 +128,7 @@ class CheckoutSuccess
     /**
      * Object containing token information for the specified payment instrument
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $paymentInstrument = null;
 

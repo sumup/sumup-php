@@ -15,7 +15,7 @@ class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
      *
-     * @var array[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $availablePaymentMethods = null;
 
@@ -96,8 +96,8 @@ class Checkouts implements SumUpService
     /**
      * Create a checkout
      *
-     * @param \SumUp\Types\CheckoutCreateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param \SumUp\Types\CheckoutCreateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Checkout
      * @throws \SumUp\Exception\ApiException
@@ -130,7 +130,7 @@ class Checkouts implements SumUpService
      * Deactivate a checkout
      *
      * @param string $id Unique ID of the checkout resource.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Checkout
      * @throws \SumUp\Exception\ApiException
@@ -159,7 +159,7 @@ class Checkouts implements SumUpService
      * Retrieve a checkout
      *
      * @param string $id Unique ID of the checkout resource.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess
      * @throws \SumUp\Exception\ApiException
@@ -187,7 +187,7 @@ class Checkouts implements SumUpService
      * List checkouts
      *
      * @param CheckoutsListParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess[]
      * @throws \SumUp\Exception\ApiException
@@ -229,7 +229,7 @@ class Checkouts implements SumUpService
      *
      * @param string $merchantCode The SumUp merchant code.
      * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse
      * @throws \SumUp\Exception\ApiException
@@ -272,8 +272,8 @@ class Checkouts implements SumUpService
      * Process a checkout
      *
      * @param string $id Unique ID of the checkout resource.
-     * @param \SumUp\Types\ProcessCheckout|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param \SumUp\Types\ProcessCheckout|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
      * @throws \SumUp\Exception\ApiException

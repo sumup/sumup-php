@@ -32,7 +32,7 @@ class DetailsError
 
     /**
      *
-     * @var array[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $failedConstraints = null;
 

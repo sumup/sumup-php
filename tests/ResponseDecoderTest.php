@@ -4,6 +4,7 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\Exception\ApiException;
+use SumUp\Exception\ErrorEnvelope;
 use SumUp\Exception\UnexpectedApiException;
 use SumUp\HttpClient\Response;
 use SumUp\ResponseDecoder;
@@ -48,6 +49,13 @@ class ResponseDecoderTest extends TestCase
             $this->assertSame(400, $exception->getStatusCode());
             $this->assertSame($response->getBody(), $exception->getResponseBody());
             $this->assertSame('Unexpected API response (400)', $exception->getMessage());
+            $this->assertInstanceOf(ErrorEnvelope::class, $exception->getErrorEnvelope());
+            $this->assertSame([
+                'status' => 400,
+                'message' => 'Unexpected API response (400)',
+                'raw' => $response->getBody(),
+                'headers' => [],
+            ], $exception->getErrorEnvelope()->toArray());
         }
     }
 
@@ -90,6 +98,29 @@ class ResponseDecoderTest extends TestCase
             $this->assertSame(502, $exception->getStatusCode());
             $this->assertSame('<html>bad gateway</html>', $exception->getResponseBody());
             $this->assertSame('Unexpected API response (502)', $exception->getMessage());
+            $this->assertSame(502, $exception->getErrorEnvelope()->getStatus());
+            $this->assertSame('<html>bad gateway</html>', $exception->getErrorEnvelope()->getRaw());
         }
+    }
+
+    public function testUnexpectedApiExceptionNormalizesEnvelopeHeaders()
+    {
+        $exception = new UnexpectedApiException(
+            'Unexpected API response (500)',
+            500,
+            ['error' => 'boom'],
+            'GET',
+            '/v0.1/test',
+            [
+                'x-trace-id' => 'abc',
+                'retry-after' => [30, '60'],
+                'empty' => [],
+            ]
+        );
+
+        $this->assertSame([
+            'x-trace-id' => ['abc'],
+            'retry-after' => ['30', '60'],
+        ], $exception->getErrorEnvelope()->getHeaders());
     }
 }

@@ -40,7 +40,7 @@ class RolesCreateRequest
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 
@@ -115,8 +115,8 @@ class Roles implements SumUpService
      * Create a role
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param RolesCreateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RolesCreateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
@@ -148,7 +148,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -179,7 +179,7 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
@@ -206,7 +206,7 @@ class Roles implements SumUpService
      * List roles
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\RolesListResponse
      * @throws \SumUp\Exception\ApiException
@@ -234,8 +234,8 @@ class Roles implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $roleId The ID of the role to retrieve.
-     * @param RolesUpdateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param RolesUpdateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException

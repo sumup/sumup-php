@@ -33,7 +33,7 @@ class SubaccountsCreateSubAccountRequest
 
     /**
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $permissions = null;
 
@@ -67,7 +67,7 @@ class SubaccountsUpdateSubAccountRequest
 
     /**
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $permissions = null;
 
@@ -135,7 +135,7 @@ class Subaccounts implements SumUpService
      * Retrieve an operator
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -161,8 +161,8 @@ class Subaccounts implements SumUpService
     /**
      * Create an operator
      *
-     * @param SubaccountsCreateSubAccountRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param SubaccountsCreateSubAccountRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -192,7 +192,7 @@ class Subaccounts implements SumUpService
      * Disable an operator.
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException
@@ -219,7 +219,7 @@ class Subaccounts implements SumUpService
      * List operators
      *
      * @param SubaccountsListSubAccountsParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator[]
      * @throws \SumUp\Exception\ApiException
@@ -263,8 +263,8 @@ class Subaccounts implements SumUpService
      * Update an operator
      *
      * @param string $operatorId The unique identifier for the operator.
-     * @param SubaccountsUpdateSubAccountRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param SubaccountsUpdateSubAccountRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Operator
      * @throws \SumUp\Exception\ApiException

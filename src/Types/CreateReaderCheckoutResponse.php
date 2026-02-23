@@ -8,7 +8,7 @@ class CreateReaderCheckoutResponse
 {
     /**
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public array $data;
 

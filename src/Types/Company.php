@@ -71,7 +71,7 @@ class Company
     /**
      * Object attributes that are modifiable only by SumUp applications.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $attributes = null;
 

@@ -221,7 +221,7 @@ func (g *Generator) resolveOperationBody(op *v3.Operation) (string, string, bool
 	}
 
 	if schema == nil {
-		return "array", "array", required, nil
+		return "array", "array<string, mixed>", required, nil
 	}
 
 	bodyType, bodyDocType := g.resolvePHPType(schema, "SumUp\\Services", "", "")
@@ -229,7 +229,7 @@ func (g *Generator) resolveOperationBody(op *v3.Operation) (string, string, bool
 		bodyType = "array"
 	}
 	if bodyDocType == "" {
-		bodyDocType = "array"
+		bodyDocType = "array<string, mixed>"
 	}
 
 	return bodyType, bodyDocType, required, schema

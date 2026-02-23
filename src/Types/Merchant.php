@@ -95,7 +95,7 @@ class Merchant
      * A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
      * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $meta = null;
 

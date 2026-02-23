@@ -16,7 +16,7 @@ class GuzzleClient implements HttpClientInterface
     private string $baseUrl;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private array $customHeaders;
 
@@ -29,7 +29,7 @@ class GuzzleClient implements HttpClientInterface
      * GuzzleClient constructor.
      *
      * @param string $baseUrl
-     * @param array $customHeaders
+     * @param array<string, string> $customHeaders
      * @param string|null $caBundlePath
      *
      * @throws ConfigurationException
@@ -46,9 +46,9 @@ class GuzzleClient implements HttpClientInterface
     /**
      * @param string $method      The request method.
      * @param string $url         The endpoint to send the request to.
-     * @param array  $body        The body of the request.
-     * @param array  $headers     The headers of the request.
-     * @param array|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
+     * @param array<string, mixed> $body        The body of the request.
+     * @param array<string, string> $headers     The headers of the request.
+     * @param array<string, mixed>|null $options Optional request options (timeout, connect_timeout, retries, retry_backoff_ms).
      *
      * @return Response
      *

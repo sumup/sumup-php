@@ -144,7 +144,7 @@ class Memberships implements SumUpService
      * List memberships
      *
      * @param MembershipsListParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\MembershipsListResponse
      * @throws \SumUp\Exception\ApiException

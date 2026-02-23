@@ -71,7 +71,7 @@ class Receipts implements SumUpService
      *
      * @param string $id SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.
      * @param ReceiptsGetParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Receipt
      * @throws \SumUp\Exception\ApiException

@@ -196,7 +196,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	if op.HasBody {
 		fmt.Fprintf(&buf, "     * @param %s $body %s request payload\n", renderBodyDocType(op), renderBodyDocQualifier(op))
 	}
-	buf.WriteString("     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)\n")
+	buf.WriteString("     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)\n")
 
 	buf.WriteString("     *\n")
 	fmt.Fprintf(&buf, "     * @return %s\n", renderOperationReturnDoc(op))
@@ -618,7 +618,7 @@ func renderResponseDocType(rt *responseType) string {
 		}
 		return "mixed"
 	case responseTypeObject:
-		return "array"
+		return "array<string, mixed>"
 	case responseTypeVoid:
 		return "null"
 	case responseTypeMixed:
@@ -736,16 +736,16 @@ func renderBodyDocQualifier(op *operation) string {
 
 func renderBodyDocType(op *operation) string {
 	if op == nil {
-		return "array|null"
+		return "array<string, mixed>|null"
 	}
 
 	baseType := op.BodyDocType
 	if baseType == "" {
-		baseType = "array"
+		baseType = "array<string, mixed>"
 	}
 
 	if bodyTypeAllowsArray(op.BodyType) {
-		baseType = baseType + "|array"
+		baseType = baseType + "|array<string, mixed>"
 	}
 
 	if !op.BodyRequired && !strings.Contains(baseType, "null") {

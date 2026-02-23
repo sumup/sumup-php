@@ -33,7 +33,7 @@ class PaymentInstrumentResponse
     /**
      * Details of the payment card.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $card = null;
 

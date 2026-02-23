@@ -46,7 +46,7 @@ class Reader
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 

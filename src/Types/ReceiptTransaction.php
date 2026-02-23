@@ -95,14 +95,14 @@ class ReceiptTransaction
     /**
      * Products
      *
-     * @var array[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $products = null;
 
     /**
      * Vat rates.
      *
-     * @var array[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $vatRates = null;
 

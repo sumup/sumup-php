@@ -40,7 +40,7 @@ class ReadersCreateRequest
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 
@@ -67,7 +67,7 @@ class ReadersUpdateRequest
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 
@@ -110,8 +110,8 @@ class Readers implements SumUpService
      * Create a Reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param ReadersCreateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param ReadersCreateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException
@@ -144,8 +144,8 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param \SumUp\Types\CreateReaderCheckoutRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param \SumUp\Types\CreateReaderCheckoutRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\CreateReaderCheckoutResponse
      * @throws \SumUp\Exception\ApiException
@@ -181,7 +181,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -211,7 +211,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException
@@ -239,7 +239,7 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\StatusResponse
      * @throws \SumUp\Exception\ApiException
@@ -271,7 +271,7 @@ class Readers implements SumUpService
      * List Readers
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\ReadersListResponse
      * @throws \SumUp\Exception\ApiException
@@ -297,8 +297,8 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Merchant Code
      * @param string $readerId The unique identifier of the Reader
-     * @param ReadersTerminateCheckoutRequest|array|null $body Optional request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param ReadersTerminateCheckoutRequest|array<string, mixed>|null $body Optional request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -336,8 +336,8 @@ class Readers implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $id The unique identifier of the reader.
-     * @param ReadersUpdateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param ReadersUpdateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Reader
      * @throws \SumUp\Exception\ApiException

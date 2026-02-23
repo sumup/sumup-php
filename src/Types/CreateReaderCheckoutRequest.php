@@ -13,7 +13,7 @@ class CreateReaderCheckoutRequest
      * Affiliate metadata for the transaction.
      * It is a field that allow for integrators to track the source of the transaction.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $affiliate = null;
 
@@ -75,7 +75,7 @@ class CreateReaderCheckoutRequest
      * The amount is represented as an integer value altogether with the currency and the minor unit.
      * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public array $totalAmount;
 

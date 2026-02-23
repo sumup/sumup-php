@@ -32,7 +32,7 @@ class SdkInfo
     /**
      * Returns the standard runtime headers used in outbound requests.
      *
-     * @return array
+     * @return array<string, string>
      */
     public static function getRuntimeHeaders()
     {

@@ -208,7 +208,7 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 
 		// Check if this is an additionalProperties-only schema - treat as array
 		if schemaIsAdditionalPropertiesOnly(schema) {
-			return "array", "array"
+			return "array", "array<string, mixed>"
 		}
 
 		name := schemaClassName(schema)
@@ -268,7 +268,7 @@ func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace s
 		}
 		return "array", itemDoc + "[]"
 	case hasSchemaType(spec, "object"):
-		return "array", "array"
+		return "array", "array<string, mixed>"
 	default:
 	}
 

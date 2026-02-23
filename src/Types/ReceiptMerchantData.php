@@ -11,7 +11,7 @@ class ReceiptMerchantData
 {
     /**
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $merchantProfile = null;
 

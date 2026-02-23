@@ -67,14 +67,14 @@ class MembersCreateRequest
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 
     /**
      * Object attributes that are modifiable only by SumUp applications.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $attributes = null;
 
@@ -91,21 +91,21 @@ class MembersUpdateRequest
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $metadata = null;
 
     /**
      * Object attributes that are modifiable only by SumUp applications.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $attributes = null;
 
     /**
      * Allows you to update user data of managed users.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public ?array $user = null;
 
@@ -206,8 +206,8 @@ class Members implements SumUpService
      * Create a member
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param MembersCreateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param MembersCreateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException
@@ -240,7 +240,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -270,7 +270,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException
@@ -298,7 +298,7 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MembersListParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\MembersListResponse
      * @throws \SumUp\Exception\ApiException
@@ -356,8 +356,8 @@ class Members implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $memberId The ID of the member to retrieve.
-     * @param MembersUpdateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param MembersUpdateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Member
      * @throws \SumUp\Exception\ApiException

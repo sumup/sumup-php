@@ -15,8 +15,8 @@ class ResponseDecoder
      * Decode a response and throw API exceptions for non-2xx statuses.
      *
      * @param Response $response
-     * @param array|string|null $successDescriptors
-     * @param array|string|null $errorDescriptors
+     * @param array<int|string, mixed>|string|null $successDescriptors
+     * @param array<int|string, mixed>|string|null $errorDescriptors
      * @param string|null $httpMethod
      * @param string|null $path
      *
@@ -66,7 +66,7 @@ class ResponseDecoder
      * Decode a response using the provided descriptor map or class name.
      *
      * @param Response $response
-     * @param array|string|null $descriptors Can be a descriptor array, a class name string, or null
+     * @param array<int|string, mixed>|string|null $descriptors Can be a descriptor array, a class name string, or null
      *
      * @return mixed
      */
@@ -102,7 +102,7 @@ class ResponseDecoder
      * Convert the payload to the descriptor type.
      *
      * @param mixed $value
-     * @param array $descriptor
+     * @param array<string, mixed> $descriptor
      *
      * @return mixed
      */

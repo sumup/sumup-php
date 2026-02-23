@@ -63,7 +63,7 @@ class Merchant implements SumUpService
      * Retrieve a profile
      *
      * @param MerchantGetParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\MerchantAccount
      * @throws \SumUp\Exception\ApiException
@@ -103,7 +103,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve DBA
      *
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\DoingBusinessAsLegacy
      * @throws \SumUp\Exception\ApiException
@@ -131,7 +131,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve a merchant profile
      *
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\MerchantProfileLegacy
      * @throws \SumUp\Exception\ApiException
@@ -160,7 +160,7 @@ class Merchant implements SumUpService
     /**
      * Retrieve a personal profile
      *
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\PersonalProfileLegacy
      * @throws \SumUp\Exception\ApiException

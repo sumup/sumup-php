@@ -58,8 +58,8 @@ class Customers implements SumUpService
     /**
      * Create a customer
      *
-     * @param \SumUp\Types\Customer|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param \SumUp\Types\Customer|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
@@ -92,7 +92,7 @@ class Customers implements SumUpService
      *
      * @param string $customerId Unique ID of the saved customer resource.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
@@ -123,7 +123,7 @@ class Customers implements SumUpService
      * Retrieve a customer
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
@@ -152,7 +152,7 @@ class Customers implements SumUpService
      * List payment instruments
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
      * @throws \SumUp\Exception\ApiException
@@ -183,8 +183,8 @@ class Customers implements SumUpService
      * Update a customer
      *
      * @param string $customerId Unique ID of the saved customer resource.
-     * @param CustomersUpdateRequest|array $body Required request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param CustomersUpdateRequest|array<string, mixed> $body Required request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException

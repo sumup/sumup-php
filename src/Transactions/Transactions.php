@@ -362,7 +362,7 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsGetParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
@@ -414,7 +414,7 @@ class Transactions implements SumUpService
      * Retrieve a transaction
      *
      * @param TransactionsGetDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
@@ -463,7 +463,7 @@ class Transactions implements SumUpService
      *
      * @param string $merchantCode
      * @param TransactionsListParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\TransactionsListResponse
      * @throws \SumUp\Exception\ApiException
@@ -538,7 +538,7 @@ class Transactions implements SumUpService
      * List transactions
      *
      * @param TransactionsListDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return \SumUp\Services\TransactionsListDeprecatedResponse
      * @throws \SumUp\Exception\ApiException
@@ -612,8 +612,8 @@ class Transactions implements SumUpService
      * Refund a transaction
      *
      * @param string $txnId Unique ID of the transaction.
-     * @param TransactionsRefundRequest|array|null $body Optional request payload
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param TransactionsRefundRequest|array<string, mixed>|null $body Optional request payload
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
      * @return null
      * @throws \SumUp\Exception\ApiException

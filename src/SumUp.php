@@ -42,7 +42,7 @@ class SumUp
     /**
      * SumUp constructor.
      *
-     * @param string|array|null $configOrApiKey
+     * @param string|array<string, mixed>|null $configOrApiKey
      *
      * @throws SDKException
      */
@@ -125,9 +125,9 @@ class SumUp
     /**
      * Normalize configuration and apply defaults.
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws ConfigurationException
      */

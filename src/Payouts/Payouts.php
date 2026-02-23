@@ -130,9 +130,9 @@ class Payouts implements SumUpService
      *
      * @param string $merchantCode
      * @param PayoutsListParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return array[]
+     * @return array<string, mixed>[]
      * @throws \SumUp\Exception\ApiException
      * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
@@ -183,9 +183,9 @@ class Payouts implements SumUpService
      * List payouts
      *
      * @param PayoutsListDeprecatedParams|null $queryParams Optional query string parameters
-     * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
+     * @param array<string, mixed>|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return array[]
+     * @return array<string, mixed>[]
      * @throws \SumUp\Exception\ApiException
      * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
