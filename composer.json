@@ -28,6 +28,7 @@
 	},
 	"scripts": {
 		"cs": "php-cs-fixer fix --dry-run --diff",
+		"analyse": "phpstan analyse --configuration=phpstan.neon --no-progress",
 		"test": "phpunit"
 	},
 	"require": {
