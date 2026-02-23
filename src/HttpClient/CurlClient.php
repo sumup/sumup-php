@@ -60,8 +60,6 @@ class CurlClient implements HttpClientInterface
      * @return Response
      *
      * @throws ConnectionException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
      * @throws SDKException
      */
     public function send(string $method, string $url, array $body, array $headers = [], ?array $options = null): Response

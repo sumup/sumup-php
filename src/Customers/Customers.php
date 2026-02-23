@@ -63,8 +63,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -97,8 +96,7 @@ class Customers implements SumUpService
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -129,8 +127,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -159,8 +156,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -192,8 +188,7 @@ class Customers implements SumUpService
      *
      * @return \SumUp\Types\Customer
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */

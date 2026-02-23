@@ -101,8 +101,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\Checkout
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -135,8 +134,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\Checkout
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -165,8 +163,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -194,8 +191,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess[]
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -237,8 +233,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -282,8 +277,7 @@ class Checkouts implements SumUpService
      *
      * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */

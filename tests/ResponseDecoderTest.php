@@ -4,28 +4,35 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\Exception\ApiException;
-use SumUp\Exception\AuthenticationException;
-use SumUp\Exception\ValidationException;
+use SumUp\Exception\UnexpectedApiException;
 use SumUp\HttpClient\Response;
 use SumUp\ResponseDecoder;
 use SumUp\Types\Error;
 
 class ResponseDecoderTest extends TestCase
 {
-    public function testDecodeOrThrowMapsAuthenticationErrorFromAssociativeArray()
+    public function testDecodeOrThrowUsesExpectedApiExceptionForKnownErrorDescriptor()
     {
         $response = new Response(401, [
             'error_code' => 'NOT_AUTHORIZED',
-            'error_message' => 'Token expired',
+            'message' => 'Token expired',
         ]);
 
-        $this->expectException(AuthenticationException::class);
+        $this->expectException(ApiException::class);
         $this->expectExceptionMessage('Token expired');
 
-        ResponseDecoder::decodeOrThrow($response, null, null, 'GET', '/v0.1/me');
+        ResponseDecoder::decodeOrThrow(
+            $response,
+            null,
+            [
+                '401' => ['type' => 'class', 'class' => Error::class],
+            ],
+            'GET',
+            '/v0.1/me'
+        );
     }
 
-    public function testDecodeOrThrowMapsValidationErrorsFromAssociativeArrayList()
+    public function testDecodeOrThrowUsesUnexpectedApiExceptionForUnknownErrorFormat()
     {
         $response = new Response(400, [
             ['error_code' => 'MISSING', 'param' => 'merchant_code'],
@@ -34,10 +41,13 @@ class ResponseDecoderTest extends TestCase
 
         try {
             ResponseDecoder::decodeOrThrow($response, null, null, 'POST', '/v0.1/checkouts');
-            $this->fail('ValidationException was not thrown');
-        } catch (ValidationException $exception) {
-            $this->assertSame(['merchant_code', 'currency'], $exception->getInvalidFields());
+            $this->fail('UnexpectedApiException was not thrown');
+        } catch (UnexpectedApiException $exception) {
+            $this->assertSame('POST', $exception->getHttpMethod());
+            $this->assertSame('/v0.1/checkouts', $exception->getPath());
             $this->assertSame(400, $exception->getStatusCode());
+            $this->assertSame($response->getBody(), $exception->getResponseBody());
+            $this->assertSame('Unexpected API response (400)', $exception->getMessage());
         }
     }
 
@@ -60,7 +70,6 @@ class ResponseDecoderTest extends TestCase
             );
             $this->fail('ApiException was not thrown');
         } catch (ApiException $exception) {
-            $this->assertTrue($exception->hasKnownFormat());
             $this->assertSame('GET', $exception->getHttpMethod());
             $this->assertSame('/v0.1/checkouts/chk_123', $exception->getPath());
             $this->assertInstanceOf(Error::class, $exception->getResponseBody());
@@ -68,20 +77,19 @@ class ResponseDecoderTest extends TestCase
         }
     }
 
-    public function testDecodeOrThrowReturnsGenericApiExceptionForUnknownErrorFormat()
+    public function testDecodeOrThrowReturnsUnexpectedApiExceptionForUnknownErrorFormat()
     {
         $response = new Response(502, '<html>bad gateway</html>');
 
         try {
             ResponseDecoder::decodeOrThrow($response, null, null, 'GET', '/v0.1/checkouts');
-            $this->fail('ApiException was not thrown');
-        } catch (ApiException $exception) {
-            $this->assertFalse($exception->hasKnownFormat());
+            $this->fail('UnexpectedApiException was not thrown');
+        } catch (UnexpectedApiException $exception) {
             $this->assertSame('GET', $exception->getHttpMethod());
             $this->assertSame('/v0.1/checkouts', $exception->getPath());
             $this->assertSame(502, $exception->getStatusCode());
             $this->assertSame('<html>bad gateway</html>', $exception->getResponseBody());
-            $this->assertSame('Server error', $exception->getMessage());
+            $this->assertSame('Unexpected API response (502)', $exception->getMessage());
         }
     }
 }

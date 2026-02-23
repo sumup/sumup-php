@@ -46,18 +46,19 @@ try {
 
     $checkoutId = $checkout->id;
     // Pass the $checkoutId to the front-end to be processed
-} catch (\SumUp\Exception\AuthenticationException $e) {
-    echo 'Authentication error: ' . $e->getMessage();
-} catch (\SumUp\Exception\ValidationException $e) {
-    echo 'Validation error: ' . $e->getMessage();
+} catch (\SumUp\Exception\ApiException $e) {
+    echo 'Expected API error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
+    // Body is decoded according to the OpenAPI error schema for that endpoint/status.
+    var_dump($e->getResponseBody());
+} catch (\SumUp\Exception\UnexpectedApiException $e) {
+    echo 'Unexpected API error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
+    // Body did not match an OpenAPI-described error shape.
+    var_dump($e->getResponseBody());
 } catch (\SumUp\Exception\SDKException $e) {
     echo 'SumUp SDK error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
-    // Inspect the parsed response body for additional details.
-    var_dump($e->getResponseBody());
+    // Covers connection/configuration and other non-API failures.
 }
 ```
-
-Unexpected responses are wrapped in `SDKException`, which now exposes the HTTP status code (`getStatusCode()`) and the decoded payload (`getResponseBody()`), making it easier to inspect raw error payloads that don't match the SDK's validation/authentication error formats.
 
 ### Providing API Key Programmatically
 

@@ -366,8 +366,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -419,8 +418,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Types\TransactionFull
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      *
@@ -469,8 +467,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Services\TransactionsListResponse
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -545,8 +542,7 @@ class Transactions implements SumUpService
      *
      * @return \SumUp\Services\TransactionsListDeprecatedResponse
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      *
@@ -621,8 +617,7 @@ class Transactions implements SumUpService
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */

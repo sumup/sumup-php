@@ -120,8 +120,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -153,8 +152,7 @@ class Roles implements SumUpService
      *
      * @return null
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -185,8 +183,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -213,8 +210,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Services\RolesListResponse
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
@@ -243,8 +239,7 @@ class Roles implements SumUpService
      *
      * @return \SumUp\Types\Role
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */

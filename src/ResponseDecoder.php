@@ -3,8 +3,7 @@
 namespace SumUp;
 
 use SumUp\Exception\ApiException;
-use SumUp\Exception\AuthenticationException;
-use SumUp\Exception\ValidationException;
+use SumUp\Exception\UnexpectedApiException;
 use SumUp\HttpClient\Response;
 
 /**
@@ -13,7 +12,7 @@ use SumUp\HttpClient\Response;
 class ResponseDecoder
 {
     /**
-     * Decode a response and throw typed exceptions for non-2xx statuses.
+     * Decode a response and throw API exceptions for non-2xx statuses.
      *
      * @param Response $response
      * @param array|string|null $successDescriptors
@@ -24,8 +23,7 @@ class ResponseDecoder
      * @return mixed
      *
      * @throws ApiException
-     * @throws AuthenticationException
-     * @throws ValidationException
+     * @throws UnexpectedApiException
      */
     public static function decodeOrThrow(
         Response $response,
@@ -39,26 +37,28 @@ class ResponseDecoder
             return self::decode($response, $successDescriptors);
         }
 
-        $decodedErrorBody = self::decode($response, $errorDescriptors);
-        if ($authError = self::extractLegacyAuthError($decodedErrorBody)) {
-            throw new AuthenticationException($authError, $statusCode, $decodedErrorBody);
+        if (self::hasDescriptorForStatus($errorDescriptors, $statusCode)) {
+            $decodedErrorBody = self::decode($response, $errorDescriptors);
+            $message = self::extractErrorMessage($decodedErrorBody, self::defaultErrorMessage($statusCode));
+
+            throw new ApiException(
+                $message,
+                $statusCode,
+                $decodedErrorBody,
+                $httpMethod,
+                $path
+            );
         }
 
-        $invalidFields = self::extractLegacyValidationFields($decodedErrorBody);
-        if (!empty($invalidFields)) {
-            throw new ValidationException($invalidFields, $statusCode);
-        }
+        $rawErrorBody = $response->getBody();
+        $message = self::extractErrorMessage($rawErrorBody, self::defaultUnexpectedErrorMessage($statusCode));
 
-        $knownFormat = self::hasDescriptorForStatus($errorDescriptors, $statusCode);
-        $message = self::extractErrorMessage($decodedErrorBody, self::defaultErrorMessage($statusCode));
-
-        throw new ApiException(
+        throw new UnexpectedApiException(
             $message,
             $statusCode,
-            $decodedErrorBody,
+            $rawErrorBody,
             $httpMethod,
-            $path,
-            $knownFormat
+            $path
         );
     }
 
@@ -201,6 +201,16 @@ class ResponseDecoder
     }
 
     /**
+     * @param int $statusCode
+     *
+     * @return string
+     */
+    private static function defaultUnexpectedErrorMessage(int $statusCode): string
+    {
+        return sprintf('Unexpected API response (%d)', $statusCode);
+    }
+
+    /**
      * @param mixed $body
      * @param string $defaultMessage
      *
@@ -216,58 +226,6 @@ class ResponseDecoder
         }
 
         return $defaultMessage;
-    }
-
-    /**
-     * @param mixed $body
-     *
-     * @return string|null
-     */
-    private static function extractLegacyAuthError($body): ?string
-    {
-        $errorCode = self::readField($body, 'error_code');
-        if ($errorCode === 'NOT_AUTHORIZED') {
-            $message = self::readField($body, 'error_message');
-            if (is_string($message) && $message !== '') {
-                return $message;
-            }
-
-            return 'Not authorized';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param mixed $body
-     *
-     * @return array<int, string>
-     */
-    private static function extractLegacyValidationFields($body): array
-    {
-        $errorCode = self::readField($body, 'error_code');
-        if ($errorCode === 'MISSING' || $errorCode === 'INVALID') {
-            $param = self::readField($body, 'param');
-            return is_string($param) && $param !== '' ? [$param] : [];
-        }
-
-        if (!is_array($body)) {
-            return [];
-        }
-
-        $fields = [];
-        foreach ($body as $item) {
-            $itemCode = self::readField($item, 'error_code');
-            if ($itemCode !== 'MISSING' && $itemCode !== 'INVALID') {
-                return [];
-            }
-            $param = self::readField($item, 'param');
-            if (is_string($param) && $param !== '') {
-                $fields[] = $param;
-            }
-        }
-
-        return $fields;
     }
 
     /**

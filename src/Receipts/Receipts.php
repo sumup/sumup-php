@@ -75,8 +75,7 @@ class Receipts implements SumUpService
      *
      * @return \SumUp\Types\Receipt
      * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\AuthenticationException
-     * @throws \SumUp\Exception\ValidationException
+     * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */

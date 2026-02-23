@@ -201,8 +201,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	buf.WriteString("     *\n")
 	fmt.Fprintf(&buf, "     * @return %s\n", renderOperationReturnDoc(op))
 	buf.WriteString("     * @throws \\SumUp\\Exception\\ApiException\n")
-	buf.WriteString("     * @throws \\SumUp\\Exception\\AuthenticationException\n")
-	buf.WriteString("     * @throws \\SumUp\\Exception\\ValidationException\n")
+	buf.WriteString("     * @throws \\SumUp\\Exception\\UnexpectedApiException\n")
 	buf.WriteString("     * @throws \\SumUp\\Exception\\ConnectionException\n")
 	buf.WriteString("     * @throws \\SumUp\\Exception\\SDKException\n")
 
