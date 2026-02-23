@@ -14,26 +14,30 @@ class SDKException extends \Exception
      *
      * @var int
      */
-    protected $statusCode;
+    protected int $statusCode;
 
     /**
      * Parsed response body or raw string when the response is not JSON.
      *
      * @var mixed
      */
-    protected $responseBody;
+    protected mixed $responseBody;
 
     /**
-     * @param string             $message
-     * @param int                $statusCode
-     * @param mixed              $responseBody
-     * @param \Exception|null    $previous
+     * @param string $message
+     * @param int $statusCode
+     * @param mixed $responseBody
+     * @param \Throwable|null $previous
      */
-    public function __construct($message = '', $statusCode = 0, $responseBody = null, $previous = null)
-    {
-        parent::__construct($message, (int) $statusCode, $previous);
+    public function __construct(
+        string $message = '',
+        int $statusCode = 0,
+        mixed $responseBody = null,
+        ?\Throwable $previous = null
+    ) {
+        parent::__construct($message, $statusCode, $previous);
 
-        $this->statusCode = (int) $statusCode;
+        $this->statusCode = $statusCode;
         $this->responseBody = $responseBody;
     }
 
@@ -42,7 +46,7 @@ class SDKException extends \Exception
      *
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -52,7 +56,7 @@ class SDKException extends \Exception
      *
      * @return mixed
      */
-    public function getResponseBody()
+    public function getResponseBody(): mixed
     {
         return $this->responseBody;
     }

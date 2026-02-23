@@ -15,16 +15,16 @@ class ValidationException extends SDKException
      *
      * @var array
      */
-    protected $fields;
+    protected array $fields;
 
     /**
      * ValidationException constructor.
      *
      * @param array $fields
-     * @param int   $code
-     * @param null  $previous
+     * @param int $code
+     * @param \Throwable|null $previous
      */
-    public function __construct($fields = [], $code = 0, $previous = null)
+    public function __construct(array $fields = [], int $code = 0, ?\Throwable $previous = null)
     {
         $this->fields = $fields;
         $message = self::VALIDATION_ERROR_BASE . implode(', ', $fields);
@@ -36,7 +36,7 @@ class ValidationException extends SDKException
      *
      * @return array
      */
-    public function getInvalidFields()
+    public function getInvalidFields(): array
     {
         return $this->fields;
     }

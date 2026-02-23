@@ -18,25 +18,25 @@ class Response
      *
      * @var number
      */
-    protected $httpResponseCode;
+    protected int $httpResponseCode;
 
     /**
      * The response body.
      *
      * @var mixed
      */
-    protected $body;
+    protected mixed $body;
 
     /**
      * Response constructor.
      *
-     * @param number $httpResponseCode
-     * @param $body
+     * @param int $httpResponseCode
+     * @param mixed $body
      *
      * @throws AuthenticationException
      * @throws SDKException
      */
-    public function __construct($httpResponseCode, $body)
+    public function __construct(int $httpResponseCode, mixed $body)
     {
         $this->httpResponseCode = $httpResponseCode;
         $this->body = $body;
@@ -48,7 +48,7 @@ class Response
      *
      * @return number
      */
-    public function getHttpResponseCode()
+    public function getHttpResponseCode(): int
     {
         return $this->httpResponseCode;
     }
@@ -58,7 +58,7 @@ class Response
      *
      * @return array|mixed
      */
-    public function getBody()
+    public function getBody(): mixed
     {
         return $this->body;
     }
@@ -72,7 +72,7 @@ class Response
      * @throws ValidationException
      * @throws SDKException
      */
-    protected function parseResponseForErrors()
+    protected function parseResponseForErrors(): void
     {
         if (isset($this->body->error_code) && $this->body->error_code === 'NOT_AUTHORIZED') {
             throw new AuthenticationException($this->body->error_message, $this->httpResponseCode);
@@ -104,7 +104,7 @@ class Response
      *
      * @return string
      */
-    protected function parseErrorMessage($defaultMessage = '')
+    protected function parseErrorMessage(string $defaultMessage = ''): string
     {
         if (is_null($this->body)) {
             return $defaultMessage;
