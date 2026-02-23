@@ -11,7 +11,7 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ListAvailablePaymentMethodsV01MerchantsMerchantCodePaymentMethodsGetResponse
+class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
      *
@@ -215,9 +215,9 @@ class Checkouts implements SumUpService
      * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListAvailablePaymentMethodsV01MerchantsMerchantCodePaymentMethodsGetResponse
+     * @return \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse
      */
-    public function listAvailablePaymentMethods(string $merchantCode, ?CheckoutsListAvailablePaymentMethodsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListAvailablePaymentMethodsV01MerchantsMerchantCodePaymentMethodsGetResponse
+    public function listAvailablePaymentMethods(string $merchantCode, ?CheckoutsListAvailablePaymentMethodsParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse
     {
         $path = sprintf('/v0.1/merchants/%s/payment-methods', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -242,7 +242,7 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListAvailablePaymentMethodsV01MerchantsMerchantCodePaymentMethodsGetResponse::class, [
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse::class, [
             '400' => ['type' => 'class', 'class' => \SumUp\Types\DetailsError::class],
             '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);

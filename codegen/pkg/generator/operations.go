@@ -16,6 +16,7 @@ import (
 
 type operation struct {
 	ID           string
+	OriginalID   string
 	Summary      string
 	Description  string
 	Method       string
@@ -121,15 +122,16 @@ func (g *Generator) collectOperations() map[string][]*operation {
 }
 
 func (g *Generator) buildOperation(method, path string, op *v3.Operation, params []*v3.Parameter) (*operation, error) {
-	operationID := op.OperationId
-	if operationID == "" {
+	originalOperationID := op.OperationId
+	if originalOperationID == "" {
 		trimmed := strings.ReplaceAll(path, "/", "_")
 		if trimmed == "" {
 			trimmed = "root"
 		}
-		operationID = fmt.Sprintf("%s_%s", strings.ToLower(method), trimmed)
+		originalOperationID = fmt.Sprintf("%s_%s", strings.ToLower(method), trimmed)
 	}
 
+	operationID := originalOperationID
 	if ext, ok := extension.Get[map[string]any](op.Extensions, "x-codegen"); ok {
 		if methodName, ok := ext["method_name"]; ok {
 			if methodStr, ok := methodName.(string); ok && methodStr != "" {
@@ -178,6 +180,7 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 
 	return &operation{
 		ID:           operationID,
+		OriginalID:   originalOperationID,
 		Summary:      strings.TrimSpace(op.Summary),
 		Description:  strings.TrimSpace(op.Description),
 		Method:       method,
@@ -191,7 +194,7 @@ func (g *Generator) buildOperation(method, path string, op *v3.Operation, params
 		BodySchema:   bodySchema,
 		BodyRequired: bodyRequired,
 		Deprecated:   deprecated,
-		Responses:    g.collectOperationResponses(op, operationID, method, path),
+		Responses:    g.collectOperationResponses(op, originalOperationID),
 	}, nil
 }
 
@@ -244,7 +247,7 @@ func (op *operation) methodName() string {
 	return strcase.ToLowerCamel(op.ID)
 }
 
-func (g *Generator) collectOperationResponses(op *v3.Operation, operationID string, method string, path string) []*operationResponse {
+func (g *Generator) collectOperationResponses(op *v3.Operation, operationID string) []*operationResponse {
 	if op == nil || op.Responses == nil || op.Responses.Codes.Len() == 0 {
 		return nil
 	}
@@ -252,7 +255,7 @@ func (g *Generator) collectOperationResponses(op *v3.Operation, operationID stri
 	responses := make([]*operationResponse, 0, op.Responses.Codes.Len())
 
 	for status, response := range op.Responses.Codes.FromOldest() {
-		respType := g.responseTypeForResponse(response, "SumUp\\Services", operationID, status, method, path)
+		respType := g.responseTypeForResponse(response, "SumUp\\Services", operationID, status)
 		if respType == nil {
 			continue
 		}
@@ -272,7 +275,7 @@ func (g *Generator) collectOperationResponses(op *v3.Operation, operationID stri
 	return responses
 }
 
-func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace string, operationID string, statusCode string, method string, path string) *responseType {
+func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace string, operationID string, statusCode string) *responseType {
 	if resp == nil {
 		return &responseType{Kind: responseTypeVoid}
 	}
@@ -304,7 +307,7 @@ func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace 
 		return &responseType{Kind: responseTypeVoid}
 	}
 
-	return g.buildResponseType(schema, currentNamespace, inlineResponseClassName(operationID, statusCode, method, path))
+	return g.buildResponseType(schema, currentNamespace, inlineResponseClassName(operationID, statusCode))
 }
 
 func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace string, inlineBaseName string) *responseType {
@@ -404,30 +407,12 @@ func (g *Generator) buildResponseTypeFromSpec(spec *base.Schema, currentNamespac
 	return &responseType{Kind: responseTypeMixed}
 }
 
-func inlineResponseClassName(operationID string, statusCode string, method string, path string) string {
+func inlineResponseClassName(operationID string, statusCode string) string {
 	if operationID == "" {
 		return ""
 	}
 
-	pathPart := ""
-	if path != "" {
-		replacer := strings.NewReplacer("/", "_", "{", "", "}", "", "-", "_", ".", "_")
-		pathPart = strcase.ToCamel(replacer.Replace(strings.Trim(path, "/")))
-	}
-
-	methodPart := ""
-	if method != "" {
-		methodPart = strcase.ToCamel(strings.ToLower(method))
-	}
-
-	base := strcase.ToCamel(operationID)
-	if pathPart != "" {
-		base += pathPart
-	}
-	if methodPart != "" {
-		base += methodPart
-	}
-	base += "Response"
+	base := strcase.ToCamel(operationID) + "Response"
 	if statusCode != "" && statusCode != "200" {
 		base += statusCode
 	}

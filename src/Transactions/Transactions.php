@@ -11,7 +11,7 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ListDeprecatedV01MeTransactionsHistoryGetResponse
+class TransactionsListDeprecatedResponse
 {
     /**
      *
@@ -27,7 +27,7 @@ class ListDeprecatedV01MeTransactionsHistoryGetResponse
 
 }
 
-class ListV21MerchantsMerchantCodeTransactionsHistoryGetResponse
+class TransactionsListResponse
 {
     /**
      *
@@ -457,9 +457,9 @@ class Transactions implements SumUpService
      * @param TransactionsListParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListV21MerchantsMerchantCodeTransactionsHistoryGetResponse
+     * @return \SumUp\Services\TransactionsListResponse
      */
-    public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListV21MerchantsMerchantCodeTransactionsHistoryGetResponse
+    public function list(string $merchantCode, ?TransactionsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\TransactionsListResponse
     {
         $path = sprintf('/v2.1/merchants/%s/transactions/history', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -517,7 +517,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListV21MerchantsMerchantCodeTransactionsHistoryGetResponse::class, [
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\TransactionsListResponse::class, [
             '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
@@ -528,11 +528,11 @@ class Transactions implements SumUpService
      * @param TransactionsListDeprecatedParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListDeprecatedV01MeTransactionsHistoryGetResponse
+     * @return \SumUp\Services\TransactionsListDeprecatedResponse
      *
      * @deprecated
      */
-    public function listDeprecated(?TransactionsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListDeprecatedV01MeTransactionsHistoryGetResponse
+    public function listDeprecated(?TransactionsListDeprecatedParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\TransactionsListDeprecatedResponse
     {
         $path = '/v0.1/me/transactions/history';
         if ($queryParams !== null) {
@@ -587,7 +587,7 @@ class Transactions implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListDeprecatedV01MeTransactionsHistoryGetResponse::class, [
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\TransactionsListDeprecatedResponse::class, [
             '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }

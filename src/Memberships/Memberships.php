@@ -10,7 +10,7 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ListV01MembershipsGetResponse
+class MembershipsListResponse
 {
     /**
      *
@@ -146,9 +146,9 @@ class Memberships implements SumUpService
      * @param MembershipsListParams|null $queryParams Optional query string parameters
      * @param array|null $requestOptions Optional request options (timeout, connect_timeout, retries, retry_backoff_ms)
      *
-     * @return \SumUp\Services\ListV01MembershipsGetResponse
+     * @return \SumUp\Services\MembershipsListResponse
      */
-    public function list(?MembershipsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\ListV01MembershipsGetResponse
+    public function list(?MembershipsListParams $queryParams = null, ?array $requestOptions = null): \SumUp\Services\MembershipsListResponse
     {
         $path = '/v0.1/memberships';
         if ($queryParams !== null) {
@@ -197,6 +197,6 @@ class Memberships implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ListV01MembershipsGetResponse::class, null, 'GET', $path);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\MembershipsListResponse::class, null, 'GET', $path);
     }
 }

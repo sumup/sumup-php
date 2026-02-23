@@ -15,6 +15,7 @@ var pathParamRegexp = regexp.MustCompile(`\{([^}]+)\}`)
 
 func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) string {
 	className := g.displayTagName(tagKey)
+	normalizeInlineResponseClassNames(className, operations)
 
 	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
@@ -114,6 +115,48 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("}\n")
 
 	return buf.String()
+}
+
+func normalizeInlineResponseClassNames(serviceClass string, operations []*operation) {
+	for _, op := range operations {
+		if op == nil {
+			continue
+		}
+
+		methodName := op.methodName()
+		if methodName == "" {
+			methodName = "Operation"
+		}
+
+		baseName := fmt.Sprintf("%s%sResponse", serviceClass, strcase.ToCamel(methodName))
+		for _, resp := range op.Responses {
+			if resp == nil || resp.Type == nil {
+				continue
+			}
+
+			inlineName := baseName
+			if resp.StatusCode != "" && resp.StatusCode != "200" {
+				inlineName = fmt.Sprintf("%s%s", baseName, resp.StatusCode)
+			}
+
+			renameInlineResponseType(resp.Type, inlineName)
+		}
+	}
+}
+
+func renameInlineResponseType(rt *responseType, inlineName string) {
+	if rt == nil {
+		return
+	}
+
+	if rt.InlineClassName != "" && rt.InlineSchema != nil {
+		rt.InlineClassName = inlineName
+		rt.ClassName = "\\SumUp\\Services\\" + inlineName
+	}
+
+	if rt.ArrayItems != nil {
+		renameInlineResponseType(rt.ArrayItems, inlineName+"Item")
+	}
 }
 
 func (g *Generator) renderServiceMethod(serviceClass string, op *operation) string {
