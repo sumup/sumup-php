@@ -22,7 +22,7 @@ class TransactionsListDeprecatedResponse
 
     /**
      *
-     * @var \SumUp\Types\Link[]|null
+     * @var \SumUp\Types\TransactionsHistoryLink[]|null
      */
     public ?array $links = null;
 
@@ -38,7 +38,7 @@ class TransactionsListResponse
 
     /**
      *
-     * @var \SumUp\Types\Link[]|null
+     * @var \SumUp\Types\TransactionsHistoryLink[]|null
      */
     public ?array $links = null;
 

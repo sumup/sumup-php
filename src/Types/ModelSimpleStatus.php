@@ -18,4 +18,5 @@ enum ModelSimpleStatus: string
     case REFUND_FAILED = 'REFUND_FAILED';
     case REFUNDED = 'REFUNDED';
     case NON_COLLECTION = 'NON_COLLECTION';
+    case PENDING = 'PENDING';
 }

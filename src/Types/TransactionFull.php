@@ -133,11 +133,32 @@ class TransactionFull
     public ?string $payoutPlan = null;
 
     /**
+     * External/foreign transaction id (passed by clients).
+     *
+     * @var string|null
+     */
+    public ?string $foreignTransactionId = null;
+
+    /**
+     * Client transaction id.
+     *
+     * @var string|null
+     */
+    public ?string $clientTransactionId = null;
+
+    /**
      * Email address of the registered user (merchant) to whom the payment is made.
      *
      * @var string|null
      */
     public ?string $username = null;
+
+    /**
+     * Transaction SumUp total fee amount.
+     *
+     * @var float|null
+     */
+    public ?float $feeAmount = null;
 
     /**
      * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
@@ -161,6 +182,19 @@ class TransactionFull
     public ?float $horizontalAccuracy = null;
 
     /**
+     * SumUp merchant internal Id.
+     *
+     * @var int|null
+     */
+    public ?int $merchantId = null;
+
+    /**
+     *
+     * @var Device|null
+     */
+    public ?Device $deviceInfo = null;
+
+    /**
      * Simple name of the payment type.
      *
      * @var string|null
@@ -182,6 +216,12 @@ class TransactionFull
     public ?CardResponse $card = null;
 
     /**
+     *
+     * @var ElvCardAccount|null
+     */
+    public ?ElvCardAccount $elvAccount = null;
+
+    /**
      * Local date and time of the creation of the transaction.
      *
      * @var string|null
@@ -189,11 +229,25 @@ class TransactionFull
     public ?string $localTime = null;
 
     /**
+     * The date of the payout.
+     *
+     * @var string|null
+     */
+    public ?string $payoutDate = null;
+
+    /**
      * Payout type for the transaction.
      *
      * @var string|null
      */
     public ?string $payoutType = null;
+
+    /**
+     * Debit/Credit.
+     *
+     * @var string|null
+     */
+    public ?string $processAs = null;
 
     /**
      * List of products from the merchant's catalogue for which the transaction serves as a payment.
@@ -205,7 +259,7 @@ class TransactionFull
     /**
      * List of VAT rates applicable to the transaction.
      *
-     * @var mixed[]|null
+     * @var array<string, mixed>[]|null
      */
     public ?array $vatRates = null;
 
@@ -226,7 +280,7 @@ class TransactionFull
     /**
      * List of hyperlinks for accessing related resources.
      *
-     * @var mixed[]|null
+     * @var Link[]|null
      */
     public ?array $links = null;
 
