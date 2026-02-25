@@ -69,7 +69,7 @@ class SumUp
                 $config['ca_bundle_path']
             );
         }
-        
+
         // Set access token from config (api_key or access_token)
         if (!empty($config['api_key'])) {
             $this->accessToken = $config['api_key'];
@@ -174,11 +174,6 @@ class SumUp
     public function memberships(): Memberships
     {
         return new Memberships($this->client, $this->resolveAccessToken());
-    }
-
-    public function merchant(): Merchant
-    {
-        return new Merchant($this->client, $this->resolveAccessToken());
     }
 
     public function merchants(): Merchants

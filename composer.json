@@ -54,7 +54,6 @@
 			"src/Customers/Customers.php",
 			"src/Members/Members.php",
 			"src/Memberships/Memberships.php",
-			"src/Merchant/Merchant.php",
 			"src/Merchants/Merchants.php",
 			"src/Payouts/Payouts.php",
 			"src/Readers/Readers.php",
