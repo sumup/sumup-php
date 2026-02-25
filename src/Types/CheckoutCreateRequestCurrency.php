@@ -13,6 +13,7 @@ enum CheckoutCreateRequestCurrency: string
     case BRL = 'BRL';
     case CHF = 'CHF';
     case CLP = 'CLP';
+    case COP = 'COP';
     case CZK = 'CZK';
     case DKK = 'DKK';
     case EUR = 'EUR';

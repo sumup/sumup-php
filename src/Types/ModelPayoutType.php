@@ -10,6 +10,5 @@ namespace SumUp\Types;
 enum ModelPayoutType: string
 {
     case BANK_ACCOUNT = 'BANK_ACCOUNT';
-    case BALANCE = 'BALANCE';
     case PREPAID_CARD = 'PREPAID_CARD';
 }

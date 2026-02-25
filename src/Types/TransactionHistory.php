@@ -125,4 +125,25 @@ class TransactionHistory
      */
     public ?string $cardType = null;
 
+    /**
+     * Payout date (if paid out at once).
+     *
+     * @var string|null
+     */
+    public ?string $payoutDate = null;
+
+    /**
+     * Payout type.
+     *
+     * @var string|null
+     */
+    public ?string $payoutType = null;
+
+    /**
+     * Total refunded amount.
+     *
+     * @var float|null
+     */
+    public ?float $refundedAmount = null;
+
 }
