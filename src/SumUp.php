@@ -10,7 +10,6 @@ use SumUp\Services\Checkouts;
 use SumUp\Services\Customers;
 use SumUp\Services\Members;
 use SumUp\Services\Memberships;
-use SumUp\Services\Merchant;
 use SumUp\Services\Merchants;
 use SumUp\Services\Payouts;
 use SumUp\Services\Readers;
