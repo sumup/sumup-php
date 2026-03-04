@@ -214,33 +214,6 @@ class Subaccounts implements SumUpService
     }
 
     /**
-     * Disable an operator.
-     *
-     * @param string $operatorId The unique identifier for the operator.
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\Operator
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     *
-     * @deprecated
-     */
-    public function deactivateSubAccount(string $operatorId, ?RequestOptions $requestOptions = null): \SumUp\Types\Operator
-    {
-        $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
-        $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
-
-        $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, null, 'DELETE', $path);
-    }
-
-    /**
      * List operators
      *
      * @param SubaccountsListSubAccountsParams|null $queryParams Optional query string parameters
