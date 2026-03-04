@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/sumup/sumup-php/compare/v0.1.0...v0.1.1) (2026-03-04)
+
+
+### Features
+
+* sync with latest openapi specs ([9509daf](https://github.com/sumup/sumup-php/commit/9509daf539d9f7af4a1422477b5b680726d7bc14))
+
+
+### Miscellaneous Chores
+
+* synced file(s) with sumup/apis ([#16](https://github.com/sumup/sumup-php/issues/16)) ([5564126](https://github.com/sumup/sumup-php/commit/55641263d74682c9f643acba15e8c3521dc724a8))
+
 ## [0.1.0](https://github.com/sumup/sumup-php/compare/v0.0.1...v0.1.0) (2026-02-23)
 
 
