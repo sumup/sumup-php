@@ -142,6 +142,7 @@ class SumUp
         }
 
         $headers = is_array($config['custom_headers']) ? $config['custom_headers'] : [];
+        $headers['Accept'] = 'application/problem+json, application/json';
         $headers['User-Agent'] = SdkInfo::getUserAgent();
         $config['custom_headers'] = $headers;
 
