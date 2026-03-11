@@ -80,6 +80,7 @@ class ReceiptTransaction
     public ?string $verificationMethod = null;
 
     /**
+     * Payment card details displayed on the receipt.
      *
      * @var ReceiptCard|null
      */

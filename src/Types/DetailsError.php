@@ -31,6 +31,7 @@ class DetailsError
     public ?float $status = null;
 
     /**
+     * List of violated validation constraints.
      *
      * @var array<string, mixed>[]|null
      */

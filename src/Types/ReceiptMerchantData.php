@@ -10,12 +10,14 @@ namespace SumUp\Types;
 class ReceiptMerchantData
 {
     /**
+     * Merchant profile details displayed on the receipt.
      *
      * @var array<string, mixed>|null
      */
     public ?array $merchantProfile = null;
 
     /**
+     * Locale used for rendering localized receipt fields.
      *
      * @var string|null
      */

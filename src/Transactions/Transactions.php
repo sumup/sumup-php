@@ -184,7 +184,7 @@ class TransactionsListParams
      *
      * @var string[]|null
      */
-    public ?array $statuses = null;
+    public ?array $statusesList = null;
 
     /**
      * Filters the returned results by the specified list of payment types used for the transactions.
@@ -284,7 +284,7 @@ class TransactionsListDeprecatedParams
      *
      * @var string[]|null
      */
-    public ?array $statuses = null;
+    public ?array $statusesList = null;
 
     /**
      * Filters the returned results by the specified list of payment types used for the transactions.
@@ -418,7 +418,7 @@ class Transactions implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\TransactionFull::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
@@ -466,7 +466,7 @@ class Transactions implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\TransactionFull::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
@@ -501,8 +501,8 @@ class Transactions implements SumUpService
             if (isset($queryParams->users)) {
                 $queryParamsData['users'] = $queryParams->users;
             }
-            if (isset($queryParams->statuses)) {
-                $queryParamsData['statuses'] = $queryParams->statuses;
+            if (isset($queryParams->statusesList)) {
+                $queryParamsData['statuses[]'] = $queryParams->statusesList;
             }
             if (isset($queryParams->paymentTypes)) {
                 $queryParamsData['payment_types'] = $queryParams->paymentTypes;
@@ -543,7 +543,8 @@ class Transactions implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\TransactionsListResponse::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -578,8 +579,8 @@ class Transactions implements SumUpService
             if (isset($queryParams->users)) {
                 $queryParamsData['users'] = $queryParams->users;
             }
-            if (isset($queryParams->statuses)) {
-                $queryParamsData['statuses'] = $queryParams->statuses;
+            if (isset($queryParams->statusesList)) {
+                $queryParamsData['statuses[]'] = $queryParams->statusesList;
             }
             if (isset($queryParams->paymentTypes)) {
                 $queryParamsData['payment_types'] = $queryParams->paymentTypes;
@@ -617,7 +618,8 @@ class Transactions implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\TransactionsListDeprecatedResponse::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 

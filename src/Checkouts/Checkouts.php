@@ -46,7 +46,7 @@ class CheckoutsListParams
 class CheckoutsListAvailablePaymentMethodsParams
 {
     /**
-     * The amount for which the payment methods should be eligible, in major units. Note that currency must also be provided when filtering by amount.
+     * The amount for which the payment methods should be eligible, in major units.
      *
      * @var float|null
      */
@@ -121,7 +121,7 @@ class Checkouts implements SumUpService
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Checkout::class],
         ], [
             '400' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'POST', $path);
@@ -150,7 +150,7 @@ class Checkouts implements SumUpService
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Checkout::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'DELETE', $path);
@@ -179,7 +179,7 @@ class Checkouts implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\CheckoutSuccess::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
@@ -221,7 +221,7 @@ class Checkouts implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class]],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -265,7 +265,6 @@ class Checkouts implements SumUpService
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\CheckoutsListAvailablePaymentMethodsResponse::class, [
             '400' => ['type' => 'class', 'class' => \SumUp\Types\DetailsError::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
 
@@ -298,7 +297,7 @@ class Checkouts implements SumUpService
             '202' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutAccepted::class],
         ], [
             '400' => ['type' => 'mixed'],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'PUT', $path);

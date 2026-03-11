@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Transaction event details as rendered on the receipt.
+ */
 class ReceiptEvent
 {
     /**
@@ -49,6 +52,7 @@ class ReceiptEvent
     public ?string $timestamp = null;
 
     /**
+     * Receipt number associated with the event.
      *
      * @var string|null
      */

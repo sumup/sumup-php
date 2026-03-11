@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Transaction entry returned in history listing responses.
+ */
 class TransactionHistory
 {
     /**
