@@ -10,10 +10,15 @@ class SdkInfoTest extends TestCase
 {
     public function testStandardHeadersIncludeRuntimeMetadata()
     {
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/problem+json, application/json',
+            'User-Agent' => SdkInfo::getUserAgent(),
+        ];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
 
         $this->assertSame('application/json', $headers['Content-Type']);
+        $this->assertSame('application/problem+json, application/json', $headers['Accept']);
         $this->assertSame(SdkInfo::getUserAgent(), $headers['User-Agent']);
         $this->assertSame(ApiVersion::CURRENT, $headers['X-Sumup-Api-Version']);
         $this->assertSame('php', $headers['X-Sumup-Lang']);
