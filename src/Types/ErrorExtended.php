@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Error payload with the invalid parameter reference.
+ */
 class ErrorExtended
 {
     /**

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Checkout-specific fields associated with a transaction.
+ */
 class TransactionCheckoutInfo
 {
     /**

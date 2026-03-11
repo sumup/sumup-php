@@ -107,7 +107,8 @@ class Receipts implements SumUpService
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Receipt::class, [
             '400' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
     }
 }

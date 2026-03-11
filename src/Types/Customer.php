@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Saved customer details.
+ */
 class Customer
 {
     /**

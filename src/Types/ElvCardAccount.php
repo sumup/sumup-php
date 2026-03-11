@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Details of the ELV card account associated with the transaction.
+ */
 class ElvCardAccount
 {
     /**

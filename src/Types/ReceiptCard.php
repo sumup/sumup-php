@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Payment card details displayed on the receipt.
+ */
 class ReceiptCard
 {
     /**

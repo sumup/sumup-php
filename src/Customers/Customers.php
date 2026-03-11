@@ -94,7 +94,8 @@ class Customers implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '201' => ['type' => 'class', 'class' => \SumUp\Types\Customer::class],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'mixed'],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'POST', $path);
@@ -126,7 +127,8 @@ class Customers implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '204' => ['type' => 'void'],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'DELETE', $path);
@@ -155,7 +157,7 @@ class Customers implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Customer::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
@@ -186,7 +188,7 @@ class Customers implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\PaymentInstrumentResponse::class]],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'GET', $path);
@@ -217,7 +219,7 @@ class Customers implements SumUpService
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Customer::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'PUT', $path);

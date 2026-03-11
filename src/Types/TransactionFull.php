@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
+/**
+ * Full transaction resource with checkout, payout, and event details.
+ */
 class TransactionFull
 {
     /**
@@ -189,6 +192,7 @@ class TransactionFull
     public ?int $merchantId = null;
 
     /**
+     * Details of the device used to create the transaction.
      *
      * @var Device|null
      */
@@ -216,6 +220,7 @@ class TransactionFull
     public ?CardResponse $card = null;
 
     /**
+     * Details of the ELV card account associated with the transaction.
      *
      * @var ElvCardAccount|null
      */

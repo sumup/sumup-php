@@ -176,7 +176,8 @@ class Payouts implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class]],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -231,7 +232,8 @@ class Payouts implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'object']],
         ], [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class]],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 }
