@@ -286,21 +286,10 @@ func (g *Generator) responseTypeForResponse(resp *v3.Response, currentNamespace 
 
 	var schema *base.SchemaProxy
 
-	if mediaType, ok := resp.Content.Get("application/json"); ok {
+	if mediaType, ok := resp.Content.Get("application/problem+json"); ok {
 		schema = mediaType.Schema
-	}
-
-	if schema == nil {
-		for _, mediaType := range resp.Content.FromOldest() {
-			if mediaType == nil {
-				continue
-			}
-
-			if mediaType.Schema != nil {
-				schema = mediaType.Schema
-				break
-			}
-		}
+	} else if mediaType, ok := resp.Content.Get("application/json"); ok {
+		schema = mediaType.Schema
 	}
 
 	if schema == nil {
