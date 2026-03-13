@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.1.1](https://github.com/sumup/sumup-php/compare/v0.1.0...v0.1.1) (2026-03-13)
+
+
+### Features
+
+* sync with latest openapi specs ([9509daf](https://github.com/sumup/sumup-php/commit/9509daf539d9f7af4a1422477b5b680726d7bc14))
+
+
+### Bug Fixes
+
+* **codegen:** prefer problem+json for response schemas ([#21](https://github.com/sumup/sumup-php/issues/21)) ([8d22914](https://github.com/sumup/sumup-php/commit/8d229143d9c936fdca391fa0408b97a1ce039e4d))
+* **http:** set default problem+json accept header ([#20](https://github.com/sumup/sumup-php/issues/20)) ([9676d4a](https://github.com/sumup/sumup-php/commit/9676d4a404abe14b9b1d85a5628c7afe461f47b2))
+
+
+### Chores
+
+* align release automation config ([#23](https://github.com/sumup/sumup-php/issues/23)) ([010fb65](https://github.com/sumup/sumup-php/commit/010fb65dbea0d7109fdb3fa6623062e2151aa8d3))
+* synced file(s) with sumup/apis ([#16](https://github.com/sumup/sumup-php/issues/16)) ([5564126](https://github.com/sumup/sumup-php/commit/55641263d74682c9f643acba15e8c3521dc724a8))
+* synced file(s) with sumup/apis ([#19](https://github.com/sumup/sumup-php/issues/19)) ([1673a64](https://github.com/sumup/sumup-php/commit/1673a64d058276bff28b6b99b4c9c6230005d453))
+* synced file(s) with sumup/apis ([#22](https://github.com/sumup/sumup-php/issues/22)) ([cd99f92](https://github.com/sumup/sumup-php/commit/cd99f928491ed50437ae73af4bceab7e4bfce155))
+
+
+### Build System & Dependencies
+
+* **deps:** bump actions/setup-go from 6.2.0 to 6.3.0 ([#17](https://github.com/sumup/sumup-php/issues/17)) ([7c4e1b6](https://github.com/sumup/sumup-php/commit/7c4e1b6374f638ce74de4f126f33a7bf124b338e))
+* **deps:** bump github.com/pb33f/libopenapi from 0.33.11 to 0.34.0 in /codegen ([#18](https://github.com/sumup/sumup-php/issues/18)) ([0d3b9f9](https://github.com/sumup/sumup-php/commit/0d3b9f98b49c4b007a8949a139a0b163efbf0617))
+
 ## [0.1.0](https://github.com/sumup/sumup-php/compare/v0.0.1...v0.1.0) (2026-02-23)
 
 
