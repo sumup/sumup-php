@@ -180,7 +180,9 @@ class Subaccounts implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, null, 'GET', $path);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Operator::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
@@ -254,7 +256,9 @@ class Subaccounts implements SumUpService
 
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\Operator::class]],
-        ], null, 'GET', $path);
+        ], [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**

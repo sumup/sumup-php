@@ -309,7 +309,9 @@ class Readers implements SumUpService
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ReadersListResponse::class, null, 'GET', $path);
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\ReadersListResponse::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
     }
 
     /**
