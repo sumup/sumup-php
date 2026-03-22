@@ -52,13 +52,6 @@ class Card
     public ?string $zipCode = null;
 
     /**
-     * Last 4 digits of the payment card number.
-     *
-     * @var string
-     */
-    public string $last4Digits;
-
-    /**
      * Issuing card network of the payment card used for the transaction.
      *
      * @var CardType

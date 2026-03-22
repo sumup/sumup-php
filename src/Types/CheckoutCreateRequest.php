@@ -66,39 +66,11 @@ class CheckoutCreateRequest
     public ?CheckoutCreateRequestPurpose $purpose = null;
 
     /**
-     * Unique ID of the checkout resource.
-     *
-     * @var string|null
-     */
-    public ?string $id = null;
-
-    /**
-     * Current status of the checkout.
-     *
-     * @var CheckoutCreateRequestStatus|null
-     */
-    public ?CheckoutCreateRequestStatus $status = null;
-
-    /**
-     * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
-     *
-     * @var string|null
-     */
-    public ?string $date = null;
-
-    /**
      * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
      *
      * @var string|null
      */
     public ?string $validUntil = null;
-
-    /**
-     * List of transactions related to the payment.
-     *
-     * @var mixed[]|null
-     */
-    public ?array $transactions = null;
 
     /**
      * __Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.
