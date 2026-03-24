@@ -30,4 +30,18 @@ class Link
      */
     public ?string $type = null;
 
+    /**
+     * Minimum allowed amount for the refund.
+     *
+     * @var float|null
+     */
+    public ?float $minAmount = null;
+
+    /**
+     * Maximum allowed amount for the refund.
+     *
+     * @var float|null
+     */
+    public ?float $maxAmount = null;
+
 }

@@ -34,5 +34,6 @@ enum TransactionCheckoutInfoEntryMode: string
     case APPLE_PAY = 'apple pay';
     case GOOGLE_PAY = 'google pay';
     case PAYPAL = 'paypal';
+    case TWINT = 'twint';
     case NA = 'na';
 }
