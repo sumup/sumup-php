@@ -14,4 +14,6 @@ enum ProcessCheckoutPaymentType: string
     case IDEAL = 'ideal';
     case BLIK = 'blik';
     case BANCONTACT = 'bancontact';
+    case GOOGLE_PAY = 'google_pay';
+    case APPLE_PAY = 'apple_pay';
 }
