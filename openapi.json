@@ -2148,7 +2148,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/EntryModeFilter"
+                "$ref": "#/components/schemas/EntryMode"
               }
             }
           },
@@ -5959,7 +5959,7 @@
         "schema": {
           "type": "array",
           "items": {
-            "$ref": "#/components/schemas/EntryModeFilter"
+            "$ref": "#/components/schemas/EntryMode"
           }
         }
       },
@@ -6474,7 +6474,9 @@
               "boleto",
               "ideal",
               "blik",
-              "bancontact"
+              "bancontact",
+              "google_pay",
+              "apple_pay"
             ]
           },
           "installments": {
@@ -6488,6 +6490,50 @@
           },
           "card": {
             "$ref": "#/components/schemas/Card"
+          },
+          "google_pay": {
+            "description": "Raw `PaymentData` object received from Google Pay. Send the Google Pay response payload as-is.",
+            "type": "object",
+            "example": {
+              "apiVersionMinor": 0,
+              "apiVersion": 2,
+              "paymentMethodData": {
+                "description": "Visa •••• 1111",
+                "tokenizationData": {
+                  "type": "PAYMENT_GATEWAY",
+                  "token": "token-data"
+                },
+                "type": "CARD",
+                "info": {
+                  "cardNetwork": "VISA",
+                  "cardDetails": "1111"
+                }
+              }
+            }
+          },
+          "apple_pay": {
+            "description": "Raw payment token object received from Apple Pay. Send the Apple Pay response payload as-is.",
+            "type": "object",
+            "example": {
+              "token": {
+                "paymentData": {
+                  "data": "si2xuT2ArQo689SfE-long-token",
+                  "signature": "MIAGCSqGSIb3DQEHA-long-signature",
+                  "header": {
+                    "publicKeyHash": "PWfjDi3TSwgZ20TY/A7f3V6J/1rhHyRDCspbeljM0io=",
+                    "ephemeralPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaBtz7UN2MNV0qInJVEEhXy10PU0KfO6KxFjXm93oKWL6lCsxZZGDl/EKioUHVSlKgpsKGin0xvgldfxeJVgy0g==",
+                    "transactionId": "62e0568bc9258e9d0e059d745650fc8211d05ef7a7a1589a6411bf9b12cdfd04"
+                  },
+                  "version": "EC_v1"
+                },
+                "paymentMethod": {
+                  "displayName": "MasterCard 8837",
+                  "network": "MasterCard",
+                  "type": "debit"
+                },
+                "transactionIdentifier": "62E0568BC9258E9D0E059D745650FC8211D05EF7A7A1589A6411BF9B12CDFD04"
+              }
+            }
           },
           "token": {
             "description": "__Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.",
@@ -7202,6 +7248,21 @@
         },
         "title": "Receipt Card"
       },
+      "ReceiptReader": {
+        "description": "Card reader details displayed on the receipt.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Reader serial number.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Reader type.",
+            "type": "string"
+          }
+        },
+        "title": "Receipt Reader"
+      },
       "ReceiptMerchantData": {
         "description": "Receipt merchant data",
         "type": "object",
@@ -7217,13 +7278,28 @@
               "business_name": {
                 "type": "string"
               },
+              "company_registration_number": {
+                "type": "string"
+              },
+              "vat_id": {
+                "type": "string"
+              },
+              "website": {
+                "type": "string"
+              },
               "email": {
+                "type": "string"
+              },
+              "language": {
                 "type": "string"
               },
               "address": {
                 "type": "object",
                 "properties": {
                   "address_line1": {
+                    "type": "string"
+                  },
+                  "address_line2": {
                     "type": "string"
                   },
                   "city": {
@@ -7236,6 +7312,9 @@
                     "type": "string"
                   },
                   "country_native_name": {
+                    "type": "string"
+                  },
+                  "region_name": {
                     "type": "string"
                   },
                   "post_code": {
@@ -7261,6 +7340,13 @@
         "properties": {
           "transaction_code": {
             "description": "Transaction code.",
+            "type": "string"
+          },
+          "transaction_id": {
+            "$ref": "#/components/schemas/TransactionID"
+          },
+          "merchant_code": {
+            "description": "Merchant code.",
             "type": "string"
           },
           "amount": {
@@ -7300,12 +7386,24 @@
             "description": "Cardholder verification method.",
             "type": "string"
           },
+          "card_reader": {
+            "$ref": "#/components/schemas/ReceiptReader"
+          },
           "card": {
             "$ref": "#/components/schemas/ReceiptCard"
           },
           "installments_count": {
             "description": "Number of installments.",
             "type": "integer"
+          },
+          "process_as": {
+            "description": "Debit/Credit.",
+            "type": "string",
+            "example": "CREDIT",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
           },
           "products": {
             "description": "Products",
@@ -7317,6 +7415,10 @@
                   "description": "Product name",
                   "type": "string",
                   "example": "Coffee"
+                },
+                "description": {
+                  "description": "Product description",
+                  "type": "string"
                 },
                 "price": {
                   "description": "Product price",
@@ -7657,33 +7759,33 @@
         "description": "Entry mode of the payment details.",
         "type": "string",
         "enum": [
-          "none",
-          "magstripe",
-          "chip",
-          "manual entry",
-          "customer entry",
-          "magstripe fallback",
-          "contactless",
-          "moto",
-          "contactless magstripe",
-          "boleto",
-          "direct debit",
-          "sofort",
-          "ideal",
-          "bancontact",
-          "eps",
-          "mybank",
-          "satispay",
-          "blik",
-          "p24",
-          "giropay",
-          "pix",
-          "qr code pix",
-          "apple pay",
-          "google pay",
-          "paypal",
-          "twint",
-          "na"
+          "BOLETO",
+          "SOFORT",
+          "IDEAL",
+          "BANCONTACT",
+          "EPS",
+          "MYBANK",
+          "SATISPAY",
+          "BLIK",
+          "P24",
+          "GIROPAY",
+          "PIX",
+          "QR_CODE_PIX",
+          "APPLE_PAY",
+          "GOOGLE_PAY",
+          "PAYPAL",
+          "TWINT",
+          "NONE",
+          "CHIP",
+          "MANUAL_ENTRY",
+          "CUSTOMER_ENTRY",
+          "MAGSTRIPE_FALLBACK",
+          "MAGSTRIPE",
+          "DIRECT_DEBIT",
+          "CONTACTLESS",
+          "MOTO",
+          "CONTACTLESS_MAGSTRIPE",
+          "N/A"
         ],
         "title": "Entry Mode"
       },
@@ -8734,7 +8836,7 @@
               "avatar": {
                 "description": "A user-facing small-format logo for use in dashboards and other user-facing applications. For customer-facing branding see `merchant.business_profile.branding`.\n",
                 "type": "string",
-                "format": "url"
+                "format": "uri"
               },
               "alias": {
                 "description": "A user-facing name of the merchant account for use in dashboards and other user-facing applications. For customer-facing business name see `merchant.business_profile`.\n",
@@ -8792,7 +8894,8 @@
             "description": "The company's legal name.",
             "type": "string",
             "example": "Gin & Doughnuts Bar GmbH",
-            "maxLength": 512
+            "maxLength": 150,
+            "minLength": 1
           },
           "merchant_category_code": {
             "description": "The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.\n",
@@ -8818,6 +8921,7 @@
           "website": {
             "description": "HTTP(S) URL of the company's website.\n",
             "type": "string",
+            "format": "uri",
             "examples": [
               "https://www.sumup.com"
             ],
@@ -8850,26 +8954,29 @@
             "description": "The customer-facing business name.",
             "type": "string",
             "example": "Example Coffee",
-            "maxLength": 512
+            "maxLength": 150,
+            "minLength": 1
           },
           "dynamic_descriptor": {
             "description": "The descriptor is the text that your customer sees on their bank account statement.\nThe more recognisable your descriptor is, the less risk you have of receiving disputes (e.g. chargebacks).\n",
             "type": "string",
             "example": "Example Coffee",
             "maxLength": 30,
+            "minLength": 1,
             "pattern": "^[a-zA-Z0-9 \\-+\\'_.]{0,30}$"
           },
           "website": {
             "description": "The business's publicly available website.",
             "type": "string",
+            "format": "uri",
             "example": "https://example.com",
-            "maxLength": 512
+            "maxLength": 255
           },
           "email": {
             "description": "A publicly available email address.",
             "type": "string",
             "example": "contact@example.com",
-            "maxLength": 256
+            "maxLength": 255
           },
           "phone_number": {
             "$ref": "#/components/schemas/PhoneNumber"
@@ -8893,7 +9000,7 @@
         "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
         "type": "string",
         "example": "+420123456789",
-        "maxLength": 64
+        "maxLength": 16
       },
       "Branding": {
         "description": "Settings used to apply the Merchant's branding to email receipts, invoices, checkouts, and other products.",
@@ -9932,10 +10039,6 @@
             "description": "Country ISO 3166-1 code",
             "type": "string"
           },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
-          },
           "region_name": {
             "description": "Country region name",
             "type": "string"
@@ -10022,10 +10125,6 @@
           "country": {
             "description": "Country ISO 3166-1 code",
             "type": "string"
-          },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
           },
           "region_name": {
             "description": "Region name",
@@ -10439,40 +10538,6 @@
           }
         },
         "title": "Personal Profile Legacy"
-      },
-      "EntryModeFilter": {
-        "description": "Entry mode value accepted by the `entry_modes[]` filter.",
-        "type": "string",
-        "enum": [
-          "BOLETO",
-          "SOFORT",
-          "IDEAL",
-          "BANCONTACT",
-          "EPS",
-          "MYBANK",
-          "SATISPAY",
-          "BLIK",
-          "P24",
-          "GIROPAY",
-          "PIX",
-          "QR_CODE_PIX",
-          "APPLE_PAY",
-          "GOOGLE_PAY",
-          "PAYPAL",
-          "TWINT",
-          "NONE",
-          "CHIP",
-          "MANUAL_ENTRY",
-          "CUSTOMER_ENTRY",
-          "MAGSTRIPE_FALLBACK",
-          "MAGSTRIPE",
-          "DIRECT_DEBIT",
-          "CONTACTLESS",
-          "MOTO",
-          "CONTACTLESS_MAGSTRIPE",
-          "N/A"
-        ],
-        "title": "Entry Mode Filter"
       }
     },
     "examples": {
