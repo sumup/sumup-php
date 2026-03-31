@@ -146,6 +146,8 @@ The repository includes runnable examples:
   Run with: `php examples/simple.php`
 - `examples/checkout.php` - create and process a checkout.
   Run with: `php examples/checkout.php`
+- `examples/oauth2/oauth2-server.php` - OAuth 2.0 Authorization Code flow with PKCE.
+  Run with: `cd examples/oauth2 && php -S localhost:8080 oauth2-server.php`
 - `examples/custom-http-client.php` - wrap/customize HTTP behavior.
   Run with: `php examples/custom-http-client.php`
 - `examples/guzzle-http-client.php` - use the built-in Guzzle client.
