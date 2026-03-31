@@ -17,6 +17,20 @@ class ReceiptTransaction
     public ?string $transactionCode = null;
 
     /**
+     * Unique ID of the transaction.
+     *
+     * @var string|null
+     */
+    public ?string $transactionId = null;
+
+    /**
+     * Merchant code.
+     *
+     * @var string|null
+     */
+    public ?string $merchantCode = null;
+
+    /**
      * Transaction amount.
      *
      * @var string|null
@@ -80,6 +94,13 @@ class ReceiptTransaction
     public ?string $verificationMethod = null;
 
     /**
+     * Card reader details displayed on the receipt.
+     *
+     * @var ReceiptReader|null
+     */
+    public ?ReceiptReader $cardReader = null;
+
+    /**
      * Payment card details displayed on the receipt.
      *
      * @var ReceiptCard|null
@@ -92,6 +113,13 @@ class ReceiptTransaction
      * @var int|null
      */
     public ?int $installmentsCount = null;
+
+    /**
+     * Debit/Credit.
+     *
+     * @var ReceiptTransactionProcessAs|null
+     */
+    public ?ReceiptTransactionProcessAs $processAs = null;
 
     /**
      * Products
