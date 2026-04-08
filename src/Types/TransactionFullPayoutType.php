@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Payout type for the transaction.
  */
-enum ModelPayoutType: string
+enum TransactionFullPayoutType: string
 {
     case BANK_ACCOUNT = 'BANK_ACCOUNT';
     case PREPAID_CARD = 'PREPAID_CARD';

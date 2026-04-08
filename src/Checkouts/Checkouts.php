@@ -16,9 +16,20 @@ class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
      *
-     * @var array<string, mixed>[]|null
+     * @var CheckoutsListAvailablePaymentMethodsResponseItem[]|null
      */
     public ?array $availablePaymentMethods = null;
+
+}
+
+class CheckoutsListAvailablePaymentMethodsResponseItem
+{
+    /**
+     * The ID of the payment method.
+     *
+     * @var string
+     */
+    public string $id;
 
 }
 

@@ -11,8 +11,8 @@ class BadRequest
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var BadRequestErrors
      */
-    public array $errors;
+    public BadRequestErrors $errors;
 
 }

@@ -12,16 +12,6 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class ReadersListResponse
-{
-    /**
-     *
-     * @var \SumUp\Types\Reader[]
-     */
-    public array $items;
-
-}
-
 class ReadersCreateRequest
 {
     /**
@@ -95,6 +85,16 @@ class ReadersUpdateRequest
             \SumUp\Hydrator::hydrate($data, self::class, $this);
         }
     }
+
+}
+
+class ReadersListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Reader[]
+     */
+    public array $items;
 
 }
 

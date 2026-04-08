@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Status generated from the processing status and the latest transaction state.
  */
-enum ModelSimpleStatus: string
+enum TransactionFullSimpleStatus: string
 {
     case SUCCESSFUL = 'SUCCESSFUL';
     case PAID_OUT = 'PAID_OUT';

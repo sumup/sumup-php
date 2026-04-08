@@ -11,8 +11,8 @@ class CreateReaderTerminateError
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var CreateReaderTerminateErrorErrors
      */
-    public array $errors;
+    public CreateReaderTerminateErrorErrors $errors;
 
 }

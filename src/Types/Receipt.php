@@ -26,15 +26,15 @@ class Receipt
     /**
      * EMV-specific metadata returned for card-present payments.
      *
-     * @var array<string, mixed>|null
+     * @var ReceiptEmvData|null
      */
-    public ?array $emvData = null;
+    public ?ReceiptEmvData $emvData = null;
 
     /**
      * Acquirer-specific metadata related to the card authorization.
      *
-     * @var array<string, mixed>|null
+     * @var ReceiptAcquirerData|null
      */
-    public ?array $acquirerData = null;
+    public ?ReceiptAcquirerData $acquirerData = null;
 
 }

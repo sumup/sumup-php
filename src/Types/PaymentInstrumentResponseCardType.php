@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Issuing card network of the payment card used for the transaction.
  */
-enum ModelCardType: string
+enum PaymentInstrumentResponseCardType: string
 {
     case ALELO = 'ALELO';
     case AMEX = 'AMEX';

@@ -37,6 +37,9 @@ type Generator struct {
 
 	tagLookup map[string]*base.Tag
 
+	// inlineSchemaNames tracks deterministic generated names for inline object schemas.
+	inlineSchemaNames map[*base.SchemaProxy]string
+
 	// schemasByTag maps normalized tag names to schemas they own.
 	schemasByTag map[string][]*base.SchemaProxy
 
@@ -62,7 +65,8 @@ type enumDefinition struct {
 // New creates a new Generator instance.
 func New(cfg Config) *Generator {
 	return &Generator{
-		cfg: cfg,
+		cfg:               cfg,
+		inlineSchemaNames: make(map[*base.SchemaProxy]string),
 	}
 }
 
@@ -265,7 +269,7 @@ func (g *Generator) buildPHPClass(name string, schema *base.SchemaProxy, current
 
 	fmt.Fprintf(&buf, "class %s\n{\n", name)
 
-	properties := g.schemaProperties(schema, currentNamespace)
+	properties := g.schemaProperties(schema, currentNamespace, name)
 	if len(properties) == 0 {
 		buf.WriteString("}\n")
 		return buf.String()
@@ -430,7 +434,11 @@ func (g *Generator) collectEnumsFromSchema(schema *base.SchemaProxy, tagKey stri
 			}
 
 			if len(propSpec.Enum) > 0 {
-				enumName := phpEnumName(schemaClassName(schema), propName)
+				schemaName := g.classNameForSchema(schema)
+				if schemaName == "" {
+					continue
+				}
+				enumName := phpEnumName(schemaName, propName)
 				if _, seen := enumsSeen[enumName]; seen {
 					continue
 				}

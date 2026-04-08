@@ -12,6 +12,32 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+/**
+ * Optional amount for partial refunds of transactions.
+ */
+class TransactionsRefundRequest
+{
+    /**
+     * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
+     *
+     * @var float|null
+     */
+    public ?float $amount = null;
+
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
+
+}
+
 class TransactionsListDeprecatedResponse
 {
     /**
@@ -41,32 +67,6 @@ class TransactionsListResponse
      * @var \SumUp\Types\TransactionsHistoryLink[]|null
      */
     public ?array $links = null;
-
-}
-
-/**
- * Optional amount for partial refunds of transactions.
- */
-class TransactionsRefundRequest
-{
-    /**
-     * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
-     *
-     * @var float|null
-     */
-    public ?float $amount = null;
-
-    /**
-     * Create request DTO from an associative array.
-     *
-     * @param array<string, mixed> $data
-     */
-    public function __construct(array $data = [])
-    {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
-    }
 
 }
 

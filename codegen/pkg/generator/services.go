@@ -28,16 +28,10 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("use SumUp\\SdkInfo;\n\n")
 
 	inlineResponseSchemas := collectInlineResponseSchemas(operations)
-	if len(inlineResponseSchemas) > 0 {
-		inlineNames := make([]string, 0, len(inlineResponseSchemas))
-		for name := range inlineResponseSchemas {
-			inlineNames = append(inlineNames, name)
-		}
-		slices.Sort(inlineNames)
-		for _, name := range inlineNames {
-			buf.WriteString(g.buildPHPClass(name, inlineResponseSchemas[name], "SumUp\\Services"))
-			buf.WriteString("\n")
-		}
+	serviceInlineSchemas := make(map[string]*base.SchemaProxy)
+	for name, schema := range inlineResponseSchemas {
+		serviceInlineSchemas[name] = schema
+		g.collectNestedInlineServiceSchemas(name, schema, serviceInlineSchemas, make(map[*base.SchemaProxy]struct{}))
 	}
 
 	seenRequestBodies := make(map[string]struct{})
@@ -57,11 +51,27 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 		op.BodyDocType = requestClass
 
 		if op.BodySchema != nil {
+			g.collectNestedInlineServiceSchemas(requestClass, op.BodySchema, serviceInlineSchemas, make(map[*base.SchemaProxy]struct{}))
+		}
+
+		if op.BodySchema != nil {
 			buf.WriteString(g.buildPHPClass(requestClass, op.BodySchema, "SumUp\\Services"))
 		} else {
 			buf.WriteString(buildEmptyRequestBodyClass(requestClass))
 		}
 		buf.WriteString("\n")
+	}
+
+	if len(serviceInlineSchemas) > 0 {
+		inlineNames := make([]string, 0, len(serviceInlineSchemas))
+		for name := range serviceInlineSchemas {
+			inlineNames = append(inlineNames, name)
+		}
+		slices.Sort(inlineNames)
+		for _, name := range inlineNames {
+			buf.WriteString(g.buildPHPClass(name, serviceInlineSchemas[name], "SumUp\\Services"))
+			buf.WriteString("\n")
+		}
 	}
 
 	seenParams := make(map[string]struct{})
@@ -463,6 +473,61 @@ func collectInlineResponseSchema(rt *responseType, acc map[string]*base.SchemaPr
 	}
 	if rt.ArrayItems != nil {
 		collectInlineResponseSchema(rt.ArrayItems, acc)
+	}
+}
+
+func (g *Generator) collectNestedInlineServiceSchemas(parentName string, schema *base.SchemaProxy, acc map[string]*base.SchemaProxy, stack map[*base.SchemaProxy]struct{}) {
+	if parentName == "" || schema == nil {
+		return
+	}
+
+	if _, ok := stack[schema]; ok {
+		return
+	}
+	stack[schema] = struct{}{}
+	defer delete(stack, schema)
+
+	spec := schema.Schema()
+	if spec == nil {
+		return
+	}
+
+	if spec.Properties != nil {
+		for propName, propSchema := range spec.Properties.FromOldest() {
+			name := g.inlinePropertyClassName(parentName, propName, propSchema)
+			if name != "" {
+				if _, ok := acc[name]; !ok {
+					acc[name] = propSchema
+				}
+				g.inlineSchemaNames[propSchema] = name
+				g.collectNestedInlineServiceSchemas(name, propSchema, acc, stack)
+			} else {
+				g.collectNestedInlineServiceSchemas(parentName, propSchema, acc, stack)
+			}
+		}
+	}
+
+	if hasSchemaType(spec, "array") && spec.Items != nil && spec.Items.A != nil {
+		itemName := g.inlineArrayItemClassName(parentName, spec.Items.A)
+		if itemName != "" {
+			if _, ok := acc[itemName]; !ok {
+				acc[itemName] = spec.Items.A
+			}
+			g.inlineSchemaNames[spec.Items.A] = itemName
+			g.collectNestedInlineServiceSchemas(itemName, spec.Items.A, acc, stack)
+		} else {
+			g.collectNestedInlineServiceSchemas(parentName, spec.Items.A, acc, stack)
+		}
+	}
+
+	for _, composite := range spec.AllOf {
+		g.collectNestedInlineServiceSchemas(parentName, composite, acc, stack)
+	}
+	for _, composite := range spec.AnyOf {
+		g.collectNestedInlineServiceSchemas(parentName, composite, acc, stack)
+	}
+	for _, composite := range spec.OneOf {
+		g.collectNestedInlineServiceSchemas(parentName, composite, acc, stack)
 	}
 }
 

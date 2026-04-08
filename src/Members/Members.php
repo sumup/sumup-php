@@ -12,22 +12,6 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class MembersListResponse
-{
-    /**
-     *
-     * @var \SumUp\Types\Member[]
-     */
-    public array $items;
-
-    /**
-     *
-     * @var int|null
-     */
-    public ?int $totalCount = null;
-
-}
-
 class MembersCreateRequest
 {
     /**
@@ -118,9 +102,9 @@ class MembersUpdateRequest
     /**
      * Allows you to update user data of managed users.
      *
-     * @var array<string, mixed>|null
+     * @var MembersUpdateRequestUser|null
      */
-    public ?array $user = null;
+    public ?MembersUpdateRequestUser $user = null;
 
     /**
      * Create request DTO from an associative array.
@@ -133,6 +117,43 @@ class MembersUpdateRequest
             \SumUp\Hydrator::hydrate($data, self::class, $this);
         }
     }
+
+}
+
+class MembersListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Member[]
+     */
+    public array $items;
+
+    /**
+     *
+     * @var int|null
+     */
+    public ?int $totalCount = null;
+
+}
+
+/**
+ * Allows you to update user data of managed users.
+ */
+class MembersUpdateRequestUser
+{
+    /**
+     * User's preferred name. Used for display purposes only.
+     *
+     * @var string|null
+     */
+    public ?string $nickname = null;
+
+    /**
+     * Password of the member to add. Only used if `is_managed_user` is true.
+     *
+     * @var string|null
+     */
+    public ?string $password = null;
 
 }
 

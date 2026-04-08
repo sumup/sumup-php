@@ -11,8 +11,8 @@ class CreateReaderCheckoutError
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var CreateReaderCheckoutErrorErrors
      */
-    public array $errors;
+    public CreateReaderCheckoutErrorErrors $errors;
 
 }

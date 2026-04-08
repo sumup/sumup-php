@@ -40,16 +40,16 @@ class ProcessCheckout
     /**
      * Raw `PaymentData` object received from Google Pay. Send the Google Pay response payload as-is.
      *
-     * @var array<string, mixed>|null
+     * @var ProcessCheckoutGooglePay|null
      */
-    public ?array $googlePay = null;
+    public ?ProcessCheckoutGooglePay $googlePay = null;
 
     /**
      * Raw payment token object received from Apple Pay. Send the Apple Pay response payload as-is.
      *
-     * @var array<string, mixed>|null
+     * @var ProcessCheckoutApplePay|null
      */
-    public ?array $applePay = null;
+    public ?ProcessCheckoutApplePay $applePay = null;
 
     /**
      * __Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.

@@ -33,9 +33,9 @@ class PaymentInstrumentResponse
     /**
      * Details of the payment card.
      *
-     * @var array<string, mixed>|null
+     * @var PaymentInstrumentResponseCard|null
      */
-    public ?array $card = null;
+    public ?PaymentInstrumentResponseCard $card = null;
 
     /**
      * Created mandate

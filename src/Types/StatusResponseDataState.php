@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Latest state of the device
  */
-enum ModelState: string
+enum StatusResponseDataState: string
 {
     case IDLE = 'IDLE';
     case SELECTING_TIP = 'SELECTING_TIP';

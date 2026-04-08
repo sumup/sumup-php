@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Type of connection used by the device
  */
-enum ModelConnectionType: string
+enum StatusResponseDataConnectionType: string
 {
     case BTLE = 'btle';
     case EDGE = 'edge';

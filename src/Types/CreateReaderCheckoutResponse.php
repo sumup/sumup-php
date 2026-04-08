@@ -8,8 +8,8 @@ class CreateReaderCheckoutResponse
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var CreateReaderCheckoutResponseData
      */
-    public array $data;
+    public CreateReaderCheckoutResponseData $data;
 
 }
