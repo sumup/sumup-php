@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.1.1](https://github.com/sumup/sumup-php/compare/v0.1.0...v0.1.1) (2026-04-08)
+
+
+### Features
+
+* sync with latest openapi specs ([9509daf](https://github.com/sumup/sumup-php/commit/9509daf539d9f7af4a1422477b5b680726d7bc14))
+
+
+### Bug Fixes
+
+* **codegen:** prefer problem+json for response schemas ([#21](https://github.com/sumup/sumup-php/issues/21)) ([8d22914](https://github.com/sumup/sumup-php/commit/8d229143d9c936fdca391fa0408b97a1ce039e4d))
+* **http:** set default problem+json accept header ([#20](https://github.com/sumup/sumup-php/issues/20)) ([9676d4a](https://github.com/sumup/sumup-php/commit/9676d4a404abe14b9b1d85a5628c7afe461f47b2))
+* typing ([#39](https://github.com/sumup/sumup-php/issues/39)) ([42d6861](https://github.com/sumup/sumup-php/commit/42d6861fda96400418fd397469068fe8c002747f))
+
+
+### Chores
+
+* align release automation config ([#23](https://github.com/sumup/sumup-php/issues/23)) ([010fb65](https://github.com/sumup/sumup-php/commit/010fb65dbea0d7109fdb3fa6623062e2151aa8d3))
+* synced file(s) with sumup/apis ([#16](https://github.com/sumup/sumup-php/issues/16)) ([5564126](https://github.com/sumup/sumup-php/commit/55641263d74682c9f643acba15e8c3521dc724a8))
+* synced file(s) with sumup/apis ([#19](https://github.com/sumup/sumup-php/issues/19)) ([1673a64](https://github.com/sumup/sumup-php/commit/1673a64d058276bff28b6b99b4c9c6230005d453))
+* synced file(s) with sumup/apis ([#22](https://github.com/sumup/sumup-php/issues/22)) ([cd99f92](https://github.com/sumup/sumup-php/commit/cd99f928491ed50437ae73af4bceab7e4bfce155))
+* synced file(s) with sumup/apis ([#29](https://github.com/sumup/sumup-php/issues/29)) ([89a0f9a](https://github.com/sumup/sumup-php/commit/89a0f9a523d2bdf7d9f65155621127fc58cc1ddf))
+* synced file(s) with sumup/apis ([#30](https://github.com/sumup/sumup-php/issues/30)) ([f0c2148](https://github.com/sumup/sumup-php/commit/f0c21484f5bbd90255a9667f9bdff6b451b6f7b4))
+* synced file(s) with sumup/apis ([#31](https://github.com/sumup/sumup-php/issues/31)) ([74b0855](https://github.com/sumup/sumup-php/commit/74b08553140ef7d7625d7e540b96ff8613589333))
+* synced file(s) with sumup/apis ([#32](https://github.com/sumup/sumup-php/issues/32)) ([35fd83d](https://github.com/sumup/sumup-php/commit/35fd83dd9e9e9595de3fb582b4883b0f319b9e1e))
+* synced file(s) with sumup/apis ([#38](https://github.com/sumup/sumup-php/issues/38)) ([db9b275](https://github.com/sumup/sumup-php/commit/db9b2755e9db3a3944ffcd6ff194d5d49959dac9))
+
+
+### Build System & Dependencies
+
+* **deps:** bump actions/create-github-app-token from 2.2.1 to 3.0.0 ([#24](https://github.com/sumup/sumup-php/issues/24)) ([f8a48e2](https://github.com/sumup/sumup-php/commit/f8a48e2badcb420bf1d48706f5c2b7e9fb5b726b))
+* **deps:** bump actions/setup-go from 6.2.0 to 6.3.0 ([#17](https://github.com/sumup/sumup-php/issues/17)) ([7c4e1b6](https://github.com/sumup/sumup-php/commit/7c4e1b6374f638ce74de4f126f33a7bf124b338e))
+* **deps:** bump actions/setup-go from 6.3.0 to 6.4.0 ([#34](https://github.com/sumup/sumup-php/issues/34)) ([cdec404](https://github.com/sumup/sumup-php/commit/cdec404fa3b60a42bb16361cbe350d9960fb2760))
+* **deps:** bump github.com/buger/jsonparser from 1.1.1 to 1.1.2 in /codegen in the go_modules group across 1 directory ([#26](https://github.com/sumup/sumup-php/issues/26)) ([2f54ea8](https://github.com/sumup/sumup-php/commit/2f54ea82186d20b2f8b35bc0489858fb6b99ea82))
+* **deps:** bump github.com/pb33f/libopenapi from 0.33.11 to 0.34.0 in /codegen ([#18](https://github.com/sumup/sumup-php/issues/18)) ([0d3b9f9](https://github.com/sumup/sumup-php/commit/0d3b9f98b49c4b007a8949a139a0b163efbf0617))
+* **deps:** bump github.com/pb33f/libopenapi from 0.34.0 to 0.34.3 in /codegen ([#28](https://github.com/sumup/sumup-php/issues/28)) ([b0f48a8](https://github.com/sumup/sumup-php/commit/b0f48a894f16aecafa5bbed2dedb79cc5df69059))
+* **deps:** bump github.com/pb33f/libopenapi from 0.34.3 to 0.35.0 in /codegen ([#36](https://github.com/sumup/sumup-php/issues/36)) ([4c5eb74](https://github.com/sumup/sumup-php/commit/4c5eb74df2bf4a9d1d9c9433a7be83fe784ccb9a))
+* **deps:** bump reviewdog/action-actionlint from 1.71.0 to 1.72.0 ([#35](https://github.com/sumup/sumup-php/issues/35)) ([0dbf237](https://github.com/sumup/sumup-php/commit/0dbf237e6b851853cda075a3df7edcb27e5b7132))
+* **deps:** bump shivammathur/setup-php from 2.36.0 to 2.37.0 ([#27](https://github.com/sumup/sumup-php/issues/27)) ([cf700ec](https://github.com/sumup/sumup-php/commit/cf700ec2922ffacc098b7e809c1291c2d185487e))
+
 ## [0.1.0](https://github.com/sumup/sumup-php/compare/v0.0.1...v0.1.0) (2026-02-23)
 
 
