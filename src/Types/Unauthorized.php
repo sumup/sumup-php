@@ -11,8 +11,8 @@ class Unauthorized
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var UnauthorizedErrors
      */
-    public array $errors;
+    public UnauthorizedErrors $errors;
 
 }

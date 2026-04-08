@@ -131,8 +131,8 @@ class CheckoutSuccess
     /**
      * Object containing token information for the specified payment instrument
      *
-     * @var array<string, mixed>|null
+     * @var CheckoutSuccessPaymentInstrument|null
      */
-    public ?array $paymentInstrument = null;
+    public ?CheckoutSuccessPaymentInstrument $paymentInstrument = null;
 
 }

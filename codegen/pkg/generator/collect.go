@@ -10,6 +10,7 @@ import (
 )
 
 type schemaUsage struct {
+	name   string
 	schema *base.SchemaProxy
 	tags   map[string]struct{}
 }
@@ -23,47 +24,137 @@ func (g *Generator) collectSchemaUsage() map[string]*schemaUsage {
 
 	for path, pathItem := range g.spec.Paths.PathItems.FromOldest() {
 		for method, op := range pathItem.GetOperations().FromOldest() {
-			c := make(schemaProxyCollection, 0, 16)
-			c.collectSchemasInResponse(op)
-			c.collectSchemasInParams(op)
-			c.collectSchemasInRequest(op)
+			opTags := make([]string, 0, len(op.Tags))
+			for _, tag := range op.Tags {
+				opTags = append(opTags, normalizeTagKey(tag))
+			}
 
-			for _, schema := range c {
-				if schema == nil {
-					continue
-				}
+			g.collectSchemaUsageInResponse(op, opTags, usage)
+			g.collectSchemaUsageInParams(op, opTags, usage)
+			g.collectSchemaUsageInRequest(op, opTags, usage)
 
-				if schema.GetReference() == "" {
-					continue
-				}
-
-				name := schemaClassName(schema)
-				entry, ok := usage[name]
-				if !ok {
-					entry = &schemaUsage{
-						schema: schema,
-						tags:   make(map[string]struct{}),
-					}
-					usage[name] = entry
-				}
-
-				if len(op.Tags) == 0 {
-					slog.Warn("operation without tags; skipping schema assignment",
-						slog.String("path", path),
-						slog.String("method", method),
-						slog.String("schema", name),
-					)
-					continue
-				}
-
-				for _, tag := range op.Tags {
-					entry.tags[normalizeTagKey(tag)] = struct{}{}
-				}
+			if len(op.Tags) == 0 {
+				slog.Warn("operation without tags; skipping schema assignment",
+					slog.String("path", path),
+					slog.String("method", method),
+				)
 			}
 		}
 	}
 
 	return usage
+}
+
+func (g *Generator) collectSchemaUsageInResponse(op *v3.Operation, tags []string, usage map[string]*schemaUsage) {
+	if op == nil || op.Responses == nil || op.Responses.Codes.Len() == 0 {
+		return
+	}
+
+	for _, response := range op.Responses.Codes.FromOldest() {
+		if response.Content == nil {
+			continue
+		}
+
+		for _, mediaType := range response.Content.FromOldest() {
+			g.collectSchemaUsageFromSchema(mediaType.Schema, tags, usage, make(map[*base.SchemaProxy]struct{}), "")
+		}
+	}
+}
+
+func (g *Generator) collectSchemaUsageInParams(op *v3.Operation, tags []string, usage map[string]*schemaUsage) {
+	if op == nil {
+		return
+	}
+
+	for _, param := range op.Parameters {
+		g.collectSchemaUsageFromSchema(param.Schema, tags, usage, make(map[*base.SchemaProxy]struct{}), "")
+	}
+}
+
+func (g *Generator) collectSchemaUsageInRequest(op *v3.Operation, tags []string, usage map[string]*schemaUsage) {
+	if op == nil || op.RequestBody == nil {
+		return
+	}
+
+	for _, mediaType := range op.RequestBody.Content.FromOldest() {
+		g.collectSchemaUsageFromSchema(mediaType.Schema, tags, usage, make(map[*base.SchemaProxy]struct{}), "")
+	}
+}
+
+func (g *Generator) collectSchemaUsageFromSchema(schema *base.SchemaProxy, tags []string, usage map[string]*schemaUsage, stack map[*base.SchemaProxy]struct{}, suggestedName string) {
+	if schema == nil {
+		return
+	}
+
+	if _, ok := stack[schema]; ok {
+		return
+	}
+	stack[schema] = struct{}{}
+	defer delete(stack, schema)
+
+	spec := schema.Schema()
+	if spec == nil {
+		return
+	}
+
+	name := g.registerSchemaUsage(schema, suggestedName, tags, usage)
+	parentName := name
+	if parentName == "" {
+		parentName = suggestedName
+	}
+
+	if spec.Properties != nil {
+		for propName, propSchema := range spec.Properties.FromOldest() {
+			childName := g.inlinePropertyClassName(parentName, propName, propSchema)
+			g.collectSchemaUsageFromSchema(propSchema, tags, usage, stack, childName)
+		}
+	}
+
+	if hasSchemaType(spec, "array") && spec.Items != nil && spec.Items.A != nil {
+		itemName := g.inlineArrayItemClassName(parentName, spec.Items.A)
+		g.collectSchemaUsageFromSchema(spec.Items.A, tags, usage, stack, itemName)
+	}
+
+	for _, composite := range spec.AllOf {
+		g.collectSchemaUsageFromSchema(composite, tags, usage, stack, parentName)
+	}
+	for _, composite := range spec.AnyOf {
+		g.collectSchemaUsageFromSchema(composite, tags, usage, stack, parentName)
+	}
+	for _, composite := range spec.OneOf {
+		g.collectSchemaUsageFromSchema(composite, tags, usage, stack, parentName)
+	}
+}
+
+func (g *Generator) registerSchemaUsage(schema *base.SchemaProxy, suggestedName string, tags []string, usage map[string]*schemaUsage) string {
+	if schema == nil {
+		return ""
+	}
+
+	name := g.classNameForSchema(schema)
+	if name == "" {
+		if suggestedName == "" || !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+			return ""
+		}
+		name = suggestedName
+		g.inlineSchemaNames[schema] = name
+	}
+
+	entry, ok := usage[name]
+	if !ok {
+		entry = &schemaUsage{
+			name:   name,
+			schema: schema,
+			tags:   make(map[string]struct{}),
+		}
+		usage[name] = entry
+	}
+
+	for _, tag := range tags {
+		entry.tags[tag] = struct{}{}
+	}
+
+	return name
 }
 
 func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[string][]*base.SchemaProxy, map[string]string) {
@@ -86,84 +177,57 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 
 	for tag := range result {
 		slices.SortFunc(result[tag], func(a, b *base.SchemaProxy) int {
-			return strings.Compare(schemaClassName(a), schemaClassName(b))
+			return strings.Compare(g.classNameForSchema(a), g.classNameForSchema(b))
 		})
 	}
 
 	return result, namespaceBySchema
 }
 
-type schemaProxyCollection []*base.SchemaProxy
-
-func (c *schemaProxyCollection) collectSchemasInResponse(op *v3.Operation) {
-	if op == nil || op.Responses == nil || op.Responses.Codes.Len() == 0 {
-		return
-	}
-
-	for _, response := range op.Responses.Codes.FromOldest() {
-		if response.Content == nil {
-			continue
-		}
-
-		for _, mediaType := range response.Content.FromOldest() {
-			c.collectReferencedSchemas(mediaType.Schema)
-		}
-	}
-}
-
-func (c *schemaProxyCollection) collectSchemasInParams(op *v3.Operation) {
-	if op == nil {
-		return
-	}
-
-	for _, param := range op.Parameters {
-		c.collectReferencedSchemas(param.Schema)
-	}
-}
-
-func (c *schemaProxyCollection) collectSchemasInRequest(op *v3.Operation) {
-	if op == nil || op.RequestBody == nil {
-		return
-	}
-
-	for _, mediaType := range op.RequestBody.Content.FromOldest() {
-		c.collectReferencedSchemas(mediaType.Schema)
-	}
-}
-
-func (c *schemaProxyCollection) collectReferencedSchemas(schema *base.SchemaProxy) {
+func (g *Generator) classNameForSchema(schema *base.SchemaProxy) string {
 	if schema == nil {
-		return
+		return ""
 	}
 
-	spec := schema.Schema()
-	if spec == nil {
-		return
+	if ref := schema.GetReference(); ref != "" {
+		return schemaClassName(schema)
 	}
 
-	if slices.Contains(spec.Type, "object") {
-		for _, prop := range spec.Properties.FromOldest() {
-			c.collectReferencedSchemas(prop)
-		}
+	if name, ok := g.inlineSchemaNames[schema]; ok {
+		return name
 	}
 
-	if slices.Contains(spec.Type, "array") && spec.Items != nil {
-		c.collectReferencedSchemas(spec.Items.A)
+	return ""
+}
+
+func (g *Generator) inlinePropertyClassName(parentName string, propertyName string, schema *base.SchemaProxy) string {
+	if parentName == "" || schema == nil {
+		return ""
 	}
 
-	for _, one := range spec.AnyOf {
-		c.collectReferencedSchemas(one)
+	if schema.GetReference() != "" {
+		return ""
 	}
 
-	for _, one := range spec.AllOf {
-		c.collectReferencedSchemas(one)
+	if !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+		return ""
 	}
 
-	for _, one := range spec.OneOf {
-		c.collectReferencedSchemas(one)
+	return phpInlineObjectName(parentName, propertyName)
+}
+
+func (g *Generator) inlineArrayItemClassName(parentName string, schema *base.SchemaProxy) string {
+	if parentName == "" || schema == nil {
+		return ""
 	}
 
-	if !slices.Contains(*c, schema) {
-		*c = append(*c, schema)
+	if schema.GetReference() != "" {
+		return ""
 	}
+
+	if !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+		return ""
+	}
+
+	return parentName + "Item"
 }

@@ -18,13 +18,12 @@ type phpProperty struct {
 	Description    string
 }
 
-func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace string) []phpProperty {
+func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace string, currentClassName string) []phpProperty {
 	propertySpecs := g.collectSchemaPropertyEntries(schema)
 	if len(propertySpecs) == 0 {
 		return nil
 	}
 
-	schemaName := schemaClassName(schema)
 	props := make([]phpProperty, 0, len(propertySpecs))
 	for _, spec := range propertySpecs {
 		prop := phpProperty{
@@ -37,7 +36,7 @@ func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace 
 			prop.Description = spec.Schema.Schema().Description
 		}
 
-		prop.Type, prop.DocType = g.resolvePHPType(spec.Schema, currentNamespace, schemaName, spec.Name)
+		prop.Type, prop.DocType = g.resolvePHPType(spec.Schema, currentNamespace, currentClassName, spec.Name)
 		props = append(props, prop)
 	}
 
@@ -203,7 +202,7 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 
 	if ref := schema.GetReference(); ref != "" {
 		if !schemaIsObject(schema) {
-			return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace, parentSchemaName, propertyName)
+			return g.resolvePHPTypeFromSpec(schema, schema.Schema(), currentNamespace, parentSchemaName, propertyName)
 		}
 
 		// Check if this is an additionalProperties-only schema - treat as array
@@ -211,7 +210,7 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 			return "array", "array<string, mixed>"
 		}
 
-		name := schemaClassName(schema)
+		name := g.classNameForSchema(schema)
 		namespace := g.schemaNamespaces[name]
 		if namespace == "" {
 			return name, name
@@ -225,10 +224,10 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 		return typeName, typeName
 	}
 
-	return g.resolvePHPTypeFromSpec(schema.Schema(), currentNamespace, parentSchemaName, propertyName)
+	return g.resolvePHPTypeFromSpec(schema, schema.Schema(), currentNamespace, parentSchemaName, propertyName)
 }
 
-func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace string, parentSchemaName string, propertyName string) (string, string) {
+func (g *Generator) resolvePHPTypeFromSpec(schema *base.SchemaProxy, spec *base.Schema, currentNamespace string, parentSchemaName string, propertyName string) (string, string) {
 	if spec == nil {
 		return "mixed", "mixed"
 	}
@@ -268,6 +267,19 @@ func (g *Generator) resolvePHPTypeFromSpec(spec *base.Schema, currentNamespace s
 		}
 		return "array", itemDoc + "[]"
 	case hasSchemaType(spec, "object"):
+		if schema != nil && !schemaIsAdditionalPropertiesOnly(schema) {
+			typeName := g.classNameForSchema(schema)
+			if typeName == "" && parentSchemaName != "" && propertyName != "" {
+				typeName = phpInlineObjectName(parentSchemaName, propertyName)
+			}
+			if typeName != "" {
+				namespace := g.schemaNamespaces[typeName]
+				if namespace != "" && namespace != currentNamespace {
+					typeName = fmt.Sprintf("\\%s\\%s", namespace, typeName)
+				}
+				return typeName, typeName
+			}
+		}
 		return "array", "array<string, mixed>"
 	default:
 	}

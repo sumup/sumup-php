@@ -11,8 +11,8 @@ class StatusResponse
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var StatusResponseData
      */
-    public array $data;
+    public StatusResponseData $data;
 
 }

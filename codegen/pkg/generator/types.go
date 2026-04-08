@@ -46,7 +46,7 @@ func (g *Generator) writeTypeModels(schemas []*base.SchemaProxy) error {
 	}
 
 	for _, schema := range schemas {
-		className := schemaClassName(schema)
+		className := g.classNameForSchema(schema)
 		filename := filepath.Join(dir, fmt.Sprintf("%s.php", className))
 		f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
 		if err != nil {

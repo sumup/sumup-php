@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Debit/Credit.
  */
-enum ModelProcessAs: string
+enum TransactionFullProcessAs: string
 {
     case CREDIT = 'CREDIT';
     case DEBIT = 'DEBIT';

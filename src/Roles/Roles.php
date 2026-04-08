@@ -12,16 +12,6 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
-class RolesListResponse
-{
-    /**
-     *
-     * @var \SumUp\Types\Role[]
-     */
-    public array $items;
-
-}
-
 class RolesCreateRequest
 {
     /**
@@ -100,6 +90,16 @@ class RolesUpdateRequest
             \SumUp\Hydrator::hydrate($data, self::class, $this);
         }
     }
+
+}
+
+class RolesListResponse
+{
+    /**
+     *
+     * @var \SumUp\Types\Role[]
+     */
+    public array $items;
 
 }
 

@@ -34,9 +34,9 @@ class SubaccountsCreateSubAccountRequest
 
     /**
      *
-     * @var array<string, mixed>|null
+     * @var SubaccountsCreateSubAccountRequestPermissions|null
      */
-    public ?array $permissions = null;
+    public ?SubaccountsCreateSubAccountRequestPermissions $permissions = null;
 
     /**
      * Create request DTO from an associative array.
@@ -80,9 +80,9 @@ class SubaccountsUpdateSubAccountRequest
 
     /**
      *
-     * @var array<string, mixed>|null
+     * @var SubaccountsUpdateSubAccountRequestPermissions|null
      */
-    public ?array $permissions = null;
+    public ?SubaccountsUpdateSubAccountRequestPermissions $permissions = null;
 
     /**
      * Create request DTO from an associative array.
@@ -95,6 +95,62 @@ class SubaccountsUpdateSubAccountRequest
             \SumUp\Hydrator::hydrate($data, self::class, $this);
         }
     }
+
+}
+
+class SubaccountsCreateSubAccountRequestPermissions
+{
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $createMotoPayments = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $createReferral = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $fullTransactionHistoryView = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $refundTransactions = null;
+
+}
+
+class SubaccountsUpdateSubAccountRequestPermissions
+{
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $createMotoPayments = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $createReferral = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $fullTransactionHistoryView = null;
+
+    /**
+     *
+     * @var bool|null
+     */
+    public ?bool $refundTransactions = null;
 
 }
 

@@ -53,6 +53,15 @@ func phpEnumName(schemaName, propertyName string) string {
 	return schemaName + baseName
 }
 
+func phpInlineObjectName(schemaName, propertyName string) string {
+	propertyName = strings.TrimSpace(propertyName)
+	propertyName = strings.ReplaceAll(propertyName, "-", "_")
+	propertyName = strings.ReplaceAll(propertyName, ".", "_")
+
+	baseName := strcase.ToCamel(propertyName)
+	return schemaName + baseName
+}
+
 func phpEnumCaseName(value string) string {
 	value = strings.TrimSpace(value)
 

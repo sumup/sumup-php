@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Verification method used for the transaction.
  */
-enum ModelVerificationMethod: string
+enum TransactionFullVerificationMethod: string
 {
     case NONE = 'none';
     case SIGNATURE = 'signature';

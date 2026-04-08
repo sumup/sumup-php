@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Key indicating type of error
  */
-enum ModelType: string
+enum BadRequestErrorsType: string
 {
     case INVALID_BEARER_TOKEN = 'INVALID_BEARER_TOKEN';
     case INVALID_USER_AGENT = 'INVALID_USER_AGENT';

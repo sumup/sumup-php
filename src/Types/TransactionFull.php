@@ -201,16 +201,16 @@ class TransactionFull
     /**
      * Simple name of the payment type.
      *
-     * @var string|null
+     * @var TransactionFullSimplePaymentType|null
      */
-    public ?string $simplePaymentType = null;
+    public ?TransactionFullSimplePaymentType $simplePaymentType = null;
 
     /**
      * Verification method used for the transaction.
      *
-     * @var string|null
+     * @var TransactionFullVerificationMethod|null
      */
-    public ?string $verificationMethod = null;
+    public ?TransactionFullVerificationMethod $verificationMethod = null;
 
     /**
      * Details of the payment card.
@@ -243,16 +243,16 @@ class TransactionFull
     /**
      * Payout type for the transaction.
      *
-     * @var string|null
+     * @var TransactionFullPayoutType|null
      */
-    public ?string $payoutType = null;
+    public ?TransactionFullPayoutType $payoutType = null;
 
     /**
      * Debit/Credit.
      *
-     * @var string|null
+     * @var TransactionFullProcessAs|null
      */
-    public ?string $processAs = null;
+    public ?TransactionFullProcessAs $processAs = null;
 
     /**
      * List of products from the merchant's catalogue for which the transaction serves as a payment.
@@ -278,9 +278,9 @@ class TransactionFull
     /**
      * Status generated from the processing status and the latest transaction state.
      *
-     * @var string|null
+     * @var TransactionFullSimpleStatus|null
      */
-    public ?string $simpleStatus = null;
+    public ?TransactionFullSimpleStatus $simpleStatus = null;
 
     /**
      * List of hyperlinks for accessing related resources.
@@ -299,9 +299,9 @@ class TransactionFull
     /**
      * Details of the payment location as received from the payment terminal.
      *
-     * @var array<string, mixed>|null
+     * @var TransactionFullLocation|null
      */
-    public ?array $location = null;
+    public ?TransactionFullLocation $location = null;
 
     /**
      * Indicates whether tax deduction is enabled for the transaction.

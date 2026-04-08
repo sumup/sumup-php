@@ -11,8 +11,8 @@ class NotFound
 {
     /**
      *
-     * @var array<string, mixed>
+     * @var NotFoundErrors
      */
-    public array $errors;
+    public NotFoundErrors $errors;
 
 }

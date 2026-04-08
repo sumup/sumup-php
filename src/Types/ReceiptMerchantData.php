@@ -12,9 +12,9 @@ class ReceiptMerchantData
     /**
      * Merchant profile details displayed on the receipt.
      *
-     * @var array<string, mixed>|null
+     * @var ReceiptMerchantDataMerchantProfile|null
      */
-    public ?array $merchantProfile = null;
+    public ?ReceiptMerchantDataMerchantProfile $merchantProfile = null;
 
     /**
      * Locale used for rendering localized receipt fields.

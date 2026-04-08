@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Simple name of the payment type.
  */
-enum ModelSimplePaymentType: string
+enum TransactionFullSimplePaymentType: string
 {
     case CASH = 'CASH';
     case CC_SIGNATURE = 'CC_SIGNATURE';

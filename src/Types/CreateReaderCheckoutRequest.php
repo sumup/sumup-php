@@ -13,17 +13,17 @@ class CreateReaderCheckoutRequest
      * Optional object containing data for transactions from ERP integrators in Greece that comply with the AADE 1155 protocol.
      * When such regulatory/business requirements apply, this object must be provided and contains the data needed to validate the transaction with the AADE signature provider.
      *
-     * @var array<string, mixed>|null
+     * @var CreateReaderCheckoutRequestAade|null
      */
-    public ?array $aade = null;
+    public ?CreateReaderCheckoutRequestAade $aade = null;
 
     /**
      * Affiliate metadata for the transaction.
      * It is a field that allow for integrators to track the source of the transaction.
      *
-     * @var array<string, mixed>|null
+     * @var CreateReaderCheckoutRequestAffiliate|null
      */
-    public ?array $affiliate = null;
+    public ?CreateReaderCheckoutRequestAffiliate $affiliate = null;
 
     /**
      * The card type of the card used for the transaction.
@@ -83,9 +83,9 @@ class CreateReaderCheckoutRequest
      * The amount is represented as an integer value altogether with the currency and the minor unit.
      * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
      *
-     * @var array<string, mixed>
+     * @var CreateReaderCheckoutRequestTotalAmount
      */
-    public array $totalAmount;
+    public CreateReaderCheckoutRequestTotalAmount $totalAmount;
 
     /**
      * Create request DTO from an associative array.
