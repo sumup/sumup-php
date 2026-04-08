@@ -10,6 +10,14 @@ namespace SumUp\Types;
 class CreateReaderCheckoutRequest
 {
     /**
+     * Optional object containing data for transactions from ERP integrators in Greece that comply with the AADE 1155 protocol.
+     * When such regulatory/business requirements apply, this object must be provided and contains the data needed to validate the transaction with the AADE signature provider.
+     *
+     * @var array<string, mixed>|null
+     */
+    public ?array $aade = null;
+
+    /**
      * Affiliate metadata for the transaction.
      * It is a field that allow for integrators to track the source of the transaction.
      *
