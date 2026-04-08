@@ -9,10 +9,11 @@ namespace SumUp\Types;
  */
 enum TransactionEventStatus: string
 {
-    case PENDING = 'PENDING';
-    case SCHEDULED = 'SCHEDULED';
     case FAILED = 'FAILED';
-    case REFUNDED = 'REFUNDED';
-    case SUCCESSFUL = 'SUCCESSFUL';
     case PAID_OUT = 'PAID_OUT';
+    case PENDING = 'PENDING';
+    case RECONCILED = 'RECONCILED';
+    case REFUNDED = 'REFUNDED';
+    case SCHEDULED = 'SCHEDULED';
+    case SUCCESSFUL = 'SUCCESSFUL';
 }
