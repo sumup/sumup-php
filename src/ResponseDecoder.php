@@ -135,7 +135,15 @@ class ResponseDecoder
             case 'scalar':
                 return self::castScalar($value, isset($descriptor['scalar']) ? $descriptor['scalar'] : 'mixed');
             case 'object':
-                return is_array($value) ? $value : [];
+                if (is_array($value)) {
+                    return $value;
+                }
+
+                if (is_object($value)) {
+                    return get_object_vars($value);
+                }
+
+                return [];
             case 'void':
                 return null;
             case 'mixed':

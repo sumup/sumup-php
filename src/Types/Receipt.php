@@ -26,9 +26,9 @@ class Receipt
     /**
      * EMV-specific metadata returned for card-present payments.
      *
-     * @var ReceiptEmvData|null
+     * @var array<string, mixed>|null
      */
-    public ?ReceiptEmvData $emvData = null;
+    public ?array $emvData = null;
 
     /**
      * Acquirer-specific metadata related to the card authorization.

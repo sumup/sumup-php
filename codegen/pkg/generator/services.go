@@ -453,7 +453,7 @@ func shouldGenerateRequestBodyClass(op *operation) bool {
 		return false
 	}
 
-	return !schemaIsAdditionalPropertiesOnly(op.BodySchema)
+	return schemaShouldGenerateClass(op.BodySchema)
 }
 
 func buildEmptyRequestBodyClass(className string) string {

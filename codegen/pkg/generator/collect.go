@@ -133,7 +133,7 @@ func (g *Generator) registerSchemaUsage(schema *base.SchemaProxy, suggestedName 
 
 	name := g.classNameForSchema(schema)
 	if name == "" {
-		if suggestedName == "" || !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+		if suggestedName == "" || !schemaShouldGenerateClass(schema) {
 			return ""
 		}
 		name = suggestedName
@@ -164,8 +164,8 @@ func (g *Generator) assignSchemasToTags(usage map[string]*schemaUsage) (map[stri
 	for schemaName, info := range usage {
 		targetTag := typesTagKey
 
-		// Skip schemas that are additionalProperties-only (they'll be treated as arrays)
-		if schemaIsAdditionalPropertiesOnly(info.schema) {
+		// Skip schemas that should remain generic maps in PHP.
+		if !schemaShouldGenerateClass(info.schema) {
 			continue
 		}
 
@@ -209,7 +209,7 @@ func (g *Generator) inlinePropertyClassName(parentName string, propertyName stri
 		return ""
 	}
 
-	if !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+	if !schemaShouldGenerateClass(schema) {
 		return ""
 	}
 
@@ -225,7 +225,7 @@ func (g *Generator) inlineArrayItemClassName(parentName string, schema *base.Sch
 		return ""
 	}
 
-	if !schemaIsObject(schema) || schemaIsAdditionalPropertiesOnly(schema) {
+	if !schemaShouldGenerateClass(schema) {
 		return ""
 	}
 
