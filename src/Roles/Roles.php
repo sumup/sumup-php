@@ -106,6 +106,8 @@ class RolesListResponse
 /**
  * Class Roles
  *
+ * Endpoints to manage custom roles. Custom roles allow you to tailor roles from individual permissions to match your needs. Once created, you can assign your custom roles to your merchant account members using the memberships.
+ *
  * @package SumUp\Services
  */
 class Roles implements SumUpService

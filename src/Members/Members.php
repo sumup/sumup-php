@@ -218,6 +218,8 @@ class MembersListParams
 /**
  * Class Members
  *
+ * Endpoints to manage account members. Members are users that have membership within merchant accounts.
+ *
  * @package SumUp\Services
  */
 class Members implements SumUpService

@@ -96,6 +96,9 @@ class PayoutsListDeprecatedParams
 /**
  * Class Payouts
  *
+ * The Payouts model will allow you to track funds you’ve received from SumUp.
+ * You can receive a detailed payouts list with information like dates, fees, references and statuses, using the `List payouts` endpoint.
+ *
  * @package SumUp\Services
  */
 class Payouts implements SumUpService

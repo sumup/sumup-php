@@ -111,6 +111,8 @@ class MembershipsListParams
 /**
  * Class Memberships
  *
+ * Endpoints to manage user's memberships. Memberships are used to connect the user to merchant accounts and to grant them access to the merchant's resources via roles.
+ *
  * @package SumUp\Services
  */
 class Memberships implements SumUpService

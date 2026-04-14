@@ -101,6 +101,8 @@ class ReadersListResponse
 /**
  * Class Readers
  *
+ * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
+ *
  * @package SumUp\Services
  */
 class Readers implements SumUpService

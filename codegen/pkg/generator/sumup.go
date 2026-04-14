@@ -153,6 +153,13 @@ class SumUp
 
 	for _, service := range services {
 		method := strcase.ToLowerCamel(service)
+		buf.WriteString("    /**\n")
+		fmt.Fprintf(&buf, "     * Access the %s API endpoints.\n", service)
+		buf.WriteString("     *\n")
+		fmt.Fprintf(&buf, "     * @return %s\n", service)
+		buf.WriteString("     *\n")
+		buf.WriteString("     * @throws ConfigurationException\n")
+		buf.WriteString("     */\n")
 		fmt.Fprintf(&buf, "    public function %s()\n", method)
 		buf.WriteString("    {\n")
 		buf.WriteString("        if (empty($this->accessToken)) {\n")

@@ -321,6 +321,13 @@ func (g *Generator) displayTagName(tagKey string) string {
 	return sanitizeTagName(tagKey)
 }
 
+func (g *Generator) tagDescription(tagKey string) string {
+	if tag, ok := g.tagLookup[tagKey]; ok && tag != nil {
+		return strings.TrimSpace(tag.Description)
+	}
+	return ""
+}
+
 func (g *Generator) namespaceForTag(tagKey string) string {
 	if tagKey == sharedTagKey {
 		return sharedTagNamespace

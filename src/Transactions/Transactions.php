@@ -340,6 +340,9 @@ class TransactionsListDeprecatedParams
 /**
  * Class Transactions
  *
+ * Retrieve details for a specific transaction by it’s `id`
+ * or any other required query parameter, or list all transactions related to the merchant account.
+ *
  * @package SumUp\Services
  */
 class Transactions implements SumUpService

@@ -182,6 +182,8 @@ class SubaccountsListSubAccountsParams
 /**
  * Class Subaccounts
  *
+ * Endpoints for managing merchant sub-accounts (operators).
+ *
  * @package SumUp\Services
  */
 class Subaccounts implements SumUpService
