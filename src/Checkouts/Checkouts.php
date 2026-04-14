@@ -42,10 +42,6 @@ class CheckoutsCreateApplePaySessionRequest
 
 }
 
-class CheckoutsCreateApplePaySessionResponse
-{
-}
-
 class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
@@ -194,13 +190,13 @@ class Checkouts implements SumUpService
      * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
-     * @return \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+     * @return array<string, mixed>
      * @throws \SumUp\Exception\ApiException
      * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function createApplePaySession(string $id, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+    public function createApplePaySession(string $id, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): array
     {
         $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $id));
         $payload = [];
@@ -213,7 +209,9 @@ class Checkouts implements SumUpService
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\CheckoutsCreateApplePaySessionResponse::class, [
+        return ResponseDecoder::decodeOrThrow($response, [
+            '200' => ['type' => 'object'],
+        ], [
             '400' => ['type' => 'mixed'],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'PUT', $path);

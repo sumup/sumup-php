@@ -309,6 +309,10 @@ func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace
 			return g.buildResponseTypeFromSpec(schema.Schema(), currentNamespace)
 		}
 
+		if !schemaShouldGenerateClass(schema) {
+			return &responseType{Kind: responseTypeObject}
+		}
+
 		name := schemaClassName(schema)
 		namespace := g.schemaNamespaces[name]
 		typeName := name
@@ -342,7 +346,7 @@ func (g *Generator) buildResponseType(schema *base.SchemaProxy, currentNamespace
 		}
 	}
 
-	if hasSchemaType(spec, "object") && inlineBaseName != "" {
+	if hasSchemaType(spec, "object") && inlineBaseName != "" && schemaShouldGenerateClass(schema) {
 		return &responseType{
 			Kind:            responseTypeClass,
 			ClassName:       fmt.Sprintf("\\SumUp\\Services\\%s", inlineBaseName),

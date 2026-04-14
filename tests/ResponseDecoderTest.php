@@ -70,6 +70,28 @@ class ResponseDecoderTest extends TestCase
         $this->assertSame('ONE', $result[0]->errorCode);
     }
 
+    public function testDecodeOrThrowDecodesOpaqueObjectDescriptorFromStdClass()
+    {
+        $response = new Response(200, (object) [
+            'merchantSessionIdentifier' => 'session_123',
+            'nested' => (object) ['value' => 'ok'],
+        ]);
+
+        $result = ResponseDecoder::decodeOrThrow(
+            $response,
+            [
+                '200' => ['type' => 'object'],
+            ],
+            null,
+            'POST',
+            '/v0.1/checkouts/chk_123/create_apple_pay_session'
+        );
+
+        $this->assertIsArray($result);
+        $this->assertSame('session_123', $result['merchantSessionIdentifier']);
+        $this->assertInstanceOf(\stdClass::class, $result['nested']);
+    }
+
     public function testDecodeOrThrowUsesUnexpectedFallbackForUnknownStatusWithNestedPayload()
     {
         $rawBody = [

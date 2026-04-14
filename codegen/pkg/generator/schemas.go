@@ -39,6 +39,60 @@ func schemaIsAdditionalPropertiesOnly(schema *base.SchemaProxy) bool {
 	return true
 }
 
+// schemaHasDeclaredProperties reports whether the schema exposes at least one
+// explicit property directly or through allOf/oneOf/anyOf composition.
+func schemaHasDeclaredProperties(schema *base.SchemaProxy) bool {
+	return schemaHasDeclaredPropertiesWithStack(schema, make(map[*base.SchemaProxy]struct{}))
+}
+
+// schemaShouldGenerateClass reports whether the schema should become a DTO
+// class instead of a generic map. Bare object schemas and
+// additionalProperties-only schemas stay as arrays in the PHP SDK.
+func schemaShouldGenerateClass(schema *base.SchemaProxy) bool {
+	return schemaIsObject(schema) && schemaHasDeclaredProperties(schema) && !schemaIsAdditionalPropertiesOnly(schema)
+}
+
+func schemaHasDeclaredPropertiesWithStack(schema *base.SchemaProxy, stack map[*base.SchemaProxy]struct{}) bool {
+	if schema == nil {
+		return false
+	}
+
+	if _, ok := stack[schema]; ok {
+		return false
+	}
+	stack[schema] = struct{}{}
+	defer delete(stack, schema)
+
+	spec := schema.Schema()
+	if spec == nil {
+		return false
+	}
+
+	if spec.Properties != nil && spec.Properties.Len() > 0 {
+		return true
+	}
+
+	for _, composite := range spec.AllOf {
+		if schemaHasDeclaredPropertiesWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	for _, composite := range spec.AnyOf {
+		if schemaHasDeclaredPropertiesWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	for _, composite := range spec.OneOf {
+		if schemaHasDeclaredPropertiesWithStack(composite, stack) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func schemaIsObjectWithStack(schema *base.SchemaProxy, stack map[*base.SchemaProxy]struct{}) bool {
 	if schema == nil {
 		return false

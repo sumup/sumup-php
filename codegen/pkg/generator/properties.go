@@ -205,8 +205,7 @@ func (g *Generator) resolvePHPType(schema *base.SchemaProxy, currentNamespace st
 			return g.resolvePHPTypeFromSpec(schema, schema.Schema(), currentNamespace, parentSchemaName, propertyName)
 		}
 
-		// Check if this is an additionalProperties-only schema - treat as array
-		if schemaIsAdditionalPropertiesOnly(schema) {
+		if !schemaShouldGenerateClass(schema) {
 			return "array", "array<string, mixed>"
 		}
 
@@ -267,7 +266,7 @@ func (g *Generator) resolvePHPTypeFromSpec(schema *base.SchemaProxy, spec *base.
 		}
 		return "array", itemDoc + "[]"
 	case hasSchemaType(spec, "object"):
-		if schema != nil && !schemaIsAdditionalPropertiesOnly(schema) {
+		if schema != nil && schemaShouldGenerateClass(schema) {
 			typeName := g.classNameForSchema(schema)
 			if typeName == "" && parentSchemaName != "" && propertyName != "" {
 				typeName = phpInlineObjectName(parentSchemaName, propertyName)
