@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Indicates the mandate type
+ * Type of mandate to create for the saved payment instrument.
  */
 enum MandatePayloadType: string
 {

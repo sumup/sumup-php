@@ -12,6 +12,40 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class CheckoutsCreateApplePaySessionRequest
+{
+    /**
+     * the context to create this apple pay session.
+     *
+     * @var string
+     */
+    public string $context;
+
+    /**
+     * The target url to create this apple pay session.
+     *
+     * @var string
+     */
+    public string $target;
+
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
+
+}
+
+class CheckoutsCreateApplePaySessionResponse
+{
+}
+
 class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
@@ -75,11 +109,20 @@ class CheckoutsListAvailablePaymentMethodsParams
 /**
  * Class Checkouts
  *
- * Accept payments from your end users by adding the Checkouts model to your platform.
- * SumUp supports standard and single payment 3DS checkout flows.
+ * Checkouts represent online payment sessions that you create before attempting to charge a payer. A checkout captures the payment intent, such as the amount, currency, merchant, and optional customer or redirect settings, and then moves through its lifecycle as you process it.
  *
- * The Checkout model allows creating, listing, retrieving, processing and deactivating checkouts.
- * A payment is completed by creating a checkout and then processing the checkout.
+ * Use this tag to:
+ * - create a checkout before collecting or confirming payment details
+ * - process the checkout with a card, saved card, wallet, or supported alternative payment method
+ * - retrieve or list checkouts to inspect their current state and associated payment attempts
+ * - deactivate a checkout that should no longer be used
+ *
+ * Typical workflow:
+ * - create a checkout with the order amount, currency, and merchant information
+ * - process the checkout through SumUp client tools such as the [Payment Widget and Swift Checkout SDK](https://developer.sumup.com/online-payments/checkouts)
+ * - retrieve the checkout or use the Transactions endpoints to inspect the resulting payment record
+ *
+ * Checkouts are used to initiate and orchestrate online payments. Transactions remain the authoritative record of the resulting payment outcome.
  *
  * @package SumUp\Services
  */
@@ -142,6 +185,38 @@ class Checkouts implements SumUpService
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'POST', $path);
+    }
+
+    /**
+     * Create an Apple Pay session
+     *
+     * @param string $id Unique ID of the checkout resource.
+     * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function createApplePaySession(string $id, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+    {
+        $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $id));
+        $payload = [];
+        if ($body !== null) {
+            $payload = RequestEncoder::encode($body);
+        }
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\CheckoutsCreateApplePaySessionResponse::class, [
+            '400' => ['type' => 'mixed'],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'PUT', $path);
     }
 
     /**

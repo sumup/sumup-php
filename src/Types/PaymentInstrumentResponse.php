@@ -38,7 +38,7 @@ class PaymentInstrumentResponse
     public ?PaymentInstrumentResponseCard $card = null;
 
     /**
-     * Created mandate
+     * Details of the mandate linked to the saved payment instrument.
      *
      * @var MandateResponse|null
      */

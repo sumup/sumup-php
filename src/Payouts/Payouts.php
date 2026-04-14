@@ -33,18 +33,21 @@ class PayoutsListParams
     public string $endDate;
 
     /**
+     * Response format for the payout list.
      *
      * @var string|null
      */
     public ?string $format = null;
 
     /**
+     * Maximum number of payout records to return.
      *
      * @var int|null
      */
     public ?int $limit = null;
 
     /**
+     * Sort direction for the returned payouts.
      *
      * @var string|null
      */
@@ -74,18 +77,21 @@ class PayoutsListDeprecatedParams
     public string $endDate;
 
     /**
+     * Response format for the payout list.
      *
      * @var string|null
      */
     public ?string $format = null;
 
     /**
+     * Maximum number of payout records to return.
      *
      * @var int|null
      */
     public ?int $limit = null;
 
     /**
+     * Sort direction for the returned payouts.
      *
      * @var string|null
      */
@@ -97,6 +103,7 @@ class PayoutsListDeprecatedParams
  * Class Payouts
  *
  * The Payouts model will allow you to track funds you’ve received from SumUp.
+ *
  * You can receive a detailed payouts list with information like dates, fees, references and statuses, using the `List payouts` endpoint.
  *
  * @package SumUp\Services
@@ -132,7 +139,7 @@ class Payouts implements SumUpService
     /**
      * List payouts
      *
-     * @param string $merchantCode
+     * @param string $merchantCode Merchant code of the account whose payouts should be listed.
      * @param PayoutsListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

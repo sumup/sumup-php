@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Details of the payment checkout.
+ * Request body for creating a checkout before processing payment. Define the payment amount, currency, merchant, and optional customer or redirect behavior here.
  */
 class CheckoutCreateRequest
 {
     /**
-     * Unique ID of the payment checkout specified by the client application when creating the checkout resource.
+     * Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.
      *
      * @var string
      */
     public string $checkoutReference;
 
     /**
-     * Amount of the payment.
+     * Amount to be charged to the payer, expressed in major units.
      *
      * @var float
      */
@@ -31,49 +31,49 @@ class CheckoutCreateRequest
     public CheckoutCreateRequestCurrency $currency;
 
     /**
-     * Unique identifying code of the merchant profile.
+     * Merchant account that should receive the payment.
      *
      * @var string
      */
     public string $merchantCode;
 
     /**
-     * Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.
+     * Short merchant-defined description shown in SumUp tools and reporting for easier identification of the checkout.
      *
      * @var string|null
      */
     public ?string $description = null;
 
     /**
-     * URL to which the SumUp platform sends the processing status of the payment checkout.
+     * Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.
      *
      * @var string|null
      */
     public ?string $returnUrl = null;
 
     /**
-     * Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.
+     * Merchant-scoped customer identifier. Required when setting up recurring payments and useful when the checkout should be linked to a returning payer.
      *
      * @var string|null
      */
     public ?string $customerId = null;
 
     /**
-     * Purpose of the checkout.
+     * Business purpose of the checkout. Use `CHECKOUT` for a standard payment and `SETUP_RECURRING_PAYMENT` when collecting consent and payment details for future recurring charges.
      *
      * @var CheckoutCreateRequestPurpose|null
      */
     public ?CheckoutCreateRequestPurpose $purpose = null;
 
     /**
-     * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
+     * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.
      *
      * @var string|null
      */
     public ?string $validUntil = null;
 
     /**
-     * __Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.
+     * URL where the payer should be sent after a redirect-based payment or SCA flow completes. This is required for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and recommended for card checkouts that may require [3DS](https://developer.sumup.com/online-payments/features/3ds). If it is omitted, the [Payment Widget](https://developer.sumup.com/online-payments/checkouts) can render the challenge in an iframe instead of using a full-page redirect.
      *
      * @var string|null
      */
