@@ -88,7 +88,21 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 		buf.WriteString("\n")
 	}
 
-	fmt.Fprintf(&buf, "/**\n * Class %s\n *\n * @package SumUp\\Services\n */\n", className)
+	fmt.Fprintf(&buf, "/**\n * Class %s\n", className)
+	if description := g.tagDescription(tagKey); description != "" {
+		buf.WriteString(" *\n")
+		for _, line := range strings.Split(description, "\n") {
+			line = strings.TrimSpace(line)
+			if line == "" {
+				buf.WriteString(" *\n")
+				continue
+			}
+			buf.WriteString(" * ")
+			buf.WriteString(line)
+			buf.WriteString("\n")
+		}
+	}
+	buf.WriteString(" *\n * @package SumUp\\Services\n */\n")
 	fmt.Fprintf(&buf, "class %s implements SumUpService\n{\n", className)
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * The client for the http communication.\n")

@@ -75,6 +75,12 @@ class CheckoutsListAvailablePaymentMethodsParams
 /**
  * Class Checkouts
  *
+ * Accept payments from your end users by adding the Checkouts model to your platform.
+ * SumUp supports standard and single payment 3DS checkout flows.
+ *
+ * The Checkout model allows creating, listing, retrieving, processing and deactivating checkouts.
+ * A payment is completed by creating a checkout and then processing the checkout.
+ *
  * @package SumUp\Services
  */
 class Checkouts implements SumUpService

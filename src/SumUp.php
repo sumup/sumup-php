@@ -156,56 +156,111 @@ class SumUp
         return $config;
     }
 
+    /**
+     * Access the Checkouts API endpoints.
+     *
+     * @return Checkouts
+     */
     public function checkouts(): Checkouts
     {
         return new Checkouts($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Customers API endpoints.
+     *
+     * @return Customers
+     */
     public function customers(): Customers
     {
         return new Customers($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Members API endpoints.
+     *
+     * @return Members
+     */
     public function members(): Members
     {
         return new Members($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Memberships API endpoints.
+     *
+     * @return Memberships
+     */
     public function memberships(): Memberships
     {
         return new Memberships($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Merchants API endpoints.
+     *
+     * @return Merchants
+     */
     public function merchants(): Merchants
     {
         return new Merchants($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Payouts API endpoints.
+     *
+     * @return Payouts
+     */
     public function payouts(): Payouts
     {
         return new Payouts($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Readers API endpoints.
+     *
+     * @return Readers
+     */
     public function readers(): Readers
     {
         return new Readers($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Receipts API endpoints.
+     *
+     * @return Receipts
+     */
     public function receipts(): Receipts
     {
         return new Receipts($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Roles API endpoints.
+     *
+     * @return Roles
+     */
     public function roles(): Roles
     {
         return new Roles($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Subaccounts API endpoints.
+     *
+     * @return Subaccounts
+     */
     public function subaccounts(): Subaccounts
     {
         return new Subaccounts($this->client, $this->resolveAccessToken());
     }
 
+    /**
+     * Access the Transactions API endpoints.
+     *
+     * @return Transactions
+     */
     public function transactions(): Transactions
     {
         return new Transactions($this->client, $this->resolveAccessToken());

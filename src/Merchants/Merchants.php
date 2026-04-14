@@ -62,6 +62,8 @@ class MerchantsListPersonsParams
 /**
  * Class Merchants
  *
+ * Merchant account represents a single business entity at SumUp.
+ *
  * @package SumUp\Services
  */
 class Merchants implements SumUpService

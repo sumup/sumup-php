@@ -37,6 +37,8 @@ class ReceiptsGetParams
 /**
  * Class Receipts
  *
+ * The Receipts model obtains receipt-like details for specific transactions.
+ *
  * @package SumUp\Services
  */
 class Receipts implements SumUpService
