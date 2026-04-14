@@ -7,6 +7,7 @@ use SumUp\Hydrator;
 use SumUp\Types\Checkout;
 use SumUp\Types\CheckoutCurrency;
 use SumUp\Types\MandateResponse;
+use SumUp\Types\MandateResponseStatus;
 
 class HydratorTest extends TestCase
 {
@@ -42,7 +43,7 @@ class HydratorTest extends TestCase
         $this->assertInstanceOf(Checkout::class, $checkout);
         $this->assertInstanceOf(MandateResponse::class, $checkout->mandate);
         $this->assertSame('MC123', $checkout->mandate->merchantCode);
-        $this->assertSame('active', $checkout->mandate->status);
+        $this->assertSame(MandateResponseStatus::ACTIVE, $checkout->mandate->status);
     }
 
     public function testHydrateArrayItemsFromDocblockClassNames()

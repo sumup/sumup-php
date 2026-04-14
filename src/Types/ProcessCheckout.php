@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Details of the payment instrument for processing the checkout.
+ * Request body for attempting payment on an existing checkout. The required companion fields depend on the selected `payment_type`, for example card details, saved-card data, or payer information required by a specific payment method.
  */
 class ProcessCheckout
 {
     /**
-     * Describes the payment method used to attempt processing
+     * Payment method used for this processing attempt. It determines which additional request fields are required.
      *
      * @var ProcessCheckoutPaymentType
      */
@@ -24,7 +24,7 @@ class ProcessCheckout
     public ?int $installments = null;
 
     /**
-     * Mandate is passed when a card is to be tokenized
+     * Mandate details used when a checkout should create a reusable card token for future recurring or merchant-initiated payments.
      *
      * @var MandatePayload|null
      */
@@ -52,14 +52,14 @@ class ProcessCheckout
     public ?ProcessCheckoutApplePay $applePay = null;
 
     /**
-     * __Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.
+     * Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.
      *
      * @var string|null
      */
     public ?string $token = null;
 
     /**
-     * __Required when `token` is provided.__ Unique ID of the customer.
+     * Customer identifier associated with the saved payment instrument. Required when `token` is provided.
      *
      * @var string|null
      */

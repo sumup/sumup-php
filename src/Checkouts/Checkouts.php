@@ -12,6 +12,40 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 use SumUp\SdkInfo;
 
+class CheckoutsCreateApplePaySessionRequest
+{
+    /**
+     * the context to create this apple pay session.
+     *
+     * @var string
+     */
+    public string $context;
+
+    /**
+     * The target url to create this apple pay session.
+     *
+     * @var string
+     */
+    public string $target;
+
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function __construct(array $data = [])
+    {
+        if ($data !== []) {
+            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        }
+    }
+
+}
+
+class CheckoutsCreateApplePaySessionResponse
+{
+}
+
 class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
@@ -142,6 +176,38 @@ class Checkouts implements SumUpService
             '403' => ['type' => 'class', 'class' => \SumUp\Types\ErrorForbidden::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'POST', $path);
+    }
+
+    /**
+     * Create an Apple Pay session
+     *
+     * @param string $id Unique ID of the checkout resource.
+     * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function createApplePaySession(string $id, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): \SumUp\Services\CheckoutsCreateApplePaySessionResponse
+    {
+        $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $id));
+        $payload = [];
+        if ($body !== null) {
+            $payload = RequestEncoder::encode($body);
+        }
+        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
+        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
+        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+
+        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Services\CheckoutsCreateApplePaySessionResponse::class, [
+            '400' => ['type' => 'mixed'],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'PUT', $path);
     }
 
     /**

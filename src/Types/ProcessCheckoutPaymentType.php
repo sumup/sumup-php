@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Describes the payment method used to attempt processing
+ * Payment method used for this processing attempt. It determines which additional request fields are required.
  */
 enum ProcessCheckoutPaymentType: string
 {

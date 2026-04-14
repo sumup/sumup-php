@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Details of the payment checkout.
+ * Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.
  */
 class Checkout
 {
     /**
-     * Unique ID of the payment checkout specified by the client application when creating the checkout resource.
+     * Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.
      *
      * @var string|null
      */
     public ?string $checkoutReference = null;
 
     /**
-     * Amount of the payment.
+     * Amount to be charged to the payer, expressed in major units.
      *
      * @var float|null
      */
@@ -31,35 +31,35 @@ class Checkout
     public ?CheckoutCurrency $currency = null;
 
     /**
-     * Unique identifying code of the merchant profile.
+     * Merchant account that receives the payment.
      *
      * @var string|null
      */
     public ?string $merchantCode = null;
 
     /**
-     * Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.
+     * Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.
      *
      * @var string|null
      */
     public ?string $description = null;
 
     /**
-     * URL to which the SumUp platform sends the processing status of the payment checkout.
+     * Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.
      *
      * @var string|null
      */
     public ?string $returnUrl = null;
 
     /**
-     * Unique ID of the checkout resource.
+     * Unique SumUp identifier of the checkout resource.
      *
      * @var string|null
      */
     public ?string $id = null;
 
     /**
-     * Current status of the checkout.
+     * Current high-level state of the checkout. `PENDING` means the checkout exists but is not yet completed, `PAID` means a payment succeeded, `FAILED` means the latest processing attempt failed, and `EXPIRED` means the checkout can no longer be processed.
      *
      * @var CheckoutStatus|null
      */
@@ -73,28 +73,28 @@ class Checkout
     public ?string $date = null;
 
     /**
-     * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
+     * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.
      *
      * @var string|null
      */
     public ?string $validUntil = null;
 
     /**
-     * Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.
+     * Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.
      *
      * @var string|null
      */
     public ?string $customerId = null;
 
     /**
-     * Created mandate
+     * Details of the mandate linked to the saved payment instrument.
      *
      * @var MandateResponse|null
      */
     public ?MandateResponse $mandate = null;
 
     /**
-     * List of transactions related to the payment.
+     * Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.
      *
      * @var mixed[]|null
      */

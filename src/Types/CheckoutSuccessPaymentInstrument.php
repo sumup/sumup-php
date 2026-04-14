@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Object containing token information for the specified payment instrument
+ * Details of the saved payment instrument created or reused during checkout processing.
  */
 class CheckoutSuccessPaymentInstrument
 {

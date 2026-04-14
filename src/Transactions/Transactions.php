@@ -376,7 +376,7 @@ class Transactions implements SumUpService
     /**
      * Retrieve a transaction
      *
-     * @param string $merchantCode
+     * @param string $merchantCode Merchant code of the account whose transaction should be retrieved.
      * @param TransactionsGetParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -477,7 +477,7 @@ class Transactions implements SumUpService
     /**
      * List transactions
      *
-     * @param string $merchantCode
+     * @param string $merchantCode Merchant code of the account whose transaction history should be listed.
      * @param TransactionsListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

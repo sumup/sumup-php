@@ -172,7 +172,6 @@ class Merchants implements SumUpService
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Person::class, [
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -213,7 +212,6 @@ class Merchants implements SumUpService
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\ListPersonsResponseBody::class, [
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 }

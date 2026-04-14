@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Created mandate
+ * Details of the mandate linked to the saved payment instrument.
  */
 class MandateResponse
 {
     /**
-     * Indicates the mandate type
+     * Type of mandate stored for the checkout or payment instrument.
      *
      * @var string|null
      */
     public ?string $type = null;
 
     /**
-     * Mandate status
+     * Current lifecycle status of the mandate.
      *
-     * @var string|null
+     * @var MandateResponseStatus|null
      */
-    public ?string $status = null;
+    public ?MandateResponseStatus $status = null;
 
     /**
-     * Merchant code which has the mandate
+     * Merchant account for which the mandate is valid.
      *
      * @var string|null
      */
