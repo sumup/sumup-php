@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.1.2](https://github.com/sumup/sumup-php/compare/v0.1.1...v0.1.2) (2026-04-14)
+
+
+### Features
+
+* **sdk:** resource docs ([#44](https://github.com/sumup/sumup-php/issues/44)) ([c7cdac3](https://github.com/sumup/sumup-php/commit/c7cdac334982b223d36fb696504d9ed6d61a3678))
+
+
+### Bug Fixes
+
+* handle object without schemas and additionalProperties ([#45](https://github.com/sumup/sumup-php/issues/45)) ([34e6b20](https://github.com/sumup/sumup-php/commit/34e6b2080a2c2f344d38b649ecc9db199e85cfcf))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#40](https://github.com/sumup/sumup-php/issues/40)) ([79f978c](https://github.com/sumup/sumup-php/commit/79f978cdf1d938d9d5a88c9d625a5c6364cc991a))
+
+
+### Build System & Dependencies
+
+* **deps:** bump actions/create-github-app-token from 3.0.0 to 3.1.1 ([#41](https://github.com/sumup/sumup-php/issues/41)) ([8883e4d](https://github.com/sumup/sumup-php/commit/8883e4d0a5267aa7464dd55a559e13e427cc8fa3))
+* **deps:** bump github.com/pb33f/libopenapi from 0.35.0 to 0.36.0 in /codegen ([#42](https://github.com/sumup/sumup-php/issues/42)) ([45b8b1c](https://github.com/sumup/sumup-php/commit/45b8b1c375ab03c0721d4dd7aec3cc51c1185fb7))
+
 ## [0.1.1](https://github.com/sumup/sumup-php/compare/v0.1.0...v0.1.1) (2026-04-08)
 
 
