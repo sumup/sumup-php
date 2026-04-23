@@ -41,7 +41,9 @@ class Hydrator
             return $payload;
         }
 
-        $object = ($target instanceof $className) ? $target : new $className();
+        $object = ($target instanceof $className)
+            ? $target
+            : (new ReflectionClass($className))->newInstanceWithoutConstructor();
         $properties = self::getClassProperties($className);
 
         foreach ($payload as $key => $value) {

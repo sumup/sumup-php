@@ -286,10 +286,10 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 	buf.WriteString("        $payload = [];\n")
 	if op.HasBody {
 		if op.BodyRequired {
-			buf.WriteString("        $payload = RequestEncoder::encode($body);\n")
+			buf.WriteString(g.renderBodyEncoding("$body", op.BodyType, "        "))
 		} else {
 			buf.WriteString("        if ($body !== null) {\n")
-			buf.WriteString("            $payload = RequestEncoder::encode($body);\n")
+			buf.WriteString(g.renderBodyEncoding("$body", op.BodyType, "            "))
 			buf.WriteString("        }\n")
 		}
 	}
@@ -459,7 +459,17 @@ func shouldGenerateRequestBodyClass(op *operation) bool {
 func buildEmptyRequestBodyClass(className string) string {
 	var buf strings.Builder
 	fmt.Fprintf(&buf, "/**\n * Request payload for %s.\n *\n * @package SumUp\\Services\n */\n", className)
-	fmt.Fprintf(&buf, "class %s\n{\n}\n", className)
+	fmt.Fprintf(&buf, "class %s\n{\n", className)
+	buf.WriteString("    /**\n")
+	buf.WriteString("     * Create request DTO from an associative array.\n")
+	buf.WriteString("     *\n")
+	buf.WriteString("     * @param array<string, mixed> $data\n")
+	buf.WriteString("     */\n")
+	buf.WriteString("    public static function fromArray(array $data): self\n")
+	buf.WriteString("    {\n")
+	buf.WriteString("        return new self();\n")
+	buf.WriteString("    }\n")
+	buf.WriteString("}\n")
 	return buf.String()
 }
 
@@ -860,6 +870,36 @@ func renderBodyArgument(op *operation) string {
 	}
 
 	return fmt.Sprintf("%s $body", baseType)
+}
+
+func (g *Generator) renderBodyEncoding(bodyExpr string, bodyType string, indent string) string {
+	var buf strings.Builder
+
+	if g.bodyTypeHasGeneratedFromArray(bodyType) {
+		classRef := formatClassReference(bodyType)
+		fmt.Fprintf(&buf, "%s$requestBody = %s;\n", indent, bodyExpr)
+		fmt.Fprintf(&buf, "%sif (is_array($requestBody)) {\n", indent)
+		fmt.Fprintf(&buf, "%s    $requestBody = %s::fromArray($requestBody);\n", indent, classRef)
+		fmt.Fprintf(&buf, "%s}\n", indent)
+		fmt.Fprintf(&buf, "%s$payload = RequestEncoder::encode($requestBody);\n", indent)
+		return buf.String()
+	}
+
+	fmt.Fprintf(&buf, "%s$payload = RequestEncoder::encode(%s);\n", indent, bodyExpr)
+	return buf.String()
+}
+
+func (g *Generator) bodyTypeHasGeneratedFromArray(typeName string) bool {
+	if !bodyTypeAllowsArray(typeName) {
+		return false
+	}
+
+	className := phpClassBaseName(typeName)
+	if className == "" {
+		return false
+	}
+
+	return g.shouldGenerateConstructorForClass(className)
 }
 
 func bodyTypeAllowsArray(typeName string) bool {

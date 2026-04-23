@@ -86,11 +86,12 @@ $sumup = new \SumUp\SumUp();
 $sumup->setDefaultAccessToken($accessToken);
 
 // Use the SDK normally
-$request = new \SumUp\Types\CheckoutCreateRequest();
-$request->amount = 10.00;
-$request->currency = \SumUp\Types\CheckoutCreateRequestCurrency::EUR;
-$request->checkoutReference = 'order-123';
-$request->merchantCode = $merchantCode;
+$request = new \SumUp\Types\CheckoutCreateRequest(
+    checkoutReference: 'order-123',
+    amount: 10.00,
+    currency: \SumUp\Types\CheckoutCreateRequestCurrency::EUR,
+    merchantCode: $merchantCode,
+);
 
 $checkout = $sumup->checkouts()->create($request);
 ```

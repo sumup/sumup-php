@@ -29,14 +29,49 @@ class CheckoutsCreateApplePaySessionRequest
     public string $target;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $context
+     * @param string $target
+     */
+    public function __construct(
+        string $context,
+        string $target
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'context' => $context,
+            'target' => $target,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'context' => 'context',
+            'target' => 'target',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 
@@ -166,7 +201,11 @@ class Checkouts implements SumUpService
     {
         $path = '/v0.1/checkouts';
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\CheckoutCreateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -201,7 +240,11 @@ class Checkouts implements SumUpService
         $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $id));
         $payload = [];
         if ($body !== null) {
-            $payload = RequestEncoder::encode($body);
+            $requestBody = $body;
+            if (is_array($requestBody)) {
+                $requestBody = CheckoutsCreateApplePaySessionRequest::fromArray($requestBody);
+            }
+            $payload = RequestEncoder::encode($requestBody);
         }
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
@@ -375,7 +418,11 @@ class Checkouts implements SumUpService
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\ProcessCheckout::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

@@ -39,14 +39,55 @@ class SubaccountsCreateSubAccountRequest
     public ?SubaccountsCreateSubAccountRequestPermissions $permissions = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $username
+     * @param string $password
+     * @param string|null $nickname
+     * @param SubaccountsCreateSubAccountRequestPermissions|null $permissions
+     */
+    public function __construct(
+        string $username,
+        string $password,
+        ?string $nickname = null,
+        ?SubaccountsCreateSubAccountRequestPermissions $permissions = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'username' => $username,
+            'password' => $password,
+            'nickname' => $nickname,
+            'permissions' => $permissions,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'username' => 'username',
+            'password' => 'password',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 
@@ -85,15 +126,41 @@ class SubaccountsUpdateSubAccountRequest
     public ?SubaccountsUpdateSubAccountRequestPermissions $permissions = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string|null $password
+     * @param string|null $username
+     * @param bool|null $disabled
+     * @param string|null $nickname
+     * @param SubaccountsUpdateSubAccountRequestPermissions|null $permissions
+     */
+    public function __construct(
+        ?string $password = null,
+        ?string $username = null,
+        ?bool $disabled = null,
+        ?string $nickname = null,
+        ?SubaccountsUpdateSubAccountRequestPermissions $permissions = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'password' => $password,
+            'username' => $username,
+            'disabled' => $disabled,
+            'nickname' => $nickname,
+            'permissions' => $permissions,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -261,7 +328,11 @@ class Subaccounts implements SumUpService
     {
         $path = '/v0.1/me/accounts';
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = SubaccountsCreateSubAccountRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -338,7 +409,11 @@ class Subaccounts implements SumUpService
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = SubaccountsUpdateSubAccountRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

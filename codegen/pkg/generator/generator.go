@@ -53,6 +53,9 @@ type Generator struct {
 
 	// enumNamespaces tracks where an enum is defined so we can reference it.
 	enumNamespaces map[string]string
+
+	// requestClassNames tracks schema classes used as OpenAPI request bodies.
+	requestClassNames map[string]struct{}
 }
 
 type enumDefinition struct {
@@ -67,6 +70,7 @@ func New(cfg Config) *Generator {
 	return &Generator{
 		cfg:               cfg,
 		inlineSchemaNames: make(map[*base.SchemaProxy]string),
+		requestClassNames: make(map[string]struct{}),
 	}
 }
 
@@ -88,6 +92,7 @@ func (g *Generator) Load(spec *v3.Document) error {
 	usage := g.collectSchemaUsage()
 	g.schemasByTag, g.schemaNamespaces = g.assignSchemasToTags(usage)
 	g.operationsByTag = g.collectOperations()
+	g.collectRequestClassNames()
 	g.enumsByTag, g.enumNamespaces = g.collectEnums()
 
 	return nil
@@ -280,30 +285,217 @@ func (g *Generator) buildPHPClass(name string, schema *base.SchemaProxy, current
 		buf.WriteString(propCode)
 	}
 
-	if strings.HasSuffix(name, "Request") && name != "BadRequest" {
-		buf.WriteString(g.buildRequestArrayConstructor(properties))
+	if g.shouldGenerateConstructorForClass(name) {
+		buf.WriteString(g.buildRequestConstructor(properties))
 	}
 
 	buf.WriteString("}\n")
 	return buf.String()
 }
 
-func (g *Generator) buildRequestArrayConstructor(_ []phpProperty) string {
+func (g *Generator) buildRequestConstructor(properties []phpProperty) string {
 	var buf strings.Builder
+
+	buf.WriteString("    /**\n")
+	buf.WriteString("     * Create request DTO.\n")
+	buf.WriteString("     *\n")
+	for _, prop := range constructorProperties(properties) {
+		fmt.Fprintf(&buf, "     * @param %s $%s\n", g.constructorParamDocType(prop), prop.Name)
+	}
+	buf.WriteString("     */\n")
+	buf.WriteString("    public function __construct(")
+	constructorProps := constructorProperties(properties)
+	if len(constructorProps) > 0 {
+		buf.WriteString("\n")
+		for idx, prop := range constructorProps {
+			buf.WriteString("        ")
+			buf.WriteString(g.constructorParamType(prop))
+			buf.WriteString(" $")
+			buf.WriteString(prop.Name)
+			if prop.Optional {
+				buf.WriteString(" = null")
+			}
+			if idx < len(constructorProps)-1 {
+				buf.WriteString(",")
+			}
+			buf.WriteString("\n")
+		}
+		buf.WriteString("    ")
+	}
+	buf.WriteString(") {\n")
+	buf.WriteString("        \\SumUp\\Hydrator::hydrate([\n")
+	for _, prop := range constructorProps {
+		fmt.Fprintf(&buf, "            '%s' => $%s,\n", prop.SerializedName, prop.Name)
+	}
+	buf.WriteString("        ], self::class, $this);\n")
+	buf.WriteString("    }\n\n")
 
 	buf.WriteString("    /**\n")
 	buf.WriteString("     * Create request DTO from an associative array.\n")
 	buf.WriteString("     *\n")
 	buf.WriteString("     * @param array<string, mixed> $data\n")
 	buf.WriteString("     */\n")
-	buf.WriteString("    public function __construct(array $data = [])\n")
+	buf.WriteString("    public static function fromArray(array $data): self\n")
 	buf.WriteString("    {\n")
-	buf.WriteString("        if ($data !== []) {\n")
-	buf.WriteString("            \\SumUp\\Hydrator::hydrate($data, self::class, $this);\n")
-	buf.WriteString("        }\n")
+	requiredProps := requiredProperties(properties)
+	if len(requiredProps) > 0 {
+		buf.WriteString("        self::assertRequiredFields($data, [\n")
+		for _, prop := range requiredProps {
+			fmt.Fprintf(&buf, "            '%s' => '%s',\n", prop.SerializedName, prop.Name)
+		}
+		buf.WriteString("        ]);\n\n")
+	}
+	buf.WriteString("        $request = (new \\ReflectionClass(self::class))->newInstanceWithoutConstructor();\n")
+	buf.WriteString("        \\SumUp\\Hydrator::hydrate($data, self::class, $request);\n\n")
+	buf.WriteString("        return $request;\n")
 	buf.WriteString("    }\n\n")
 
+	if len(requiredProps) > 0 {
+		buf.WriteString("    /**\n")
+		buf.WriteString("     * @param array<string, mixed> $data\n")
+		buf.WriteString("     * @param array<string, string> $requiredFields\n")
+		buf.WriteString("     */\n")
+		buf.WriteString("    private static function assertRequiredFields(array $data, array $requiredFields): void\n")
+		buf.WriteString("    {\n")
+		buf.WriteString("        foreach ($requiredFields as $serializedName => $propertyName) {\n")
+		buf.WriteString("            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {\n")
+		buf.WriteString("                throw new \\InvalidArgumentException(sprintf('Missing required field \"%s\".', $serializedName));\n")
+		buf.WriteString("            }\n")
+		buf.WriteString("        }\n")
+		buf.WriteString("    }\n\n")
+	}
+
 	return buf.String()
+}
+
+func constructorProperties(properties []phpProperty) []phpProperty {
+	result := make([]phpProperty, 0, len(properties))
+	for _, prop := range properties {
+		if !prop.Optional {
+			result = append(result, prop)
+		}
+	}
+	for _, prop := range properties {
+		if prop.Optional {
+			result = append(result, prop)
+		}
+	}
+	return result
+}
+
+func requiredProperties(properties []phpProperty) []phpProperty {
+	result := make([]phpProperty, 0, len(properties))
+	for _, prop := range properties {
+		if !prop.Optional {
+			result = append(result, prop)
+		}
+	}
+	return result
+}
+
+func (g *Generator) constructorParamDocType(prop phpProperty) string {
+	docType := prop.DocType
+	if docType == "" {
+		docType = "mixed"
+	}
+	if backingType := g.enumBackingType(prop.Type); backingType != "" {
+		docType += "|" + backingType
+	}
+	if prop.Optional && !strings.Contains(docType, "null") {
+		docType += "|null"
+	}
+	return docType
+}
+
+func (g *Generator) constructorParamType(prop phpProperty) string {
+	paramType := prop.Type
+	if paramType == "" {
+		paramType = "mixed"
+	}
+
+	if backingType := g.enumBackingType(paramType); backingType != "" {
+		paramType += "|" + backingType
+	}
+
+	if prop.Optional && paramType != "mixed" {
+		if strings.Contains(paramType, "|") {
+			if !strings.Contains(paramType, "null") {
+				paramType += "|null"
+			}
+		} else if !strings.HasPrefix(paramType, "?") {
+			paramType = "?" + paramType
+		}
+	}
+
+	return paramType
+}
+
+func (g *Generator) enumBackingType(typeName string) string {
+	if typeName == "" {
+		return ""
+	}
+
+	trimmed := strings.TrimPrefix(typeName, "\\")
+	parts := strings.Split(trimmed, "\\")
+	enumName := parts[len(parts)-1]
+	if enumName == "" {
+		return ""
+	}
+
+	for _, enums := range g.enumsByTag {
+		for _, enum := range enums {
+			if enum.Name == enumName {
+				return enum.Type
+			}
+		}
+	}
+
+	return ""
+}
+
+func (g *Generator) collectRequestClassNames() {
+	g.requestClassNames = make(map[string]struct{})
+	for _, operations := range g.operationsByTag {
+		for _, op := range operations {
+			if op == nil || !op.HasBody || op.BodyType == "" {
+				continue
+			}
+			className := phpClassBaseName(op.BodyType)
+			if className == "" || isBuiltinPHPType(className) {
+				continue
+			}
+			g.requestClassNames[className] = struct{}{}
+		}
+	}
+}
+
+func (g *Generator) shouldGenerateConstructorForClass(className string) bool {
+	if className == "" || className == "BadRequest" {
+		return false
+	}
+	if strings.HasSuffix(className, "Request") {
+		return true
+	}
+	_, ok := g.requestClassNames[className]
+	return ok
+}
+
+func phpClassBaseName(typeName string) string {
+	trimmed := strings.TrimPrefix(typeName, "\\")
+	if strings.Contains(trimmed, "|") {
+		return ""
+	}
+	parts := strings.Split(trimmed, "\\")
+	return parts[len(parts)-1]
+}
+
+func isBuiltinPHPType(typeName string) bool {
+	switch typeName {
+	case "array", "mixed", "string", "int", "float", "bool", "null", "void":
+		return true
+	default:
+		return false
+	}
 }
 
 func (g *Generator) displayTagName(tagKey string) string {

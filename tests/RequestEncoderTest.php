@@ -18,11 +18,12 @@ class RequestEncoderTest extends TestCase
 
     public function testEncodeConvertsDtoToSnakeCaseAndBackedEnumValues()
     {
-        $request = new CheckoutCreateRequest();
-        $request->checkoutReference = 'order-123';
-        $request->amount = 10.0;
-        $request->currency = CheckoutCreateRequestCurrency::EUR;
-        $request->merchantCode = 'MC123';
+        $request = new CheckoutCreateRequest(
+            checkoutReference: 'order-123',
+            amount: 10.0,
+            currency: CheckoutCreateRequestCurrency::EUR,
+            merchantCode: 'MC123',
+        );
 
         $encoded = RequestEncoder::encode($request);
 

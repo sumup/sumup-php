@@ -32,7 +32,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Lint
-        run: make fmtcheck
+        run: vendor/bin/php-cs-fixer fix -v --using-cache=no --dry-run
 
   static-analysis:
     name: Static Analysis
@@ -51,7 +51,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run PHPStan
-        run: make analyse
+        run: PHPSTAN_DISABLE_PARALLEL=1 vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=1G --debug
 
   docs:
     name: Docs
@@ -70,7 +70,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist
 
       - name: Generate docs
-        run: make docs
+        run: docker run --rm -v "$PWD:/data" "phpdoc/phpdoc:3"
 
       - name: Ensure docs are up to date
         run: git diff --exit-code -- docs

@@ -43,14 +43,55 @@ class RolesCreateRequest
     public ?string $description = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $name
+     * @param string[] $permissions
+     * @param array<string, mixed>|null $metadata
+     * @param string|null $description
+     */
+    public function __construct(
+        string $name,
+        array $permissions,
+        ?array $metadata = null,
+        ?string $description = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'name' => $name,
+            'permissions' => $permissions,
+            'metadata' => $metadata,
+            'description' => $description,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'name' => 'name',
+            'permissions' => 'permissions',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 
@@ -80,15 +121,35 @@ class RolesUpdateRequest
     public ?string $description = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string|null $name
+     * @param string[]|null $permissions
+     * @param string|null $description
+     */
+    public function __construct(
+        ?string $name = null,
+        ?array $permissions = null,
+        ?string $description = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'name' => $name,
+            'permissions' => $permissions,
+            'description' => $description,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -155,7 +216,11 @@ class Roles implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/roles', rawurlencode((string) $merchantCode));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = RolesCreateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -274,7 +339,11 @@ class Roles implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/roles/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $roleId));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = RolesUpdateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

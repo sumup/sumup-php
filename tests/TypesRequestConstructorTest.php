@@ -9,17 +9,19 @@ use SumUp\Types\CreateReaderCheckoutRequest;
 use SumUp\Types\CreateReaderCheckoutRequestAade;
 use SumUp\Types\CreateReaderCheckoutRequestAffiliate;
 use SumUp\Types\CreateReaderCheckoutRequestTotalAmount;
+use SumUp\Types\ProcessCheckout;
+use SumUp\Types\ProcessCheckoutPaymentType;
 
 class TypesRequestConstructorTest extends TestCase
 {
-    public function testCheckoutCreateRequestSupportsArrayInputWithEnumCoercion(): void
+    public function testCheckoutCreateRequestSupportsNamedArgumentsWithEnumCoercion(): void
     {
-        $request = new CheckoutCreateRequest([
-            'checkout_reference' => 'ref-123',
-            'amount' => 10,
-            'currency' => 'EUR',
-            'merchant_code' => 'MERCHANT-1',
-        ]);
+        $request = new CheckoutCreateRequest(
+            checkoutReference: 'ref-123',
+            amount: 10,
+            currency: 'EUR',
+            merchantCode: 'MERCHANT-1',
+        );
 
         $this->assertSame('ref-123', $request->checkoutReference);
         $this->assertSame(10.0, $request->amount);
@@ -27,9 +29,9 @@ class TypesRequestConstructorTest extends TestCase
         $this->assertSame('MERCHANT-1', $request->merchantCode);
     }
 
-    public function testCheckoutCreateRequestIgnoresUnknownProperty(): void
+    public function testCheckoutCreateRequestFromArrayIgnoresUnknownProperty(): void
     {
-        $request = new CheckoutCreateRequest([
+        $request = CheckoutCreateRequest::fromArray([
             'checkout_reference' => 'ref-123',
             'amount' => 10.0,
             'currency' => CheckoutCreateRequestCurrency::EUR,
@@ -40,18 +42,19 @@ class TypesRequestConstructorTest extends TestCase
         $this->assertSame('ref-123', $request->checkoutReference);
     }
 
-    public function testCheckoutCreateRequestAllowsPartialInput(): void
+    public function testCheckoutCreateRequestFromArrayRequiresRequiredFields(): void
     {
-        $request = new CheckoutCreateRequest([
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing required field "amount".');
+
+        CheckoutCreateRequest::fromArray([
             'checkout_reference' => 'ref-123',
         ]);
-
-        $this->assertSame('ref-123', $request->checkoutReference);
     }
 
     public function testCreateReaderCheckoutRequestHydratesInlineObjectProperties(): void
     {
-        $request = new CreateReaderCheckoutRequest([
+        $request = CreateReaderCheckoutRequest::fromArray([
             'aade' => [
                 'provider_id' => 'provider-123',
                 'signature' => 'base64-signature',
@@ -84,5 +87,14 @@ class TypesRequestConstructorTest extends TestCase
         $this->assertSame('EUR', $request->totalAmount->currency);
         $this->assertSame(2, $request->totalAmount->minorUnit);
         $this->assertSame(100, $request->totalAmount->value);
+    }
+
+    public function testRequestBodyDtoWithoutRequestSuffixSupportsNamedArgumentsAndFromArray(): void
+    {
+        $namedRequest = new ProcessCheckout(paymentType: 'card');
+        $arrayRequest = ProcessCheckout::fromArray(['payment_type' => 'card']);
+
+        $this->assertSame(ProcessCheckoutPaymentType::CARD, $namedRequest->paymentType);
+        $this->assertSame(ProcessCheckoutPaymentType::CARD, $arrayRequest->paymentType);
     }
 }

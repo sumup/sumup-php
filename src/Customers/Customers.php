@@ -22,15 +22,29 @@ class CustomersUpdateRequest
     public ?\SumUp\Types\PersonalDetails $personalDetails = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param \SumUp\Types\PersonalDetails|null $personalDetails
+     */
+    public function __construct(
+        ?\SumUp\Types\PersonalDetails $personalDetails = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'personal_details' => $personalDetails,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -90,7 +104,11 @@ class Customers implements SumUpService
     {
         $path = '/v0.1/customers';
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\Customer::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -217,7 +235,11 @@ class Customers implements SumUpService
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = CustomersUpdateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

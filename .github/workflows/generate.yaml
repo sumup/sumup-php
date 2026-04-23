@@ -44,7 +44,7 @@ jobs:
         working-directory: codegen
 
       - name: Format
-        run: make fmt
+        run: vendor/bin/php-cs-fixer fix -v --using-cache=no
 
       - name: Create GitHub App token
         id: app-token

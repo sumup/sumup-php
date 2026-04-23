@@ -26,12 +26,12 @@ if (!$merchantCode) {
 $sumup = new \SumUp\SumUp($apiKey);
 
 try {
-    $checkout = $sumup->checkouts()->create(new \SumUp\Types\CheckoutCreateRequest([
-        'amount' => 12.30,
-        'checkout_reference' => 'TX-' . time(),
-        'currency' => 'EUR',
-        'merchant_code' => $merchantCode,
-    ]));
+    $checkout = $sumup->checkouts()->create(new \SumUp\Types\CheckoutCreateRequest(
+        checkoutReference: 'TX-' . time(),
+        amount: 12.30,
+        currency: 'EUR',
+        merchantCode: $merchantCode,
+    ));
 
     if ($checkout->id === null) {
         fwrite(STDERR, "Checkout was created, but response did not include an ID.\n");
