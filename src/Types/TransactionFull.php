@@ -101,13 +101,6 @@ class TransactionFull
     public ?string $authCode = null;
 
     /**
-     * Internal unique ID of the transaction on the SumUp platform.
-     *
-     * @var int|null
-     */
-    public ?int $internalId = null;
-
-    /**
      * Short description of the payment. The value is taken from the `description` property of the related checkout resource.
      *
      * @var string|null
