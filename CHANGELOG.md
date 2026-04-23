@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.3](https://github.com/sumup/sumup-php/compare/v0.1.2...v0.1.3) (2026-04-23)
+
+
+### Features
+
+* improve generated request DTO ergonomics ([#49](https://github.com/sumup/sumup-php/issues/49)) ([4e71c06](https://github.com/sumup/sumup-php/commit/4e71c0623099dab82598316802f54caee4f5d02a))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#46](https://github.com/sumup/sumup-php/issues/46)) ([ff477cc](https://github.com/sumup/sumup-php/commit/ff477cc42e7cd09570d8a86cd3b384f46c6b6b58))
+
+
+### Build System & Dependencies
+
+* **deps:** bump github.com/pb33f/libopenapi from 0.36.0 to 0.36.1 in /codegen ([#48](https://github.com/sumup/sumup-php/issues/48)) ([d76009f](https://github.com/sumup/sumup-php/commit/d76009fb848126018150408d2b988001e83cd500))
+* **deps:** bump googleapis/release-please-action from 4.4.0 to 4.4.1 ([#47](https://github.com/sumup/sumup-php/issues/47)) ([ae9f15a](https://github.com/sumup/sumup-php/commit/ae9f15a2658d83a6b966e2c7fbd675c8eef69cc5))
+
 ## [0.1.2](https://github.com/sumup/sumup-php/compare/v0.1.1...v0.1.2) (2026-04-14)
 
 
