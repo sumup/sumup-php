@@ -36,14 +36,52 @@ class ReadersCreateRequest
     public ?array $metadata = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $pairingCode
+     * @param string $name
+     * @param array<string, mixed>|null $metadata
+     */
+    public function __construct(
+        string $pairingCode,
+        string $name,
+        ?array $metadata = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'pairing_code' => $pairingCode,
+            'name' => $name,
+            'metadata' => $metadata,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'pairing_code' => 'pairingCode',
+            'name' => 'name',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 
@@ -56,6 +94,15 @@ class ReadersCreateRequest
  */
 class ReadersTerminateCheckoutRequest
 {
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self();
+    }
 }
 
 class ReadersUpdateRequest
@@ -75,15 +122,32 @@ class ReadersUpdateRequest
     public ?array $metadata = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string|null $name
+     * @param array<string, mixed>|null $metadata
+     */
+    public function __construct(
+        ?string $name = null,
+        ?array $metadata = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'name' => $name,
+            'metadata' => $metadata,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -150,7 +214,11 @@ class Readers implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/readers', rawurlencode((string) $merchantCode));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = ReadersCreateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -184,7 +252,11 @@ class Readers implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\CreateReaderCheckoutRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -335,7 +407,11 @@ class Readers implements SumUpService
         $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
         if ($body !== null) {
-            $payload = RequestEncoder::encode($body);
+            $requestBody = $body;
+            if (is_array($requestBody)) {
+                $requestBody = ReadersTerminateCheckoutRequest::fromArray($requestBody);
+            }
+            $payload = RequestEncoder::encode($requestBody);
         }
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
@@ -371,7 +447,11 @@ class Readers implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = ReadersUpdateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

@@ -88,14 +88,69 @@ class CreateReaderCheckoutRequest
     public CreateReaderCheckoutRequestTotalAmount $totalAmount;
 
     /**
+     * Create request DTO.
+     *
+     * @param CreateReaderCheckoutRequestTotalAmount $totalAmount
+     * @param CreateReaderCheckoutRequestAade|null $aade
+     * @param CreateReaderCheckoutRequestAffiliate|null $affiliate
+     * @param CreateReaderCheckoutRequestCardType|string|null $cardType
+     * @param string|null $description
+     * @param int|null $installments
+     * @param string|null $returnUrl
+     * @param float[]|null $tipRates
+     * @param int|null $tipTimeout
+     */
+    public function __construct(
+        CreateReaderCheckoutRequestTotalAmount $totalAmount,
+        ?CreateReaderCheckoutRequestAade $aade = null,
+        ?CreateReaderCheckoutRequestAffiliate $affiliate = null,
+        CreateReaderCheckoutRequestCardType|string|null $cardType = null,
+        ?string $description = null,
+        ?int $installments = null,
+        ?string $returnUrl = null,
+        ?array $tipRates = null,
+        ?int $tipTimeout = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'total_amount' => $totalAmount,
+            'aade' => $aade,
+            'affiliate' => $affiliate,
+            'card_type' => $cardType,
+            'description' => $description,
+            'installments' => $installments,
+            'return_url' => $returnUrl,
+            'tip_rates' => $tipRates,
+            'tip_timeout' => $tipTimeout,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'total_amount' => 'totalAmount',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 

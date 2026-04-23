@@ -80,14 +80,75 @@ class CheckoutCreateRequest
     public ?string $redirectUrl = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $checkoutReference
+     * @param float $amount
+     * @param CheckoutCreateRequestCurrency|string $currency
+     * @param string $merchantCode
+     * @param string|null $description
+     * @param string|null $returnUrl
+     * @param string|null $customerId
+     * @param CheckoutCreateRequestPurpose|string|null $purpose
+     * @param string|null $validUntil
+     * @param string|null $redirectUrl
+     */
+    public function __construct(
+        string $checkoutReference,
+        float $amount,
+        CheckoutCreateRequestCurrency|string $currency,
+        string $merchantCode,
+        ?string $description = null,
+        ?string $returnUrl = null,
+        ?string $customerId = null,
+        CheckoutCreateRequestPurpose|string|null $purpose = null,
+        ?string $validUntil = null,
+        ?string $redirectUrl = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'checkout_reference' => $checkoutReference,
+            'amount' => $amount,
+            'currency' => $currency,
+            'merchant_code' => $merchantCode,
+            'description' => $description,
+            'return_url' => $returnUrl,
+            'customer_id' => $customerId,
+            'purpose' => $purpose,
+            'valid_until' => $validUntil,
+            'redirect_url' => $redirectUrl,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'checkout_reference' => 'checkoutReference',
+            'amount' => 'amount',
+            'currency' => 'currency',
+            'merchant_code' => 'merchantCode',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 

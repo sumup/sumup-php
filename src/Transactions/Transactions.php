@@ -25,15 +25,29 @@ class TransactionsRefundRequest
     public ?float $amount = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param float|null $amount
+     */
+    public function __construct(
+        ?float $amount = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'amount' => $amount,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -660,7 +674,11 @@ class Transactions implements SumUpService
         $path = sprintf('/v0.1/me/refund/%s', rawurlencode((string) $txnId));
         $payload = [];
         if ($body !== null) {
-            $payload = RequestEncoder::encode($body);
+            $requestBody = $body;
+            if (is_array($requestBody)) {
+                $requestBody = TransactionsRefundRequest::fromArray($requestBody);
+            }
+            $payload = RequestEncoder::encode($requestBody);
         }
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());

@@ -72,4 +72,71 @@ class ProcessCheckout
      */
     public ?PersonalDetails $personalDetails = null;
 
+    /**
+     * Create request DTO.
+     *
+     * @param ProcessCheckoutPaymentType|string $paymentType
+     * @param int|null $installments
+     * @param MandatePayload|null $mandate
+     * @param Card|null $card
+     * @param array<string, mixed>|null $googlePay
+     * @param array<string, mixed>|null $applePay
+     * @param string|null $token
+     * @param string|null $customerId
+     * @param PersonalDetails|null $personalDetails
+     */
+    public function __construct(
+        ProcessCheckoutPaymentType|string $paymentType,
+        ?int $installments = null,
+        ?MandatePayload $mandate = null,
+        ?Card $card = null,
+        ?array $googlePay = null,
+        ?array $applePay = null,
+        ?string $token = null,
+        ?string $customerId = null,
+        ?PersonalDetails $personalDetails = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'payment_type' => $paymentType,
+            'installments' => $installments,
+            'mandate' => $mandate,
+            'card' => $card,
+            'google_pay' => $googlePay,
+            'apple_pay' => $applePay,
+            'token' => $token,
+            'customer_id' => $customerId,
+            'personal_details' => $personalDetails,
+        ], self::class, $this);
+    }
+
+    /**
+     * Create request DTO from an associative array.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        self::assertRequiredFields($data, [
+            'payment_type' => 'paymentType',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
+        }
+    }
+
 }

@@ -64,14 +64,64 @@ class MembersCreateRequest
     public ?array $attributes = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string $email
+     * @param string[] $roles
+     * @param bool|null $isManagedUser
+     * @param string|null $password
+     * @param string|null $nickname
+     * @param array<string, mixed>|null $metadata
+     * @param array<string, mixed>|null $attributes
+     */
+    public function __construct(
+        string $email,
+        array $roles,
+        ?bool $isManagedUser = null,
+        ?string $password = null,
+        ?string $nickname = null,
+        ?array $metadata = null,
+        ?array $attributes = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'email' => $email,
+            'roles' => $roles,
+            'is_managed_user' => $isManagedUser,
+            'password' => $password,
+            'nickname' => $nickname,
+            'metadata' => $metadata,
+            'attributes' => $attributes,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
+        self::assertRequiredFields($data, [
+            'email' => 'email',
+            'roles' => 'roles',
+        ]);
+
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $requiredFields
+     */
+    private static function assertRequiredFields(array $data, array $requiredFields): void
+    {
+        foreach ($requiredFields as $serializedName => $propertyName) {
+            if (!array_key_exists($serializedName, $data) && !array_key_exists($propertyName, $data)) {
+                throw new \InvalidArgumentException(sprintf('Missing required field "%s".', $serializedName));
+            }
         }
     }
 
@@ -107,15 +157,38 @@ class MembersUpdateRequest
     public ?MembersUpdateRequestUser $user = null;
 
     /**
+     * Create request DTO.
+     *
+     * @param string[]|null $roles
+     * @param array<string, mixed>|null $metadata
+     * @param array<string, mixed>|null $attributes
+     * @param MembersUpdateRequestUser|null $user
+     */
+    public function __construct(
+        ?array $roles = null,
+        ?array $metadata = null,
+        ?array $attributes = null,
+        ?MembersUpdateRequestUser $user = null
+    ) {
+        \SumUp\Hydrator::hydrate([
+            'roles' => $roles,
+            'metadata' => $metadata,
+            'attributes' => $attributes,
+            'user' => $user,
+        ], self::class, $this);
+    }
+
+    /**
      * Create request DTO from an associative array.
      *
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data = [])
+    public static function fromArray(array $data): self
     {
-        if ($data !== []) {
-            \SumUp\Hydrator::hydrate($data, self::class, $this);
-        }
+        $request = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        \SumUp\Hydrator::hydrate($data, self::class, $request);
+
+        return $request;
     }
 
 }
@@ -267,7 +340,11 @@ class Members implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/members', rawurlencode((string) $merchantCode));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = MembersCreateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;
@@ -417,7 +494,11 @@ class Members implements SumUpService
     {
         $path = sprintf('/v0.1/merchants/%s/members/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $memberId));
         $payload = [];
-        $payload = RequestEncoder::encode($body);
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = MembersUpdateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
         $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
         $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
         $headers['Authorization'] = 'Bearer ' . $this->accessToken;

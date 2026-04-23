@@ -37,12 +37,12 @@ try {
     // SDK automatically uses SUMUP_API_KEY environment variable
     $sumup = new \SumUp\SumUp();
 
-    $request = new \SumUp\Types\CheckoutCreateRequest([
-        'amount' => 10.00,
-        'currency' => 'EUR', // or CheckoutCreateRequestCurrency::EUR
-        'checkout_reference' => 'your-checkout-ref',
-        'merchant_code' => 'YOUR-MERCHANT-CODE',
-    ]);
+    $request = new \SumUp\Types\CheckoutCreateRequest(
+        checkoutReference: 'your-checkout-ref',
+        amount: 10.00,
+        currency: 'EUR', // or CheckoutCreateRequestCurrency::EUR
+        merchantCode: 'YOUR-MERCHANT-CODE',
+    );
 
     $checkout = $sumup->checkouts()->create($request);
 
@@ -63,7 +63,7 @@ try {
 }
 ```
 
-Service methods also accept associative arrays as request payloads. For typed usage, prefer DTOs from `\SumUp\Types\...` with `new TypeName([...])`.
+Service methods also accept associative arrays as request payloads. For typed usage, prefer DTOs from `\SumUp\Types\...` with named arguments, or use `TypeName::fromArray([...])` when you already have associative array data.
 
 ### Providing API Key Programmatically
 
