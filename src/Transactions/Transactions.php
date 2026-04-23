@@ -99,13 +99,6 @@ class TransactionsGetParams
     public ?string $id = null;
 
     /**
-     * Retrieves the transaction resource with the specified internal transaction ID (the `internal_id` parameter in the transaction resource).
-     *
-     * @var string|null
-     */
-    public ?string $internalId = null;
-
-    /**
      * Retrieves the transaction resource with the specified transaction code.
      *
      * @var string|null
@@ -141,13 +134,6 @@ class TransactionsGetDeprecatedParams
      * @var string|null
      */
     public ?string $id = null;
-
-    /**
-     * Retrieves the transaction resource with the specified internal transaction ID (the `internal_id` parameter in the transaction resource).
-     *
-     * @var string|null
-     */
-    public ?string $internalId = null;
 
     /**
      * Retrieves the transaction resource with the specified transaction code.
@@ -424,9 +410,6 @@ class Transactions implements SumUpService
             if (isset($queryParams->id)) {
                 $queryParamsData['id'] = $queryParams->id;
             }
-            if (isset($queryParams->internalId)) {
-                $queryParamsData['internal_id'] = $queryParams->internalId;
-            }
             if (isset($queryParams->transactionCode)) {
                 $queryParamsData['transaction_code'] = $queryParams->transactionCode;
             }
@@ -477,9 +460,6 @@ class Transactions implements SumUpService
             $queryParamsData = [];
             if (isset($queryParams->id)) {
                 $queryParamsData['id'] = $queryParams->id;
-            }
-            if (isset($queryParams->internalId)) {
-                $queryParamsData['internal_id'] = $queryParams->internalId;
             }
             if (isset($queryParams->transactionCode)) {
                 $queryParamsData['transaction_code'] = $queryParams->transactionCode;

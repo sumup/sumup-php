@@ -44,11 +44,4 @@ class TransactionCheckoutInfo
      */
     public ?string $authCode = null;
 
-    /**
-     * Internal unique ID of the transaction on the SumUp platform.
-     *
-     * @var int|null
-     */
-    public ?int $internalId = null;
-
 }
