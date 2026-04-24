@@ -80,6 +80,13 @@ class CheckoutCreateRequest
     public ?string $redirectUrl = null;
 
     /**
+     * Hosted Checkout configuration. Enable it to receive a SumUp-hosted payment page URL in the checkout response.
+     *
+     * @var HostedCheckout|null
+     */
+    public ?HostedCheckout $hostedCheckout = null;
+
+    /**
      * Create request DTO.
      *
      * @param string $checkoutReference
@@ -92,6 +99,7 @@ class CheckoutCreateRequest
      * @param CheckoutCreateRequestPurpose|string|null $purpose
      * @param string|null $validUntil
      * @param string|null $redirectUrl
+     * @param HostedCheckout|null $hostedCheckout
      */
     public function __construct(
         string $checkoutReference,
@@ -103,7 +111,8 @@ class CheckoutCreateRequest
         ?string $customerId = null,
         CheckoutCreateRequestPurpose|string|null $purpose = null,
         ?string $validUntil = null,
-        ?string $redirectUrl = null
+        ?string $redirectUrl = null,
+        ?HostedCheckout $hostedCheckout = null
     ) {
         \SumUp\Hydrator::hydrate([
             'checkout_reference' => $checkoutReference,
@@ -116,6 +125,7 @@ class CheckoutCreateRequest
             'purpose' => $purpose,
             'valid_until' => $validUntil,
             'redirect_url' => $redirectUrl,
+            'hosted_checkout' => $hostedCheckout,
         ], self::class, $this);
     }
 
