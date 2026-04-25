@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.4](https://github.com/sumup/sumup-php/compare/v0.1.3...v0.1.4) (2026-04-25)
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#51](https://github.com/sumup/sumup-php/issues/51)) ([713cec2](https://github.com/sumup/sumup-php/commit/713cec29ed6c5f5100a1f8f49d01b32d663ae7cc))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.94.2 to 3.95.1 ([#52](https://github.com/sumup/sumup-php/issues/52)) ([14fea98](https://github.com/sumup/sumup-php/commit/14fea98072a2a48af30f0dd99af6a0edecadb94f))
+
 ## [0.1.3](https://github.com/sumup/sumup-php/compare/v0.1.2...v0.1.3) (2026-04-23)
 
 
