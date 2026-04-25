@@ -94,6 +94,13 @@ class CheckoutSuccess
     public ?MandateResponse $mandate = null;
 
     /**
+     * URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.
+     *
+     * @var string|null
+     */
+    public ?string $hostedCheckoutUrl = null;
+
+    /**
      * Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.
      *
      * @var mixed[]|null
