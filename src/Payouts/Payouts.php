@@ -19,58 +19,14 @@ use SumUp\SdkInfo;
 class PayoutsListParams
 {
     /**
-     * Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     * Start date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`).
      *
      * @var string
      */
     public string $startDate;
 
     /**
-     * End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
-     *
-     * @var string
-     */
-    public string $endDate;
-
-    /**
-     * Response format for the payout list.
-     *
-     * @var string|null
-     */
-    public ?string $format = null;
-
-    /**
-     * Maximum number of payout records to return.
-     *
-     * @var int|null
-     */
-    public ?int $limit = null;
-
-    /**
-     * Sort direction for the returned payouts.
-     *
-     * @var string|null
-     */
-    public ?string $order = null;
-
-}
-
-/**
- * Query parameters for PayoutsListDeprecatedParams.
- *
- * @package SumUp\Services
- */
-class PayoutsListDeprecatedParams
-{
-    /**
-     * Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
-     *
-     * @var string
-     */
-    public string $startDate;
-
-    /**
-     * End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+     * End date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`). Must be greater than or equal to `start_date`.
      *
      * @var string
      */
@@ -143,7 +99,7 @@ class Payouts implements SumUpService
      * @param PayoutsListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
-     * @return array<string, mixed>[]
+     * @return \SumUp\Types\FinancialPayout[]
      * @throws \SumUp\Exception\ApiException
      * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
@@ -184,63 +140,7 @@ class Payouts implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, [
-            '200' => ['type' => 'array', 'items' => ['type' => 'object']],
-        ], [
-            '400' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class]],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'GET', $path);
-    }
-
-    /**
-     * List payouts
-     *
-     * @param PayoutsListDeprecatedParams|null $queryParams Optional query string parameters
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return array<string, mixed>[]
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     *
-     * @deprecated
-     */
-    public function listDeprecated(?PayoutsListDeprecatedParams $queryParams = null, ?RequestOptions $requestOptions = null): array
-    {
-        $path = '/v0.1/me/financials/payouts';
-        if ($queryParams !== null) {
-            $queryParamsData = [];
-            if (isset($queryParams->startDate)) {
-                $queryParamsData['start_date'] = $queryParams->startDate;
-            }
-            if (isset($queryParams->endDate)) {
-                $queryParamsData['end_date'] = $queryParams->endDate;
-            }
-            if (isset($queryParams->format)) {
-                $queryParamsData['format'] = $queryParams->format;
-            }
-            if (isset($queryParams->limit)) {
-                $queryParamsData['limit'] = $queryParams->limit;
-            }
-            if (isset($queryParams->order)) {
-                $queryParamsData['order'] = $queryParams->order;
-            }
-            if (!empty($queryParamsData)) {
-                $queryString = http_build_query($queryParamsData);
-                if (!empty($queryString)) {
-                    $path .= '?' . $queryString;
-                }
-            }
-        }
-        $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
-
-        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, [
-            '200' => ['type' => 'array', 'items' => ['type' => 'object']],
+            '200' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\FinancialPayout::class]],
         ], [
             '400' => ['type' => 'array', 'items' => ['type' => 'class', 'class' => \SumUp\Types\ErrorExtended::class]],
             '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],

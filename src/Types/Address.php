@@ -24,9 +24,7 @@ class Address
     public ?string $postCode = null;
 
     /**
-     * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-     * country code. This definition users `oneOf` with a two-character string
-     * type to allow for support of future countries in client code.
+     * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition users `oneOf` with a two-character string type to allow for support of future countries in client code.
      *
      * @var string
      */
