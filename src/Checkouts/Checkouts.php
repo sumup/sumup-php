@@ -7,10 +7,10 @@ namespace SumUp\Checkouts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestHeaders;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
-use SumUp\SdkInfo;
 
 class CheckoutsCreateApplePaySessionRequest
 {
@@ -206,9 +206,7 @@ class Checkouts implements SumUpService
             $requestBody = \SumUp\Types\CheckoutCreateRequest::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
@@ -246,9 +244,7 @@ class Checkouts implements SumUpService
             }
             $payload = RequestEncoder::encode($requestBody);
         }
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 
@@ -276,9 +272,7 @@ class Checkouts implements SumUpService
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
@@ -305,9 +299,7 @@ class Checkouts implements SumUpService
     {
         $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -345,9 +337,7 @@ class Checkouts implements SumUpService
             }
         }
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -390,9 +380,7 @@ class Checkouts implements SumUpService
             }
         }
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -423,9 +411,7 @@ class Checkouts implements SumUpService
             $requestBody = \SumUp\Types\ProcessCheckout::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 

@@ -3,7 +3,10 @@
 namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SumUp\HttpClient\RequestOptions;
+use SumUp\HttpClient\Response;
 use SumUp\SumUp;
+use SumUp\Tests\Doubles\FakeHttpClient;
 
 class SumUpTest extends TestCase
 {
@@ -70,7 +73,64 @@ class SumUpTest extends TestCase
         $this->assertSame('new-token', $token);
     }
 
+    public function testRawRequestDoesNotAuthenticateWhenNoAccessTokenIsSet()
+    {
+        $fakeClient = new FakeHttpClient(new Response(200, ['ok' => true]));
+        $sumup = new SumUp(['client' => $fakeClient]);
 
+        $response = $sumup->request('GET', '/ping');
+
+        $requests = $fakeClient->getRequests();
+        $this->assertCount(1, $requests);
+        $this->assertSame('GET', $requests[0]['method']);
+        $this->assertSame('/ping', $requests[0]['url']);
+        $this->assertArrayNotHasKey('Authorization', $requests[0]['headers']);
+        $this->assertSame(['ok' => true], $response->getBody());
+    }
+
+    public function testRawRequestAppliesAuthenticationAndAdditionalHeaders()
+    {
+        $fakeClient = new FakeHttpClient(new Response(200, ['ok' => true]));
+        $sumup = new SumUp([
+            'client' => $fakeClient,
+            'access_token' => 'default-token',
+        ]);
+
+        $sumup->request('POST', '/custom', ['foo' => 'bar'], new RequestOptions(
+            headers: [
+                'X-Integrator' => 'example',
+                'Authorization' => 'Bearer override-token',
+            ]
+        ));
+
+        $requests = $fakeClient->getRequests();
+        $this->assertCount(1, $requests);
+        $this->assertSame(['foo' => 'bar'], $requests[0]['body']);
+        $this->assertSame('example', $requests[0]['headers']['X-Integrator']);
+        $this->assertSame('Bearer override-token', $requests[0]['headers']['Authorization']);
+    }
+
+    public function testServiceRequestsApplyAdditionalHeadersOnTopOfSdkHeaders()
+    {
+        $fakeClient = new FakeHttpClient(new Response(204, null));
+        $sumup = new SumUp([
+            'client' => $fakeClient,
+            'access_token' => 'default-token',
+        ]);
+
+        $sumup->customers()->deactivatePaymentInstrument('customer-id', 'token-id', new RequestOptions(
+            headers: [
+                'X-Integrator' => 'example',
+                'Authorization' => 'Bearer override-token',
+            ]
+        ));
+
+        $requests = $fakeClient->getRequests();
+        $this->assertCount(1, $requests);
+        $this->assertSame('application/json', $requests[0]['headers']['Content-Type']);
+        $this->assertSame('example', $requests[0]['headers']['X-Integrator']);
+        $this->assertSame('Bearer override-token', $requests[0]['headers']['Authorization']);
+    }
 
     public function testMethodAccessUsesDefaultToken()
     {

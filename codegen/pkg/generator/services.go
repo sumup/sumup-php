@@ -20,12 +20,13 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	var buf strings.Builder
 	buf.WriteString("namespace SumUp\\Services;\n\n")
 	buf.WriteString("use SumUp\\HttpClient\\HttpClientInterface;\n")
+	buf.WriteString("use SumUp\\HttpClient\\RequestHeaders;\n")
 	buf.WriteString("use SumUp\\HttpClient\\RequestOptions;\n")
 	if serviceHasRequestBody(operations) {
 		buf.WriteString("use SumUp\\RequestEncoder;\n")
 	}
 	buf.WriteString("use SumUp\\ResponseDecoder;\n")
-	buf.WriteString("use SumUp\\SdkInfo;\n\n")
+	buf.WriteString("\n")
 
 	inlineResponseSchemas := collectInlineResponseSchemas(operations)
 	serviceInlineSchemas := make(map[string]*base.SchemaProxy)
@@ -294,9 +295,7 @@ func (g *Generator) renderServiceMethod(serviceClass string, op *operation) stri
 		}
 	}
 
-	buf.WriteString("        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];\n")
-	buf.WriteString("        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());\n")
-	buf.WriteString("        $headers['Authorization'] = 'Bearer ' . $this->accessToken;\n\n")
+	buf.WriteString("        $headers = RequestHeaders::build($this->accessToken, $requestOptions);\n\n")
 	fmt.Fprintf(&buf, "        $response = $this->client->send('%s', $path, $payload, $headers, $requestOptions);\n\n", strings.ToUpper(op.Method))
 	successDescriptor := renderOperationSuccessResponseDescriptor(op)
 	errorDescriptor := renderOperationErrorResponseDescriptor(op)

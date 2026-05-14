@@ -11,7 +11,7 @@ A tiny OpenAPI specs to SDK generator for [sumup-php](https://github.com/sumup/s
 Generate the SDK using the JSON spec:
 
 ```sh
-go run ./... generate ../openapi.json ./build
+go run . generate ../openapi.json ./build
 ```
 
 > Note: The PHP SDK now ships only with `openapi.json`; the YAML version is no longer maintained.

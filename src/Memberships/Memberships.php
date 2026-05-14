@@ -7,9 +7,9 @@ namespace SumUp\Memberships;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestHeaders;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
-use SumUp\SdkInfo;
 
 class MembershipsListResponse
 {
@@ -198,9 +198,7 @@ class Memberships implements SumUpService
             }
         }
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 

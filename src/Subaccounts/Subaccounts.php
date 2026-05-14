@@ -7,10 +7,10 @@ namespace SumUp\Subaccounts;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestHeaders;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
-use SumUp\SdkInfo;
 
 class SubaccountsCreateSubAccountRequest
 {
@@ -299,9 +299,7 @@ class Subaccounts implements SumUpService
     {
         $path = sprintf('/v0.1/me/accounts/%s', rawurlencode((string) $operatorId));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -333,9 +331,7 @@ class Subaccounts implements SumUpService
             $requestBody = SubaccountsCreateSubAccountRequest::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
@@ -377,9 +373,7 @@ class Subaccounts implements SumUpService
             }
         }
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -414,9 +408,7 @@ class Subaccounts implements SumUpService
             $requestBody = SubaccountsUpdateSubAccountRequest::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 

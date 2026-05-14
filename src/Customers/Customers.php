@@ -7,10 +7,10 @@ namespace SumUp\Customers;
 namespace SumUp\Services;
 
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestHeaders;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
-use SumUp\SdkInfo;
 
 class CustomersUpdateRequest
 {
@@ -109,9 +109,7 @@ class Customers implements SumUpService
             $requestBody = \SumUp\Types\Customer::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
@@ -142,9 +140,7 @@ class Customers implements SumUpService
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments/%s', rawurlencode((string) $customerId), rawurlencode((string) $token));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('DELETE', $path, $payload, $headers, $requestOptions);
 
@@ -174,9 +170,7 @@ class Customers implements SumUpService
     {
         $path = sprintf('/v0.1/customers/%s', rawurlencode((string) $customerId));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -203,9 +197,7 @@ class Customers implements SumUpService
     {
         $path = sprintf('/v0.1/customers/%s/payment-instruments', rawurlencode((string) $customerId));
         $payload = [];
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
@@ -240,9 +232,7 @@ class Customers implements SumUpService
             $requestBody = CustomersUpdateRequest::fromArray($requestBody);
         }
         $payload = RequestEncoder::encode($requestBody);
-        $headers = ['Content-Type' => 'application/json', 'User-Agent' => SdkInfo::getUserAgent()];
-        $headers = array_merge($headers, SdkInfo::getRuntimeHeaders());
-        $headers['Authorization'] = 'Bearer ' . $this->accessToken;
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
         $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
 

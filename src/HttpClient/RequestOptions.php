@@ -8,6 +8,13 @@ namespace SumUp\HttpClient;
 class RequestOptions
 {
     /**
+     * Additional headers to apply on top of the SDK defaults.
+     *
+     * @var array<string, string>
+     */
+    public array $headers = [];
+
+    /**
      * Total request timeout in seconds.
      *
      * @var int|null
@@ -35,15 +42,20 @@ class RequestOptions
      */
     public ?int $retryBackoffMs = null;
 
+    /**
+     * @param array<string, string> $headers
+     */
     public function __construct(
         ?int $timeout = null,
         ?int $connectTimeout = null,
         ?int $retries = null,
-        ?int $retryBackoffMs = null
+        ?int $retryBackoffMs = null,
+        array $headers = []
     ) {
         $this->timeout = $timeout;
         $this->connectTimeout = $connectTimeout;
         $this->retries = $retries;
         $this->retryBackoffMs = $retryBackoffMs;
+        $this->headers = $headers;
     }
 }

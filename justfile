@@ -40,4 +40,4 @@ analyse: install
 
 # Generate SDK from the local OpenAPI specs.
 generate:
-  cd codegen && go run ./... generate ../openapi.json ../src
+  cd codegen && go run . generate ../openapi.json ../src

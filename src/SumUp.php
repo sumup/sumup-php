@@ -6,6 +6,9 @@ use SumUp\Exception\ConfigurationException;
 use SumUp\Exception\SDKException;
 use SumUp\HttpClient\CurlClient;
 use SumUp\HttpClient\HttpClientInterface;
+use SumUp\HttpClient\RequestHeaders;
+use SumUp\HttpClient\RequestOptions;
+use SumUp\HttpClient\Response;
 use SumUp\Services\Checkouts;
 use SumUp\Services\Customers;
 use SumUp\Services\Members;
@@ -97,6 +100,27 @@ class SumUp
     public function setDefaultAccessToken(string $accessToken): void
     {
         $this->accessToken = $accessToken;
+    }
+
+    /**
+     * Send a raw request through the configured HTTP client.
+     *
+     * @param string $method
+     * @param string $path
+     * @param array<int|string, mixed> $body
+     * @param RequestOptions|null $requestOptions
+     *
+     * @return Response
+     */
+    public function request(
+        string $method,
+        string $path,
+        array $body = [],
+        ?RequestOptions $requestOptions = null
+    ): Response {
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        return $this->client->send($method, $path, $body, $headers, $requestOptions);
     }
 
     /**
