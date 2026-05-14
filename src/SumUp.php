@@ -18,7 +18,6 @@ use SumUp\Services\Payouts;
 use SumUp\Services\Readers;
 use SumUp\Services\Receipts;
 use SumUp\Services\Roles;
-use SumUp\Services\Subaccounts;
 use SumUp\Services\Transactions;
 
 /**
@@ -268,16 +267,6 @@ class SumUp
     public function roles(): Roles
     {
         return new Roles($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Subaccounts API endpoints.
-     *
-     * @return Subaccounts
-     */
-    public function subaccounts(): Subaccounts
-    {
-        return new Subaccounts($this->client, $this->resolveAccessToken());
     }
 
     /**

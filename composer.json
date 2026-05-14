@@ -60,7 +60,6 @@
 			"src/Receipts/Receipts.php",
 			"src/Roles/Roles.php",
 			"src/Shared/Shared.php",
-			"src/Subaccounts/Subaccounts.php",
 			"src/Transactions/Transactions.php"
 		]
 	},
