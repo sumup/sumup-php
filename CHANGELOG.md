@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.4](https://github.com/sumup/sumup-php/compare/v0.1.3...v0.1.4) (2026-05-14)
+
+
+### Features
+
+* **sdk:** allow sending arbitrary request ([#56](https://github.com/sumup/sumup-php/issues/56)) ([055ea0f](https://github.com/sumup/sumup-php/commit/055ea0f3487193841271e6e3eccf0ef4da5b72f0))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#51](https://github.com/sumup/sumup-php/issues/51)) ([713cec2](https://github.com/sumup/sumup-php/commit/713cec29ed6c5f5100a1f8f49d01b32d663ae7cc))
+* synced file(s) with sumup/apis ([#54](https://github.com/sumup/sumup-php/issues/54)) ([c942e8b](https://github.com/sumup/sumup-php/commit/c942e8b2f8849e00c29682444f3fad9742c63eff))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.94.2 to 3.95.1 ([#52](https://github.com/sumup/sumup-php/issues/52)) ([14fea98](https://github.com/sumup/sumup-php/commit/14fea98072a2a48af30f0dd99af6a0edecadb94f))
+* **deps:** bump github.com/pb33f/libopenapi from 0.36.1 to 0.36.3 in /codegen ([#55](https://github.com/sumup/sumup-php/issues/55)) ([647bd76](https://github.com/sumup/sumup-php/commit/647bd76cd9354412bbdba09cb2774f9eb2f0dd33))
+
 ## [0.1.3](https://github.com/sumup/sumup-php/compare/v0.1.2...v0.1.3) (2026-04-23)
 
 

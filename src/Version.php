@@ -6,5 +6,5 @@ namespace SumUp;
 
 class Version
 {
-    const CURRENT = '0.1.3'; // x-release-please-version
+    const CURRENT = '0.1.4'; // x-release-please-version
 }
