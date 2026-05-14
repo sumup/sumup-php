@@ -7,7 +7,7 @@ namespace SumUp\Types;
 class PersonalIdentifier
 {
     /**
-     * The unique reference for the personal identifier type.
+     * The unique reference for the personal identifier type as defined in the country SDK.
      *
      * @var string
      */

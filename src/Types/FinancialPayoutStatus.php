@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
-enum FinancialPayoutsItemStatus: string
+/**
+ * Merchant-facing outcome of the payout record.
+ */
+enum FinancialPayoutStatus: string
 {
     case SUCCESSFUL = 'SUCCESSFUL';
     case FAILED = 'FAILED';
