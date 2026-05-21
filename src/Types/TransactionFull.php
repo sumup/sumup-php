@@ -46,6 +46,11 @@ class TransactionFull
 
     /**
      * Current status of the transaction.
+     * - `PENDING`: The transaction has been created but its final outcome is not known yet.
+     * - `SUCCESSFUL`: The transaction completed successfully.
+     * - `CANCELLED`: The transaction was cancelled or otherwise reversed before completion.
+     * - `FAILED`: The transaction attempt did not complete successfully.
+     * - `REFUNDED`: The transaction was refunded in full or in part.
      *
      * @var string|null
      */
