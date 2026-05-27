@@ -384,7 +384,7 @@ class Transactions implements SumUpService
      * Refund a transaction
      *
      * @param string $merchantCode Merchant code of the account that owns the payment to refund.
-     * @param string $id Unique ID of the transaction.
+     * @param string $transactionId Unique ID of the transaction.
      * @param TransactionsRefundRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -394,9 +394,9 @@ class Transactions implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function refund(string $merchantCode, string $id, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
+    public function refund(string $merchantCode, string $transactionId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
     {
-        $path = sprintf('/v1.0/merchants/%s/payments/%s/refunds', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
+        $path = sprintf('/v1.0/merchants/%s/payments/%s/refunds', rawurlencode((string) $merchantCode), rawurlencode((string) $transactionId));
         $payload = [];
         if ($body !== null) {
             $requestBody = $body;
