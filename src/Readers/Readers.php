@@ -273,7 +273,7 @@ class Readers implements SumUpService
      * Delete a reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param string $id The unique identifier of the reader.
+     * @param string $readerId The unique identifier of the reader.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return null
@@ -282,9 +282,9 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function delete(string $merchantCode, string $id, ?RequestOptions $requestOptions = null): null
+    public function delete(string $merchantCode, string $readerId, ?RequestOptions $requestOptions = null): null
     {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
+        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -301,7 +301,7 @@ class Readers implements SumUpService
      * Retrieve a Reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param string $id The unique identifier of the reader.
+     * @param string $readerId The unique identifier of the reader.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Reader
@@ -310,9 +310,9 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, string $id, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
+    public function get(string $merchantCode, string $readerId, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
     {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
+        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -419,7 +419,7 @@ class Readers implements SumUpService
      * Update a Reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param string $id The unique identifier of the reader.
+     * @param string $readerId The unique identifier of the reader.
      * @param ReadersUpdateRequest|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -429,9 +429,9 @@ class Readers implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function update(string $merchantCode, string $id, ReadersUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
+    public function update(string $merchantCode, string $readerId, ReadersUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Reader
     {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $id));
+        $path = sprintf('/v0.1/merchants/%s/readers/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
         $payload = [];
         $requestBody = $body;
         if (is_array($requestBody)) {

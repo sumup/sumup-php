@@ -223,7 +223,7 @@ class Checkouts implements SumUpService
     /**
      * Create an Apple Pay session
      *
-     * @param string $id Unique ID of the checkout resource.
+     * @param string $checkoutId Unique ID of the checkout resource.
      * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -233,9 +233,9 @@ class Checkouts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function createApplePaySession(string $id, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): array
+    public function createApplePaySession(string $checkoutId, CheckoutsCreateApplePaySessionRequest|array|null $body = null, ?RequestOptions $requestOptions = null): array
     {
-        $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $id));
+        $path = sprintf('/v0.2/checkouts/%s/apple-pay-session', rawurlencode((string) $checkoutId));
         $payload = [];
         if ($body !== null) {
             $requestBody = $body;
@@ -259,7 +259,7 @@ class Checkouts implements SumUpService
     /**
      * Deactivate a checkout
      *
-     * @param string $id Unique ID of the checkout resource.
+     * @param string $checkoutId Unique ID of the checkout resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Checkout
@@ -268,9 +268,9 @@ class Checkouts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function deactivate(string $id, ?RequestOptions $requestOptions = null): \SumUp\Types\Checkout
+    public function deactivate(string $checkoutId, ?RequestOptions $requestOptions = null): \SumUp\Types\Checkout
     {
-        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
+        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $checkoutId));
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -286,7 +286,7 @@ class Checkouts implements SumUpService
     /**
      * Retrieve a checkout
      *
-     * @param string $id Unique ID of the checkout resource.
+     * @param string $checkoutId Unique ID of the checkout resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\CheckoutSuccess
@@ -295,9 +295,9 @@ class Checkouts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $id, ?RequestOptions $requestOptions = null): \SumUp\Types\CheckoutSuccess
+    public function get(string $checkoutId, ?RequestOptions $requestOptions = null): \SumUp\Types\CheckoutSuccess
     {
-        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
+        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $checkoutId));
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -392,7 +392,7 @@ class Checkouts implements SumUpService
     /**
      * Process a checkout
      *
-     * @param string $id Unique ID of the checkout resource.
+     * @param string $checkoutId Unique ID of the checkout resource.
      * @param \SumUp\Types\ProcessCheckout|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -402,9 +402,9 @@ class Checkouts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function process(string $id, \SumUp\Types\ProcessCheckout|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
+    public function process(string $checkoutId, \SumUp\Types\ProcessCheckout|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
     {
-        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $id));
+        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $checkoutId));
         $payload = [];
         $requestBody = $body;
         if (is_array($requestBody)) {

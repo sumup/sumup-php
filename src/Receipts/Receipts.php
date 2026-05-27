@@ -72,7 +72,7 @@ class Receipts implements SumUpService
     /**
      * Retrieve receipt details
      *
-     * @param string $id SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.
+     * @param string $transactionId SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.
      * @param ReceiptsGetParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -82,9 +82,9 @@ class Receipts implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $id, ?ReceiptsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Receipt
+    public function get(string $transactionId, ?ReceiptsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Receipt
     {
-        $path = sprintf('/v1.1/receipts/%s', rawurlencode((string) $id));
+        $path = sprintf('/v1.1/receipts/%s', rawurlencode((string) $transactionId));
         if ($queryParams !== null) {
             $queryParamsData = [];
             if (isset($queryParams->mid)) {
