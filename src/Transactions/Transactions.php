@@ -394,7 +394,7 @@ class Transactions implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function refund(string $merchantCode, string $transactionId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
+    public function refund(string $merchantCode, string $transactionId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null)
     {
         $path = sprintf('/v1.0/merchants/%s/payments/%s/refunds', rawurlencode((string) $merchantCode), rawurlencode((string) $transactionId));
         $payload = [];
