@@ -215,7 +215,7 @@ class MembersListResponse
 class MembersUpdateRequestUser
 {
     /**
-     * User's preferred name. Used for display purposes only.
+     * User's nickname. Used for display purposes only.
      *
      * @var string|null
      */
@@ -382,6 +382,7 @@ class Members implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, [
             '200' => ['type' => 'void'],
         ], [
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'DELETE', $path);
     }
