@@ -138,7 +138,7 @@ class TransactionsListParams
      *
      * @var string[]|null
      */
-    public ?array $users = null;
+    public ?array $usersList = null;
 
     /**
      * Filters the returned results by the specified list of final statuses of the transactions.
@@ -152,7 +152,7 @@ class TransactionsListParams
      *
      * @var string[]|null
      */
-    public ?array $paymentTypes = null;
+    public ?array $paymentTypesList = null;
 
     /**
      * Filters the returned results by the specified list of entry modes.
@@ -166,7 +166,7 @@ class TransactionsListParams
      *
      * @var string[]|null
      */
-    public ?array $types = null;
+    public ?array $typesList = null;
 
     /**
      * Filters the results by the latest modification time of resources and returns only transactions that are modified *at or after* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
@@ -332,20 +332,20 @@ class Transactions implements SumUpService
             if (isset($queryParams->limit)) {
                 $queryParamsData['limit'] = $queryParams->limit;
             }
-            if (isset($queryParams->users)) {
-                $queryParamsData['users'] = $queryParams->users;
+            if (isset($queryParams->usersList)) {
+                $queryParamsData['users[]'] = $queryParams->usersList;
             }
             if (isset($queryParams->statusesList)) {
                 $queryParamsData['statuses[]'] = $queryParams->statusesList;
             }
-            if (isset($queryParams->paymentTypes)) {
-                $queryParamsData['payment_types'] = $queryParams->paymentTypes;
+            if (isset($queryParams->paymentTypesList)) {
+                $queryParamsData['payment_types[]'] = $queryParams->paymentTypesList;
             }
             if (isset($queryParams->entryModesList)) {
                 $queryParamsData['entry_modes[]'] = $queryParams->entryModesList;
             }
-            if (isset($queryParams->types)) {
-                $queryParamsData['types'] = $queryParams->types;
+            if (isset($queryParams->typesList)) {
+                $queryParamsData['types[]'] = $queryParams->typesList;
             }
             if (isset($queryParams->changesSince)) {
                 $queryParamsData['changes_since'] = $queryParams->changesSince;

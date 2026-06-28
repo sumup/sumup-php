@@ -17,6 +17,13 @@ class MembershipUser
     public string $id;
 
     /**
+     * Type of the user account.
+     *
+     * @var MembershipUserType
+     */
+    public MembershipUserType $type;
+
+    /**
      * End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.
      *
      * @var string
@@ -52,7 +59,7 @@ class MembershipUser
     public ?string $disabledAt = null;
 
     /**
-     * User's preferred name. Used for display purposes only.
+     * User's nickname. Used for display purposes only.
      *
      * @var string|null
      */
