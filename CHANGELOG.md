@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.1.5](https://github.com/sumup/sumup-php/compare/v0.1.4...v0.1.5) (2026-06-28)
+
+
+### Features
+
+* issue templates ([#62](https://github.com/sumup/sumup-php/issues/62)) ([3ca090f](https://github.com/sumup/sumup-php/commit/3ca090f143d34a86b4bb26964f1255b97349c367))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#61](https://github.com/sumup/sumup-php/issues/61)) ([80bdc7f](https://github.com/sumup/sumup-php/commit/80bdc7f6caa906a8a4391e5aad638ca601e5fcbe))
+* synced file(s) with sumup/apis ([#64](https://github.com/sumup/sumup-php/issues/64)) ([fc7ff8b](https://github.com/sumup/sumup-php/commit/fc7ff8b1df001d0cec461e83407216c3d2e15a41))
+* synced file(s) with sumup/apis ([#67](https://github.com/sumup/sumup-php/issues/67)) ([6cd9083](https://github.com/sumup/sumup-php/commit/6cd9083466cdc9a071d077be59aa09236ac1e917))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.1 to 3.95.2 ([#59](https://github.com/sumup/sumup-php/issues/59)) ([9e78497](https://github.com/sumup/sumup-php/commit/9e78497815caa3d4120698efc051ac64a4e9878c))
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.2 to 3.95.5 ([#75](https://github.com/sumup/sumup-php/issues/75)) ([549620c](https://github.com/sumup/sumup-php/commit/549620c2f4af9bc97d61a0ef1aa2b71702f47974))
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.5 to 3.95.11 ([#83](https://github.com/sumup/sumup-php/issues/83)) ([a23c0ec](https://github.com/sumup/sumup-php/commit/a23c0ece50acd023da724dd033905f3622f03ace))
+* **deps:** bump actions/checkout from 6.0.2 to 6.0.3 ([#70](https://github.com/sumup/sumup-php/issues/70)) ([3b46147](https://github.com/sumup/sumup-php/commit/3b46147c3483f10b01a385f762c8a2b2a447e80f))
+* **deps:** bump actions/checkout from 6.0.3 to 7.0.0 ([#77](https://github.com/sumup/sumup-php/issues/77)) ([0d85c16](https://github.com/sumup/sumup-php/commit/0d85c1620ab25768c83685456aaeb11834c62268))
+* **deps:** bump actions/create-github-app-token from 3.1.1 to 3.2.0 ([#57](https://github.com/sumup/sumup-php/issues/57)) ([eb329b8](https://github.com/sumup/sumup-php/commit/eb329b8b56b2d0c5be6b42ae947e7acc37e6620f))
+* **deps:** bump actions/setup-go from 6.4.0 to 6.5.0 ([#82](https://github.com/sumup/sumup-php/issues/82)) ([117b927](https://github.com/sumup/sumup-php/commit/117b927c756d38beb6e316f8e7dce778bf832646))
+* **deps:** bump github.com/pb33f/libopenapi from 0.36.3 to 0.36.4 in /codegen ([#60](https://github.com/sumup/sumup-php/issues/60)) ([901fe55](https://github.com/sumup/sumup-php/commit/901fe55c9b16ca4839ecfdfc39c690591e6fc680))
+* **deps:** bump github.com/pb33f/libopenapi from 0.36.4 to 0.37.3 in /codegen ([#72](https://github.com/sumup/sumup-php/issues/72)) ([e3c0575](https://github.com/sumup/sumup-php/commit/e3c0575a210071078028321c09153965338bc59b))
+* **deps:** bump github.com/pb33f/libopenapi from 0.37.3 to 0.38.3 in /codegen ([#81](https://github.com/sumup/sumup-php/issues/81)) ([e9bda71](https://github.com/sumup/sumup-php/commit/e9bda71ce26e22f75b93144578b0374e0f4cf56c))
+* **deps:** bump go.yaml.in/yaml/v4 from 4.0.0-rc.4 to 4.0.0-rc.5 in /codegen ([#74](https://github.com/sumup/sumup-php/issues/74)) ([c29658e](https://github.com/sumup/sumup-php/commit/c29658e84331bd2e0374cd7df4fc20da65dc11d6))
+* **deps:** bump golangci/golangci-lint-action from 9.2.0 to 9.2.1 ([#65](https://github.com/sumup/sumup-php/issues/65)) ([e9cd86f](https://github.com/sumup/sumup-php/commit/e9cd86f89ce55db6a38dd0c26cdacd25a34d17b9))
+* **deps:** bump shivammathur/setup-php from 2.37.0 to 2.37.1 ([#58](https://github.com/sumup/sumup-php/issues/58)) ([3258ec6](https://github.com/sumup/sumup-php/commit/3258ec6844869a6ef37cfd152671e0471f1464eb))
+* **deps:** bump shivammathur/setup-php from 2.37.1 to 2.37.2 ([#73](https://github.com/sumup/sumup-php/issues/73)) ([63cb830](https://github.com/sumup/sumup-php/commit/63cb8304da9ae729e45dd2285b654bd962da7666))
+
 ## [0.1.4](https://github.com/sumup/sumup-php/compare/v0.1.3...v0.1.4) (2026-05-14)
 
 
