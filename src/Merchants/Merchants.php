@@ -62,7 +62,7 @@ class MerchantsListPersonsParams
 /**
  * Class Merchants
  *
- * Merchant account represents a single business entity at SumUp.
+ * A Merchant represents a single business which can use SumUp products like payment processing.
  *
  * @package SumUp\Services
  */
@@ -95,7 +95,7 @@ class Merchants implements SumUpService
     }
 
     /**
-     * Retrieve a Merchant
+     * Get Merchant
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param MerchantsGetParams|null $queryParams Optional query string parameters
@@ -133,7 +133,7 @@ class Merchants implements SumUpService
     }
 
     /**
-     * Retrieve a Person
+     * Get Person
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $personId Person ID
