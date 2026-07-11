@@ -113,7 +113,7 @@ class Merchant
     public ?string $version = null;
 
     /**
-     * Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
+     * Reflects the status of changes submitted through the `PATCH` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
      * The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
      *
      * @var string|null

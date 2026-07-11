@@ -425,4 +425,36 @@ class Checkouts implements SumUpService
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
         ], 'PUT', $path);
     }
+
+    /**
+     * Update a checkout
+     *
+     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param \SumUp\Types\CheckoutUpdateRequest|array<string, mixed> $body Required request payload
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Types\Checkout
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function update(string $checkoutId, \SumUp\Types\CheckoutUpdateRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\Checkout
+    {
+        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $checkoutId));
+        $payload = [];
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\CheckoutUpdateRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Checkout::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+        ], 'PATCH', $path);
+    }
 }

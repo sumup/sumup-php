@@ -10,6 +10,13 @@ namespace SumUp\Types;
 class Branding
 {
     /**
+     * Footer text rendered on receipts and other customer-facing products.
+     *
+     * @var string|null
+     */
+    public ?string $footerText = null;
+
+    /**
      * An icon for the merchant. Must be square.
      *
      * @var string|null
