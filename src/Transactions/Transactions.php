@@ -388,13 +388,13 @@ class Transactions implements SumUpService
      * @param TransactionsRefundRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
-     * @return null
+     * @return array<string, mixed>
      * @throws \SumUp\Exception\ApiException
      * @throws \SumUp\Exception\UnexpectedApiException
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function refund(string $merchantCode, string $transactionId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
+    public function refund(string $merchantCode, string $transactionId, TransactionsRefundRequest|array|null $body = null, ?RequestOptions $requestOptions = null): array
     {
         $path = sprintf('/v1.0/merchants/%s/payments/%s/refunds', rawurlencode((string) $merchantCode), rawurlencode((string) $transactionId));
         $payload = [];
@@ -410,10 +410,13 @@ class Transactions implements SumUpService
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, [
-            '204' => ['type' => 'void'],
+            '201' => ['type' => 'object'],
         ], [
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
-            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '409' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'POST', $path);
     }
 }
