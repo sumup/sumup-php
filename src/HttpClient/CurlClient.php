@@ -111,7 +111,6 @@ class CurlClient implements HttpClientInterface
 
             $error = curl_error($ch);
             if ($error) {
-                $this->closeHandle($ch);
                 if ($attempt < $retries) {
                     $this->sleepBackoff($backoffMs, $attempt);
                     $attempt++;
@@ -122,7 +121,6 @@ class CurlClient implements HttpClientInterface
 
             $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 
-            $this->closeHandle($ch);
             if ($code >= 500 && $attempt < $retries) {
                 $this->sleepBackoff($backoffMs, $attempt);
                 $attempt++;
@@ -230,14 +228,6 @@ class CurlClient implements HttpClientInterface
         }
 
         return $headers;
-    }
-
-    /**
-     * Close the cURL handle.
-     */
-    private function closeHandle(\CurlHandle $handle): void
-    {
-        curl_close($handle);
     }
 
     /**
