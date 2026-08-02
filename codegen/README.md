@@ -16,6 +16,18 @@ go run . generate ../openapi.json ./build
 
 > Note: The PHP SDK now ships only with `openapi.json`; the YAML version is no longer maintained.
 
+## PHP Code Samples
+
+The `samples` command generates a deterministic, versioned JSON catalog from the same OpenAPI model used to generate the SDK. Each entry contains a complete PHP program that calls the generated service method. Named OpenAPI request examples produce separate entries.
+
+Generate the catalog from the repository root with:
+
+```sh
+just generate-codesamples
+```
+
+The recipe writes `code-samples.json` in the repository root by default. Pass another path as its argument to write it elsewhere. The generated file is ignored in this repository, and the codegen tests lint every program with PHP. Published releases regenerate the catalog from the release tag and open or update a pull request in `sumup/sumup-developer`.
+
 ## Features
 
 ### Enum Support

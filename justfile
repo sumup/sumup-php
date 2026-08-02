@@ -40,4 +40,13 @@ analyse: install
 
 # Generate SDK from the local OpenAPI specs.
 generate:
-  cd codegen && go run . generate ../openapi.json ../src
+  go -C codegen run . generate \
+    ../openapi.json  \
+    ../src
+
+# Generate a versioned JSON catalog of PHP code samples.
+generate-codesamples output="code-samples.json":
+  go -C codegen run . samples \
+    --sdk-version-file ../composer.json \
+    --out "{{ absolute_path(output) }}" \
+    ../openapi.json

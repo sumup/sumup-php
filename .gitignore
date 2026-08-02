@@ -8,4 +8,5 @@ composer.lock
 .phpunit.result.cache
 .envrc
 build/
+code-samples.json
 .phpdoc/
