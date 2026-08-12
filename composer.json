@@ -21,9 +21,6 @@
 	"config": {
 		"platform": {
 			"php": "8.2.0"
-		},
-		"allow-plugins": {
-			"phpdocumentor/shim": true
 		}
 	},
 	"scripts": {
@@ -39,7 +36,6 @@
 		"friendsofphp/php-cs-fixer": "3.95.18",
 		"phpstan/phpstan": "^2.1",
 		"phpunit/phpunit": "^9.6",
-		"phpdocumentor/shim": "^3.9",
 		"league/oauth2-client": "^2.9"
 	},
 	"suggest": {
