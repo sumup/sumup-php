@@ -165,8 +165,6 @@ class ReadersListResponse
 /**
  * Class Readers
  *
- * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
- *
  * @package SumUp\Services
  */
 class Readers implements SumUpService
@@ -270,6 +268,42 @@ class Readers implements SumUpService
     }
 
     /**
+     * Create a Go Reader Payment
+     *
+     * @param string $merchantCode Short unique identifier for the merchant.
+     * @param string $readerId The unique identifier of the reader.
+     * @param \SumUp\Types\ReaderPaymentRequestParams|array<string, mixed> $body Required request payload
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Types\ReaderPaymentResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function createGoCheckout(string $merchantCode, string $readerId, \SumUp\Types\ReaderPaymentRequestParams|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\ReaderPaymentResponse
+    {
+        $path = sprintf('/v0/merchants/%s/readers/%s/go-checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
+        $payload = [];
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\ReaderPaymentRequestParams::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\ReaderPaymentResponse::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'POST', $path);
+    }
+
+    /**
      * Delete a reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
@@ -319,6 +353,34 @@ class Readers implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Reader::class, [
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
+    }
+
+    /**
+     * Get a Reader Checkout
+     *
+     * @param string $merchantCode Merchant Code
+     * @param string $readerId The unique identifier of the Reader
+     * @param string $checkoutId The unique identifier of the Checkout
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Types\GetReaderCheckoutResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function getCheckout(string $merchantCode, string $readerId, string $checkoutId, ?RequestOptions $requestOptions = null): \SumUp\Types\GetReaderCheckoutResponse
+    {
+        $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId), rawurlencode((string) $checkoutId));
+        $payload = [];
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\GetReaderCheckoutResponse::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
