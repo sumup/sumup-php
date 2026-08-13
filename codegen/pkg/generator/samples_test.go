@@ -10,6 +10,9 @@ import (
 	"testing"
 
 	"github.com/pb33f/libopenapi"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/pb33f/libopenapi/orderedmap"
+	"go.yaml.in/yaml/v4"
 )
 
 func TestGeneratorSamples(t *testing.T) {
@@ -102,6 +105,27 @@ func TestGeneratorSamplesDeterministic(t *testing.T) {
 	}
 	if string(first) != string(second) {
 		t.Fatal("sample generation is not deterministic")
+	}
+}
+
+func TestRequestExamplesPreserveWholeRequestExample(t *testing.T) {
+	t.Parallel()
+
+	var node yaml.Node
+	if err := node.Encode(map[string]any{"selected": "request-example"}); err != nil {
+		t.Fatalf("encode request example: %v", err)
+	}
+	content := orderedmap.New[string, *v3.MediaType]()
+	content.Set("application/json", &v3.MediaType{Example: &node})
+	operation := &v3.Operation{RequestBody: &v3.RequestBody{Content: content}}
+
+	examples := requestExamples(operation)
+	if len(examples) != 1 || !examples[0].provided {
+		t.Fatalf("requestExamples() = %#v", examples)
+	}
+	value, ok := examples[0].value.(map[string]any)
+	if !ok || len(value) != 1 || value["selected"] != "request-example" {
+		t.Fatalf("request example was expanded with schema values: %#v", examples[0].value)
 	}
 }
 
