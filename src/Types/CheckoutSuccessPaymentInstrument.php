@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class CheckoutSuccessPaymentInstrument
 {
     /**
-     * Token value
+     * Unique token of the saved payment instrument.
      *
      * @var string|null
      */

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Details of the transaction.
+ * Core details shared by transaction resources.
  */
 class TransactionBase
 {
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
@@ -31,14 +31,14 @@ class TransactionBase
     public ?float $amount = null;
 
     /**
-     * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
      * @var TransactionBaseCurrency|null
      */
     public ?TransactionBaseCurrency $currency = null;
 
     /**
-     * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+     * The timestamp of when the transaction was created.
      *
      * @var string|null
      */
@@ -64,7 +64,7 @@ class TransactionBase
     public ?TransactionBasePaymentType $paymentType = null;
 
     /**
-     * Current number of the installment for deferred payments.
+     * Number of installments for a deferred payment.
      *
      * @var int|null
      */

@@ -24,7 +24,7 @@ class MandateResponse
     public ?MandateResponseStatus $status = null;
 
     /**
-     * Merchant account for which the mandate is valid.
+     * Short unique identifier for the merchant for which the mandate is valid.
      *
      * @var string|null
      */

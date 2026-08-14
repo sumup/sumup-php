@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Error message structure.
+ * Details of a request validation error.
  */
 class DetailsError
 {
@@ -24,7 +24,7 @@ class DetailsError
     public ?string $details = null;
 
     /**
-     * The status code.
+     * HTTP status code for the error.
      *
      * @var float|null
      */

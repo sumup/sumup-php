@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class Link
 {
     /**
-     * Specifies the relation to the current resource.
+     * Relation of the linked resource to the current resource.
      *
      * @var string|null
      */
@@ -24,21 +24,21 @@ class Link
     public ?string $href = null;
 
     /**
-     * Specifies the media type of the related resource.
+     * Media type of the linked resource.
      *
      * @var string|null
      */
     public ?string $type = null;
 
     /**
-     * Minimum allowed amount for the refund.
+     * Minimum amount allowed for a refund, in major units.
      *
      * @var float|null
      */
     public ?float $minAmount = null;
 
     /**
-     * Maximum allowed amount for the refund.
+     * Maximum amount allowed for a refund, in major units.
      *
      * @var float|null
      */

@@ -24,14 +24,14 @@ class Checkout
     public ?float $amount = null;
 
     /**
-     * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
      * @var CheckoutCurrency|null
      */
     public ?CheckoutCurrency $currency = null;
 
     /**
-     * Merchant account that receives the payment.
+     * Short unique identifier for the merchant that receives the payment.
      *
      * @var string|null
      */
@@ -66,7 +66,7 @@ class Checkout
     public ?CheckoutStatus $status = null;
 
     /**
-     * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+     * The timestamp of when the checkout was created.
      *
      * @var string|null
      */

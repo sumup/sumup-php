@@ -10,14 +10,14 @@ namespace SumUp\Types;
 class ReceiptEvent
 {
     /**
-     * Unique ID of the transaction event.
+     * Unique identifier of the transaction event.
      *
      * @var int|null
      */
     public ?int $id = null;
 
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
@@ -46,14 +46,14 @@ class ReceiptEvent
     public ?ReceiptEventStatus $status = null;
 
     /**
-     * Amount of the event.
+     * Amount associated with the transaction event, in major units.
      *
      * @var string|null
      */
     public ?string $amount = null;
 
     /**
-     * Date and time of the transaction event.
+     * The timestamp of when the transaction event occurred.
      *
      * @var string|null
      */

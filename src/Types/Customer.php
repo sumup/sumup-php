@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class Customer
 {
     /**
-     * Unique ID of the customer.
+     * Unique identifier of the customer.
      *
      * @var string
      */

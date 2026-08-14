@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Error message for forbidden requests.
+ * Details of an error returned for a forbidden request.
  */
 class ErrorForbidden
 {

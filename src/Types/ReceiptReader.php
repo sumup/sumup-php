@@ -10,14 +10,14 @@ namespace SumUp\Types;
 class ReceiptReader
 {
     /**
-     * Reader serial number.
+     * Unique identifier of the physical card reader.
      *
      * @var string|null
      */
     public ?string $code = null;
 
     /**
-     * Reader type.
+     * Model of the physical card reader.
      *
      * @var string|null
      */

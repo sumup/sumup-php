@@ -126,7 +126,7 @@ class Customers implements SumUpService
     /**
      * Deactivate a payment instrument
      *
-     * @param string $customerId Unique ID of the saved customer resource.
+     * @param string $customerId Unique identifier of the saved customer resource.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -157,7 +157,7 @@ class Customers implements SumUpService
     /**
      * Retrieve a customer
      *
-     * @param string $customerId Unique ID of the saved customer resource.
+     * @param string $customerId Unique identifier of the saved customer resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Customer
@@ -184,7 +184,7 @@ class Customers implements SumUpService
     /**
      * List payment instruments
      *
-     * @param string $customerId Unique ID of the saved customer resource.
+     * @param string $customerId Unique identifier of the saved customer resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
@@ -213,7 +213,7 @@ class Customers implements SumUpService
     /**
      * Update a customer
      *
-     * @param string $customerId Unique ID of the saved customer resource.
+     * @param string $customerId Unique identifier of the saved customer resource.
      * @param CustomersUpdateRequest|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

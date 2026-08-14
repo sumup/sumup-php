@@ -55,12 +55,14 @@ class TransactionsRefundRequest
 class TransactionsListResponse
 {
     /**
+     * Transactions in the current result page.
      *
      * @var \SumUp\Types\TransactionHistory[]|null
      */
     public ?array $items = null;
 
     /**
+     * Pagination links for navigating the transaction history.
      *
      * @var \SumUp\Types\TransactionsHistoryLink[]|null
      */
@@ -90,14 +92,14 @@ class TransactionsGetParams
     public ?string $transactionCode = null;
 
     /**
-     * External/foreign transaction id (passed by clients).
+     * External transaction identifier supplied by the client.
      *
      * @var string|null
      */
     public ?string $foreignTransactionId = null;
 
     /**
-     * Client transaction id.
+     * Client-supplied identifier of the transaction.
      *
      * @var string|null
      */
@@ -260,7 +262,7 @@ class Transactions implements SumUpService
     /**
      * Retrieve a transaction
      *
-     * @param string $merchantCode Merchant code of the account whose transaction should be retrieved.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param TransactionsGetParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -308,7 +310,7 @@ class Transactions implements SumUpService
     /**
      * List transactions
      *
-     * @param string $merchantCode Merchant code of the account whose transaction history should be listed.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param TransactionsListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -383,8 +385,8 @@ class Transactions implements SumUpService
     /**
      * Refund a transaction
      *
-     * @param string $merchantCode Merchant code of the account that owns the payment to refund.
-     * @param string $transactionId Unique ID of the transaction.
+     * @param string $merchantCode Short unique identifier for the merchant.
+     * @param string $transactionId Unique identifier of the transaction.
      * @param TransactionsRefundRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

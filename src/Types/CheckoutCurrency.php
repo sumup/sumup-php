@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+ * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
  */
 enum CheckoutCurrency: string
 {

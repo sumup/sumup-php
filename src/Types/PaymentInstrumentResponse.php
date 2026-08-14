@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Payment Instrument Response
+ * Details of a saved payment instrument.
  */
 class PaymentInstrumentResponse
 {
@@ -45,7 +45,7 @@ class PaymentInstrumentResponse
     public ?MandateResponse $mandate = null;
 
     /**
-     * Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+     * The timestamp of when the payment instrument was created.
      *
      * @var string|null
      */

@@ -165,6 +165,8 @@ class ReadersListResponse
 /**
  * Class Readers
  *
+ * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
+ *
  * @package SumUp\Services
  */
 class Readers implements SumUpService
@@ -299,7 +301,6 @@ class Readers implements SumUpService
             '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '500' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'POST', $path);
     }
 

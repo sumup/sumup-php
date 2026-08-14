@@ -10,14 +10,14 @@ namespace SumUp\Types;
 class Receipt
 {
     /**
-     * Transaction information.
+     * Transaction details displayed on a receipt.
      *
      * @var ReceiptTransaction|null
      */
     public ?ReceiptTransaction $transactionData = null;
 
     /**
-     * Receipt merchant data
+     * Merchant details displayed on a transaction receipt.
      *
      * @var ReceiptMerchantData|null
      */
