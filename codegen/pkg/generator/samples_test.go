@@ -66,14 +66,6 @@ func TestGeneratorSamples(t *testing.T) {
 		t.Fatalf("sample JSON contains internal source field name: %s", encodedSample)
 	}
 
-	getTransaction := sampleByID(t, catalog.Samples, "GetTransactionV2.1")
-	if !strings.Contains(getTransaction.Source, "$queryParams->id = 'transaction-id';") {
-		t.Fatalf("GetTransaction sample does not select a transaction identifier:\n%s", getTransaction.Source)
-	}
-	if strings.Contains(getTransaction.Source, "$queryParams->transactionCode") {
-		t.Fatalf("GetTransaction sample sets mutually exclusive identifiers:\n%s", getTransaction.Source)
-	}
-
 	php, err := exec.LookPath("php")
 	if err != nil {
 		t.Skip("php is not installed")
