@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Purchase product.
+ * Product details associated with a transaction.
  */
 class Product
 {
@@ -17,7 +17,7 @@ class Product
     public ?string $name = null;
 
     /**
-     * Product description.
+     * Human-readable label for the product price.
      *
      * @var string|null
      */
@@ -31,7 +31,7 @@ class Product
     public ?float $price = null;
 
     /**
-     * VAT percentage.
+     * VAT rate applied to the product price.
      *
      * @var float|null
      */
@@ -45,14 +45,14 @@ class Product
     public ?float $singleVatAmount = null;
 
     /**
-     * Product price incl. VAT.
+     * Product price including VAT.
      *
      * @var float|null
      */
     public ?float $priceWithVat = null;
 
     /**
-     * VAT amount.
+     * Total VAT amount for the product quantity.
      *
      * @var float|null
      */
@@ -66,14 +66,14 @@ class Product
     public ?int $quantity = null;
 
     /**
-     * Quantity x product price.
+     * Total price calculated as the product price multiplied by the quantity.
      *
      * @var float|null
      */
     public ?float $totalPrice = null;
 
     /**
-     * Total price incl. VAT.
+     * Total product price including VAT.
      *
      * @var float|null
      */

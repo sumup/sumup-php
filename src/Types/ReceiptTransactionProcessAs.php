@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Debit/Credit.
+ * Whether the transaction was processed as credit or debit.
  */
 enum ReceiptTransactionProcessAs: string
 {

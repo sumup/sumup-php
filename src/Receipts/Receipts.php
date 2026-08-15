@@ -19,14 +19,14 @@ use SumUp\ResponseDecoder;
 class ReceiptsGetParams
 {
     /**
-     * Merchant code.
+     * Short unique identifier for the merchant.
      *
      * @var string
      */
     public string $mid;
 
     /**
-     * The ID of the transaction event (refund).
+     * Unique identifier of the transaction event to include on the receipt.
      *
      * @var int|null
      */

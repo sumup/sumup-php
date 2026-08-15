@@ -95,7 +95,7 @@ class Payouts implements SumUpService
     /**
      * List payouts
      *
-     * @param string $merchantCode Merchant code of the account whose payouts should be listed.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param PayoutsListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

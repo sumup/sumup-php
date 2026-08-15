@@ -24,14 +24,14 @@ class CheckoutCreateRequest
     public float $amount;
 
     /**
-     * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
      * @var CheckoutCreateRequestCurrency
      */
     public CheckoutCreateRequestCurrency $currency;
 
     /**
-     * Merchant account that should receive the payment.
+     * Short unique identifier for the merchant that should receive the payment.
      *
      * @var string
      */

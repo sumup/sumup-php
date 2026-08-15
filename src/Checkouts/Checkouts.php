@@ -80,6 +80,7 @@ class CheckoutsCreateApplePaySessionRequest
 class CheckoutsListAvailablePaymentMethodsResponse
 {
     /**
+     * Payment methods available to the merchant for the checkout.
      *
      * @var CheckoutsListAvailablePaymentMethodsResponseItem[]|null
      */
@@ -90,7 +91,7 @@ class CheckoutsListAvailablePaymentMethodsResponse
 class CheckoutsListAvailablePaymentMethodsResponseItem
 {
     /**
-     * The ID of the payment method.
+     * Unique identifier of the payment method.
      *
      * @var string
      */
@@ -106,7 +107,7 @@ class CheckoutsListAvailablePaymentMethodsResponseItem
 class CheckoutsListParams
 {
     /**
-     * Filters the list of checkout resources by the unique ID of the checkout.
+     * Filters the list of checkout resources by the unique reference of the checkout.
      *
      * @var string|null
      */
@@ -223,7 +224,7 @@ class Checkouts implements SumUpService
     /**
      * Create an Apple Pay session
      *
-     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param string $checkoutId Unique identifier of the checkout resource.
      * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -259,7 +260,7 @@ class Checkouts implements SumUpService
     /**
      * Deactivate a checkout
      *
-     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param string $checkoutId Unique identifier of the checkout resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Checkout
@@ -286,7 +287,7 @@ class Checkouts implements SumUpService
     /**
      * Retrieve a checkout
      *
-     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param string $checkoutId Unique identifier of the checkout resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\CheckoutSuccess
@@ -351,7 +352,7 @@ class Checkouts implements SumUpService
     /**
      * Get available payment methods
      *
-     * @param string $merchantCode The SumUp merchant code.
+     * @param string $merchantCode Short unique identifier for the merchant.
      * @param CheckoutsListAvailablePaymentMethodsParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -392,7 +393,7 @@ class Checkouts implements SumUpService
     /**
      * Process a checkout
      *
-     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param string $checkoutId Unique identifier of the checkout resource.
      * @param \SumUp\Types\ProcessCheckout|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -429,7 +430,7 @@ class Checkouts implements SumUpService
     /**
      * Update a checkout
      *
-     * @param string $checkoutId Unique ID of the checkout resource.
+     * @param string $checkoutId Unique identifier of the checkout resource.
      * @param \SumUp\Types\CheckoutUpdateRequest|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *

@@ -45,7 +45,7 @@ class PersonalDetails
     public ?string $birthDate = null;
 
     /**
-     * An identification number user for tax purposes (e.g. CPF)
+     * Identification number used for tax purposes, such as a CPF in Brazil.
      *
      * @var string|null
      */

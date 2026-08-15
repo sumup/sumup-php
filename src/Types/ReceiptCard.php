@@ -10,14 +10,14 @@ namespace SumUp\Types;
 class ReceiptCard
 {
     /**
-     * Card last 4 digits.
+     * Last four digits of the payment card number.
      *
      * @var string|null
      */
     public ?string $last4Digits = null;
 
     /**
-     * Card Scheme.
+     * Issuing card network of the payment card.
      *
      * @var string|null
      */

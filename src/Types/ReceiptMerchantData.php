@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Receipt merchant data
+ * Merchant details displayed on a transaction receipt.
  */
 class ReceiptMerchantData
 {

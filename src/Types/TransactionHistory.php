@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class TransactionHistory
 {
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
@@ -31,14 +31,14 @@ class TransactionHistory
     public ?float $amount = null;
 
     /**
-     * Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.
+     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
      * @var string|null
      */
     public ?string $currency = null;
 
     /**
-     * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+     * The timestamp of when the transaction was created.
      *
      * @var string|null
      */
@@ -64,7 +64,7 @@ class TransactionHistory
     public ?string $paymentType = null;
 
     /**
-     * Current number of the installment for deferred payments.
+     * Number of installments for a deferred payment.
      *
      * @var int|null
      */
@@ -99,14 +99,14 @@ class TransactionHistory
     public ?string $payoutPlan = null;
 
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
     public ?string $transactionId = null;
 
     /**
-     * Client-specific ID of the transaction.
+     * Client-supplied identifier of the transaction.
      *
      * @var string|null
      */

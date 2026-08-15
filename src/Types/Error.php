@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Error message structure.
+ * Details of an API error.
  */
 class Error
 {

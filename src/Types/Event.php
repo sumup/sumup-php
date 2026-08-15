@@ -10,14 +10,14 @@ namespace SumUp\Types;
 class Event
 {
     /**
-     * Unique ID of the transaction event.
+     * Unique identifier of the transaction event.
      *
      * @var int|null
      */
     public ?int $id = null;
 
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
@@ -46,42 +46,42 @@ class Event
     public ?EventStatus $status = null;
 
     /**
-     * Amount of the event.
+     * Amount associated with the transaction event, in major units.
      *
      * @var float|null
      */
     public ?float $amount = null;
 
     /**
-     * Date and time of the transaction event.
+     * The timestamp of when the transaction event occurred.
      *
      * @var string|null
      */
     public ?string $timestamp = null;
 
     /**
-     * Amount of the fee related to the event.
+     * Fee associated with the transaction event, in major units.
      *
      * @var float|null
      */
     public ?float $feeAmount = null;
 
     /**
-     * Consecutive number of the installment.
+     * Consecutive number of the installment associated with the event.
      *
      * @var int|null
      */
     public ?int $installmentNumber = null;
 
     /**
-     * Amount deducted for the event.
+     * Amount deducted from the merchant for the event, in major units.
      *
      * @var float|null
      */
     public ?float $deductedAmount = null;
 
     /**
-     * Amount of the fee deducted for the event.
+     * Fee deducted from the merchant for the event, in major units.
      *
      * @var float|null
      */

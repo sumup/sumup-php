@@ -5,82 +5,82 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Transaction information.
+ * Transaction details displayed on a receipt.
  */
 class ReceiptTransaction
 {
     /**
-     * Transaction code.
+     * Transaction code returned after processing the transaction.
      *
      * @var string|null
      */
     public ?string $transactionCode = null;
 
     /**
-     * Unique ID of the transaction.
+     * Unique identifier of the transaction.
      *
      * @var string|null
      */
     public ?string $transactionId = null;
 
     /**
-     * Merchant code.
+     * Short unique identifier for the merchant.
      *
      * @var string|null
      */
     public ?string $merchantCode = null;
 
     /**
-     * Transaction amount.
+     * Total transaction amount, in major units.
      *
      * @var string|null
      */
     public ?string $amount = null;
 
     /**
-     * Transaction VAT amount.
+     * VAT included in the transaction amount, in major units.
      *
      * @var string|null
      */
     public ?string $vatAmount = null;
 
     /**
-     * Tip amount (included in transaction amount).
+     * Tip included in the transaction amount, in major units.
      *
      * @var string|null
      */
     public ?string $tipAmount = null;
 
     /**
-     * Transaction currency.
+     * Three-letter ISO 4217 currency code of the transaction.
      *
      * @var string|null
      */
     public ?string $currency = null;
 
     /**
-     * Time created at.
+     * The timestamp of when the transaction was created.
      *
      * @var string|null
      */
     public ?string $timestamp = null;
 
     /**
-     * Transaction processing status.
+     * Current processing status of the transaction.
      *
      * @var string|null
      */
     public ?string $status = null;
 
     /**
-     * Transaction type.
+     * Payment type used for the transaction.
      *
      * @var string|null
      */
     public ?string $paymentType = null;
 
     /**
-     * Transaction entry mode.
+     * Entry mode of the payment details.
      *
      * @var string|null
      */
@@ -115,35 +115,35 @@ class ReceiptTransaction
     public ?int $installmentsCount = null;
 
     /**
-     * Debit/Credit.
+     * Whether the transaction was processed as credit or debit.
      *
      * @var ReceiptTransactionProcessAs|null
      */
     public ?ReceiptTransactionProcessAs $processAs = null;
 
     /**
-     * Products
+     * Products associated with the transaction.
      *
      * @var array<string, mixed>[]|null
      */
     public ?array $products = null;
 
     /**
-     * Vat rates.
+     * VAT breakdown for the transaction.
      *
      * @var array<string, mixed>[]|null
      */
     public ?array $vatRates = null;
 
     /**
-     * Events
+     * Transaction events displayed on the receipt.
      *
      * @var ReceiptEvent[]|null
      */
     public ?array $events = null;
 
     /**
-     * Receipt number
+     * Receipt number associated with the transaction.
      *
      * @var string|null
      */

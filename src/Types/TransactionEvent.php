@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class TransactionEvent
 {
     /**
-     * Unique ID of the transaction event.
+     * Unique identifier of the transaction event.
      *
      * @var int|null
      */
