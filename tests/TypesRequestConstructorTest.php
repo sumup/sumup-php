@@ -9,8 +9,8 @@ use SumUp\Types\CreateReaderCheckoutRequest;
 use SumUp\Types\CreateReaderCheckoutRequestAade;
 use SumUp\Types\CreateReaderCheckoutRequestAffiliate;
 use SumUp\Types\CreateReaderCheckoutRequestTotalAmount;
-use SumUp\Types\ProcessCheckout;
-use SumUp\Types\ProcessCheckoutPaymentType;
+use SumUp\Types\Customer;
+use SumUp\Types\PersonalDetails;
 
 class TypesRequestConstructorTest extends TestCase
 {
@@ -91,10 +91,20 @@ class TypesRequestConstructorTest extends TestCase
 
     public function testRequestBodyDtoWithoutRequestSuffixSupportsNamedArgumentsAndFromArray(): void
     {
-        $namedRequest = new ProcessCheckout(paymentType: 'card');
-        $arrayRequest = ProcessCheckout::fromArray(['payment_type' => 'card']);
+        $personalDetails = new PersonalDetails();
+        $personalDetails->firstName = 'Alice';
 
-        $this->assertSame(ProcessCheckoutPaymentType::CARD, $namedRequest->paymentType);
-        $this->assertSame(ProcessCheckoutPaymentType::CARD, $arrayRequest->paymentType);
+        $namedRequest = new Customer(customerId: 'cust-123', personalDetails: $personalDetails);
+        $arrayRequest = Customer::fromArray([
+            'customer_id' => 'cust-123',
+            'personal_details' => ['first_name' => 'Alice'],
+        ]);
+
+        $this->assertSame('cust-123', $namedRequest->customerId);
+        $this->assertSame($personalDetails, $namedRequest->personalDetails);
+
+        $this->assertSame('cust-123', $arrayRequest->customerId);
+        $this->assertInstanceOf(PersonalDetails::class, $arrayRequest->personalDetails);
+        $this->assertSame('Alice', $arrayRequest->personalDetails->firstName);
     }
 }

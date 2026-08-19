@@ -391,43 +391,6 @@ class Checkouts implements SumUpService
     }
 
     /**
-     * Process a checkout
-     *
-     * @param string $checkoutId Unique identifier of the checkout resource.
-     * @param \SumUp\Types\ProcessCheckout|array<string, mixed> $body Required request payload
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function process(string $checkoutId, \SumUp\Types\ProcessCheckout|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\CheckoutSuccess|\SumUp\Types\CheckoutAccepted
-    {
-        $path = sprintf('/v0.1/checkouts/%s', rawurlencode((string) $checkoutId));
-        $payload = [];
-        $requestBody = $body;
-        if (is_array($requestBody)) {
-            $requestBody = \SumUp\Types\ProcessCheckout::fromArray($requestBody);
-        }
-        $payload = RequestEncoder::encode($requestBody);
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('PUT', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, [
-            '200' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutSuccess::class],
-            '202' => ['type' => 'class', 'class' => \SumUp\Types\CheckoutAccepted::class],
-        ], [
-            '400' => ['type' => 'mixed'],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
-            '409' => ['type' => 'class', 'class' => \SumUp\Types\Error::class],
-        ], 'PUT', $path);
-    }
-
-    /**
      * Update a checkout
      *
      * @param string $checkoutId Unique identifier of the checkout resource.

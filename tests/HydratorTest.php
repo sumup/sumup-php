@@ -8,7 +8,7 @@ use SumUp\Types\Checkout;
 use SumUp\Types\CheckoutCurrency;
 use SumUp\Types\MandateResponse;
 use SumUp\Types\MandateResponseStatus;
-use SumUp\Types\ProcessCheckout;
+use SumUp\Types\Receipt;
 
 class HydratorTest extends TestCase
 {
@@ -49,19 +49,17 @@ class HydratorTest extends TestCase
 
     public function testHydrateOpaqueObjectSchemaAsArray()
     {
-        $checkout = Hydrator::hydrate([
-            'apple_pay' => [
-                'token' => [
-                    'paymentData' => [
-                        'version' => 'EC_v1',
-                    ],
+        $receipt = Hydrator::hydrate([
+            'emv_data' => [
+                'application' => [
+                    'identifier' => 'A0000000031010',
                 ],
             ],
-        ], ProcessCheckout::class);
+        ], Receipt::class);
 
-        $this->assertInstanceOf(ProcessCheckout::class, $checkout);
-        $this->assertIsArray($checkout->applePay);
-        $this->assertSame('EC_v1', $checkout->applePay['token']['paymentData']['version']);
+        $this->assertInstanceOf(Receipt::class, $receipt);
+        $this->assertIsArray($receipt->emvData);
+        $this->assertSame('A0000000031010', $receipt->emvData['application']['identifier']);
     }
 
     public function testHydrateArrayItemsFromDocblockClassNames()
