@@ -14,7 +14,7 @@ class PersonalIdentifier
     public string $ref;
 
     /**
-     * The company identifier value.
+     * The personal identifier value.
      *
      * @var string
      */
