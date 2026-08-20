@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.7](https://github.com/sumup/sumup-php/compare/v0.1.6...v0.1.7) (2026-08-20)
+
+
+### Bug Fixes
+
+* codesamples sync ([96f52c8](https://github.com/sumup/sumup-php/commit/96f52c8419f31308a852f57f73c49bcb08e2d3b1))
+
+
+### Chores
+
+* use draft releases ([e83e9d9](https://github.com/sumup/sumup-php/commit/e83e9d9a6879c764b0806a4a2df01995eaa16825))
+
 ## [0.1.6](https://github.com/sumup/sumup-php/compare/v0.1.5...v0.1.6) (2026-08-19)
 
 
