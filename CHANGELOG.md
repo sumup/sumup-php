@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.6](https://github.com/sumup/sumup-php/compare/v0.1.5...v0.1.6) (2026-08-19)
+
+
+### Features
+
+* improve code samples generation ([87331be](https://github.com/sumup/sumup-php/commit/87331be2ab19d765e39140758105f49039952e22))
+
+
+### Chores
+
+* fix tests for sample generator ([d95623b](https://github.com/sumup/sumup-php/commit/d95623b5cae92d57bf9eeb4080901811e042a628))
+* synced file(s) with sumup/apis ([#106](https://github.com/sumup/sumup-php/issues/106)) ([a9b4b5a](https://github.com/sumup/sumup-php/commit/a9b4b5a8f419180ee679a0787e6ba2ca58863368))
+* synced file(s) with sumup/apis ([#109](https://github.com/sumup/sumup-php/issues/109)) ([08b1473](https://github.com/sumup/sumup-php/commit/08b14736a78d650c2e030baa254baf5937bd8a92))
+
+
+### Build System & Dependencies
+
+* **deps:** bump reviewdog/action-actionlint from 1.73.0 to 1.73.1 ([#108](https://github.com/sumup/sumup-php/issues/108)) ([37a22be](https://github.com/sumup/sumup-php/commit/37a22be89c6cc16b5830abd383659fa51d2ea39d))
+
 ## [0.1.5](https://github.com/sumup/sumup-php/compare/v0.1.4...v0.1.5) (2026-08-12)
 
 
