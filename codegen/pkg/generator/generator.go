@@ -401,7 +401,7 @@ func (g *Generator) constructorParamDocType(prop phpProperty) string {
 	if backingType := g.enumBackingType(prop.Type); backingType != "" {
 		docType += "|" + backingType
 	}
-	if prop.Optional && !strings.Contains(docType, "null") {
+	if (prop.Optional || prop.Nullable) && !strings.Contains(docType, "null") {
 		docType += "|null"
 	}
 	return docType
@@ -417,7 +417,7 @@ func (g *Generator) constructorParamType(prop phpProperty) string {
 		paramType += "|" + backingType
 	}
 
-	if prop.Optional && paramType != "mixed" {
+	if (prop.Optional || prop.Nullable) && paramType != "mixed" {
 		if strings.Contains(paramType, "|") {
 			if !strings.Contains(paramType, "null") {
 				paramType += "|null"

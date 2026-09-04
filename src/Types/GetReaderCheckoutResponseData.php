@@ -9,9 +9,9 @@ class GetReaderCheckoutResponseData
     /**
      * Type of the card. Required for some countries
      *
-     * @var GetReaderCheckoutResponseDataCardType
+     * @var GetReaderCheckoutResponseDataCardType|null
      */
-    public GetReaderCheckoutResponseDataCardType $cardType;
+    public ?GetReaderCheckoutResponseDataCardType $cardType;
 
     /**
      * Unique identifier for the checkout
@@ -37,9 +37,9 @@ class GetReaderCheckoutResponseData
     /**
      * Number of installments for the transaction. Required for some countries.
      *
-     * @var int
+     * @var int|null
      */
-    public int $installments;
+    public ?int $installments;
 
     /**
      * Payment failure reason
@@ -51,9 +51,9 @@ class GetReaderCheckoutResponseData
     /**
      * Payment status from payments v2 event
      *
-     * @var string
+     * @var string|null
      */
-    public string $paymentStatus;
+    public ?string $paymentStatus;
 
     /**
      * Type of the payment. Required for some countries
@@ -102,8 +102,8 @@ class GetReaderCheckoutResponseData
     /**
      * Checkout expiration timestamp. After this time, the checkout will be automatically cancelled.
      *
-     * @var string
+     * @var string|null
      */
-    public string $validUntil;
+    public ?string $validUntil;
 
 }

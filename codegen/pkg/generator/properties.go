@@ -15,6 +15,7 @@ type phpProperty struct {
 	Type           string
 	DocType        string
 	Optional       bool
+	Nullable       bool
 	Description    string
 }
 
@@ -30,6 +31,7 @@ func (g *Generator) schemaProperties(schema *base.SchemaProxy, currentNamespace 
 			Name:           phpPropertyName(spec.Name),
 			SerializedName: spec.Name,
 			Optional:       !spec.Required,
+			Nullable:       schemaAllowsNull(spec.Schema),
 		}
 
 		if spec.Schema != nil && spec.Schema.Schema() != nil {
@@ -169,7 +171,7 @@ func (g *Generator) renderProperty(prop phpProperty) string {
 	}
 	b.WriteString("     *\n")
 	docType := prop.DocType
-	if prop.Optional {
+	if prop.Optional || prop.Nullable {
 		if !strings.Contains(docType, "null") {
 			docType += "|null"
 		}
@@ -178,7 +180,7 @@ func (g *Generator) renderProperty(prop phpProperty) string {
 	b.WriteString("     */\n")
 
 	propertyType := prop.Type
-	if prop.Optional && propertyType != "mixed" && !strings.HasPrefix(propertyType, "?") {
+	if (prop.Optional || prop.Nullable) && propertyType != "mixed" && !strings.HasPrefix(propertyType, "?") {
 		propertyType = "?" + propertyType
 	}
 
@@ -295,4 +297,24 @@ func hasSchemaType(schema *base.Schema, typ string) bool {
 		return false
 	}
 	return slices.Contains(schema.Type, typ)
+}
+
+func schemaAllowsNull(schemaRef *base.SchemaProxy) bool {
+	if schemaRef == nil {
+		return false
+	}
+	schema := schemaRef.Schema()
+	if schema == nil {
+		return false
+	}
+	if schema.Nullable != nil && *schema.Nullable {
+		return true
+	}
+	if hasSchemaType(schema, "null") {
+		return true
+	}
+	if len(schema.AllOf) == 1 {
+		return schemaAllowsNull(schema.AllOf[0])
+	}
+	return false
 }
