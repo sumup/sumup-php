@@ -273,6 +273,13 @@ class MembersListParams
     public ?string $userId = null;
 
     /**
+     * Filter the returned members by user type. Repeat this parameter to include multiple user types.
+     *
+     * @var string[]|null
+     */
+    public ?array $userType = null;
+
+    /**
      * Filter the returned members by the membership status.
      *
      * @var string|null
@@ -445,6 +452,9 @@ class Members implements SumUpService
             }
             if (isset($queryParams->userId)) {
                 $queryParamsData['user.id'] = $queryParams->userId;
+            }
+            if (isset($queryParams->userType)) {
+                $queryParamsData['user.type'] = $queryParams->userType;
             }
             if (isset($queryParams->status)) {
                 $queryParamsData['status'] = $queryParams->status;
