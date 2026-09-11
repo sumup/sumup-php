@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.7](https://github.com/sumup/sumup-php/compare/v0.1.6...v0.1.7) (2026-09-11)
+
+
+### Bug Fixes
+
+* codesamples sync ([96f52c8](https://github.com/sumup/sumup-php/commit/96f52c8419f31308a852f57f73c49bcb08e2d3b1))
+
+
+### Chores
+
+* **codegen:** nullable schemas with 3.1.0 specs ([78659ab](https://github.com/sumup/sumup-php/commit/78659ab0f64201cd0fa8997ef9aa659306ae20e1))
+* synced file(s) with sumup/apis ([#114](https://github.com/sumup/sumup-php/issues/114)) ([caebecc](https://github.com/sumup/sumup-php/commit/caebecca695960f42ed575f43f2510a3637f3bce))
+* use draft releases ([e83e9d9](https://github.com/sumup/sumup-php/commit/e83e9d9a6879c764b0806a4a2df01995eaa16825))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.18 to 3.95.19 ([#111](https://github.com/sumup/sumup-php/issues/111)) ([82f343c](https://github.com/sumup/sumup-php/commit/82f343c71bf416d33489ba9199abfc52caa71796))
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.19 to 3.95.24 ([#116](https://github.com/sumup/sumup-php/issues/116)) ([a1f394f](https://github.com/sumup/sumup-php/commit/a1f394f38ffe73a76470c227f6a32fee05e2b02a))
+* **deps:** bump reviewdog/action-actionlint from 1.73.1 to 1.73.2 ([#112](https://github.com/sumup/sumup-php/issues/112)) ([d124dfc](https://github.com/sumup/sumup-php/commit/d124dfc647f38028b9d5f416b21183bd6c7aaf8b))
+* **deps:** bump reviewdog/action-actionlint from 1.73.2 to 1.73.4 ([#115](https://github.com/sumup/sumup-php/issues/115)) ([b7a920a](https://github.com/sumup/sumup-php/commit/b7a920af4a7b203223f04e0fac26a3e57e36e719))
+
 ## [0.1.6](https://github.com/sumup/sumup-php/compare/v0.1.5...v0.1.6) (2026-08-19)
 
 
