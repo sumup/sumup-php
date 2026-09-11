@@ -12,54 +12,6 @@ use SumUp\HttpClient\RequestOptions;
 use SumUp\ResponseDecoder;
 
 /**
- * Query parameters for MerchantsGetParams.
- *
- * @package SumUp\Services
- */
-class MerchantsGetParams
-{
-    /**
-     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
-     *
-     * @var string|null
-     */
-    public ?string $version = null;
-
-}
-
-/**
- * Query parameters for MerchantsGetPersonParams.
- *
- * @package SumUp\Services
- */
-class MerchantsGetPersonParams
-{
-    /**
-     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
-     *
-     * @var string|null
-     */
-    public ?string $version = null;
-
-}
-
-/**
- * Query parameters for MerchantsListPersonsParams.
- *
- * @package SumUp\Services
- */
-class MerchantsListPersonsParams
-{
-    /**
-     * The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
-     *
-     * @var string|null
-     */
-    public ?string $version = null;
-
-}
-
-/**
  * Class Merchants
  *
  * A Merchant represents a single business which can use SumUp products like payment processing.
@@ -98,7 +50,6 @@ class Merchants implements SumUpService
      * Get Merchant
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param MerchantsGetParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Merchant
@@ -107,21 +58,9 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function get(string $merchantCode, ?MerchantsGetParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Merchant
+    public function get(string $merchantCode, ?RequestOptions $requestOptions = null): \SumUp\Types\Merchant
     {
         $path = sprintf('/v1/merchants/%s', rawurlencode((string) $merchantCode));
-        if ($queryParams !== null) {
-            $queryParamsData = [];
-            if (isset($queryParams->version)) {
-                $queryParamsData['version'] = $queryParams->version;
-            }
-            if (!empty($queryParamsData)) {
-                $queryString = http_build_query($queryParamsData);
-                if (!empty($queryString)) {
-                    $path .= '?' . $queryString;
-                }
-            }
-        }
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -137,7 +76,6 @@ class Merchants implements SumUpService
      *
      * @param string $merchantCode Short unique identifier for the merchant.
      * @param string $personId Person ID
-     * @param MerchantsGetPersonParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Person
@@ -146,21 +84,9 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function getPerson(string $merchantCode, string $personId, ?MerchantsGetPersonParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\Person
+    public function getPerson(string $merchantCode, string $personId, ?RequestOptions $requestOptions = null): \SumUp\Types\Person
     {
         $path = sprintf('/v1/merchants/%s/persons/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $personId));
-        if ($queryParams !== null) {
-            $queryParamsData = [];
-            if (isset($queryParams->version)) {
-                $queryParamsData['version'] = $queryParams->version;
-            }
-            if (!empty($queryParamsData)) {
-                $queryString = http_build_query($queryParamsData);
-                if (!empty($queryString)) {
-                    $path .= '?' . $queryString;
-                }
-            }
-        }
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
@@ -175,7 +101,6 @@ class Merchants implements SumUpService
      * List Persons
      *
      * @param string $merchantCode Short unique identifier for the merchant.
-     * @param MerchantsListPersonsParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\ListPersonsResponseBody
@@ -184,21 +109,9 @@ class Merchants implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function listPersons(string $merchantCode, ?MerchantsListPersonsParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
+    public function listPersons(string $merchantCode, ?RequestOptions $requestOptions = null): \SumUp\Types\ListPersonsResponseBody
     {
         $path = sprintf('/v1/merchants/%s/persons', rawurlencode((string) $merchantCode));
-        if ($queryParams !== null) {
-            $queryParamsData = [];
-            if (isset($queryParams->version)) {
-                $queryParamsData['version'] = $queryParams->version;
-            }
-            if (!empty($queryParamsData)) {
-                $queryString = http_build_query($queryParamsData);
-                if (!empty($queryString)) {
-                    $path .= '?' . $queryString;
-                }
-            }
-        }
         $payload = [];
         $headers = RequestHeaders::build($this->accessToken, $requestOptions);
 
