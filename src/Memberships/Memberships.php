@@ -84,8 +84,15 @@ class MembershipsListParams
     public ?string $resourceName = null;
 
     /**
+     * Filter memberships by the ID of the resource the membership is in.
+     *
+     * @var string|null
+     */
+    public ?string $resourceId = null;
+
+    /**
      * Filter memberships by the parent of the resource the membership is in.
-     * When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.
+     * Omit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.
      *
      * @var string|null
      */
@@ -93,11 +100,11 @@ class MembershipsListParams
 
     /**
      * Filter memberships by the parent of the resource the membership is in.
-     * When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.
+     * Omit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.
      *
-     * @var mixed|null
+     * @var string|null
      */
-    public mixed $resourceParentType = null;
+    public ?string $resourceParentType = null;
 
     /**
      * Filter the returned memberships by role.
@@ -180,6 +187,9 @@ class Memberships implements SumUpService
             }
             if (isset($queryParams->resourceName)) {
                 $queryParamsData['resource.name'] = $queryParams->resourceName;
+            }
+            if (isset($queryParams->resourceId)) {
+                $queryParamsData['resource.id'] = $queryParams->resourceId;
             }
             if (isset($queryParams->resourceParentId)) {
                 $queryParamsData['resource.parent.id'] = $queryParams->resourceParentId;
