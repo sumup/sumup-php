@@ -53,11 +53,11 @@ class BasePerson
     public ?string $middleName = null;
 
     /**
-     * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+     * The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var string|null
+     * @var mixed|null
      */
-    public ?string $phoneNumber = null;
+    public mixed $phoneNumber = null;
 
     /**
      * A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship `representative`.
@@ -67,18 +67,18 @@ class BasePerson
     public ?array $relationships = null;
 
     /**
+     * Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.
      *
-     * @var Ownership|null
+     * @var mixed|null
      */
-    public ?Ownership $ownership = null;
+    public mixed $ownership = null;
 
     /**
-     * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
-     * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
+     * The address of the individual.
      *
-     * @var Address|null
+     * @var mixed|null
      */
-    public ?Address $address = null;
+    public mixed $address = null;
 
     /**
      * A list of country-specific personal identifiers.
@@ -88,13 +88,11 @@ class BasePerson
     public ?array $identifiers = null;
 
     /**
-     * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-     * country code. This definition users `oneOf` with a two-character string
-     * type to allow for support of future countries in client code.
+     * The Alpha-2 ISO code of the country where the Person is a citizen.
      *
-     * @var string|null
+     * @var mixed|null
      */
-    public ?string $citizenship = null;
+    public mixed $citizenship = null;
 
     /**
      * The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.

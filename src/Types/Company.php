@@ -25,27 +25,25 @@ class Company
     public ?string $merchantCategoryCode = null;
 
     /**
-     * The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
+     * The category identifying the legal structure of the company or legal entity.
      *
-     * @var string|null
+     * @var mixed|null
      */
-    public ?string $legalType = null;
+    public mixed $legalType = null;
 
     /**
-     * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
-     * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
+     * The company's primary address.
      *
-     * @var Address|null
+     * @var mixed|null
      */
-    public ?Address $address = null;
+    public mixed $address = null;
 
     /**
-     * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
-     * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
+     * A trading address is where your suppliers, banks or customers send you correspondence to. Trading address can be different to the company's registered address (`address`).
      *
-     * @var Address|null
+     * @var mixed|null
      */
-    public ?Address $tradingAddress = null;
+    public mixed $tradingAddress = null;
 
     /**
      * A list of country-specific company identifiers.
@@ -55,11 +53,11 @@ class Company
     public ?array $identifiers = null;
 
     /**
-     * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+     * The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
-     * @var string|null
+     * @var mixed|null
      */
-    public ?string $phoneNumber = null;
+    public mixed $phoneNumber = null;
 
     /**
      * HTTP(S) URL of the company's website.

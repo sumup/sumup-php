@@ -52,11 +52,11 @@ class CustomersUpdateRequest
 /**
  * Class Customers
  *
- * Allow your regular customers to save their information with the Customers model.
+ * Customers represent payers in your integration. Create a customer with your own `customer_id` to associate their personal details and saved payment instruments with your business records.
  *
- * This will prevent re-entering payment instrument information for recurring payments on your platform.
+ * To save a card, create a checkout for that customer with `purpose = SETUP_RECURRING_PAYMENT`, then process it with the payer's consent and mandate details. See the [tokenization guide](https://developer.sumup.com/online-payments/guides/tokenization-with-payment-sdk/).
  *
- * Depending on the needs you can allow, creating, listing or deactivating payment instruments & creating, retrieving and updating customers.
+ * Use the Customers endpoints to create, retrieve, or update customer details and to list or deactivate saved payment instruments. For subsequent payments, process a new checkout with the saved instrument's `token` and its associated `customer_id`.
  *
  * @package SumUp\Services
  */
@@ -126,7 +126,7 @@ class Customers implements SumUpService
     /**
      * Deactivate a payment instrument
      *
-     * @param string $customerId Unique identifier of the saved customer resource.
+     * @param string $customerId The `customer_id` you supplied when creating the customer.
      * @param string $token Unique token identifying the card saved as a payment instrument resource.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -157,7 +157,7 @@ class Customers implements SumUpService
     /**
      * Retrieve a customer
      *
-     * @param string $customerId Unique identifier of the saved customer resource.
+     * @param string $customerId The `customer_id` you supplied when creating the customer.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Customer
@@ -184,7 +184,7 @@ class Customers implements SumUpService
     /**
      * List payment instruments
      *
-     * @param string $customerId Unique identifier of the saved customer resource.
+     * @param string $customerId The `customer_id` you supplied when creating the customer.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\PaymentInstrumentResponse[]
@@ -213,7 +213,7 @@ class Customers implements SumUpService
     /**
      * Update a customer
      *
-     * @param string $customerId Unique identifier of the saved customer resource.
+     * @param string $customerId The `customer_id` you supplied when creating the customer.
      * @param CustomersUpdateRequest|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
