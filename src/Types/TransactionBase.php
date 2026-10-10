@@ -17,14 +17,14 @@ class TransactionBase
     public ?string $id = null;
 
     /**
-     * Transaction code returned by the acquirer/processing entity after processing the transaction.
+     * SumUp transaction code, for example `TEENSK4W2K`. Use it to look up the transaction with the `transaction_code` query parameter. This is separate from the transaction's `id` and the card issuer's `auth_code`.
      *
      * @var string|null
      */
     public ?string $transactionCode = null;
 
     /**
-     * Total amount of the transaction.
+     * Total amount of the transaction in major units of `currency`, for example `10.1` for EUR 10.10.
      *
      * @var float|null
      */
@@ -57,7 +57,7 @@ class TransactionBase
     public ?TransactionBaseStatus $status = null;
 
     /**
-     * Payment type used for the transaction.
+     * Payment category recorded on a transaction, for example `POS` for a point-of-sale card payment, `ECOM` for an online card payment, or `RECURRING` for a recurring card payment. These reporting values are separate from the lowercase `payment_type` values used to process checkouts.
      *
      * @var TransactionBasePaymentType|null
      */

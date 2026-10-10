@@ -8,9 +8,9 @@ class ReaderPaymentRequestParams
 {
     /**
      *
-     * @var Affiliate|null
+     * @var mixed|null
      */
-    public ?Affiliate $affiliate = null;
+    public mixed $affiliate = null;
 
     /**
      * Caller-supplied correlation identifier, used as the idempotency key.
@@ -28,22 +28,22 @@ class ReaderPaymentRequestParams
 
     /**
      *
-     * @var Amount
+     * @var mixed
      */
-    public Amount $totalAmount;
+    public mixed $totalAmount;
 
     /**
      * Create request DTO.
      *
      * @param string $clientTransactionId
-     * @param Amount $totalAmount
-     * @param Affiliate|null $affiliate
+     * @param mixed $totalAmount
+     * @param mixed|null $affiliate
      * @param int|null $tipAmount
      */
     public function __construct(
         string $clientTransactionId,
-        Amount $totalAmount,
-        ?Affiliate $affiliate = null,
+        mixed $totalAmount,
+        mixed $affiliate = null,
         ?int $tipAmount = null
     ) {
         \SumUp\Hydrator::hydrate([

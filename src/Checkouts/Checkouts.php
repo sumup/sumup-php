@@ -15,14 +15,14 @@ use SumUp\ResponseDecoder;
 class CheckoutsCreateApplePaySessionRequest
 {
     /**
-     * the context to create this apple pay session.
+     * Hostname of the website displaying the Apple Pay payment sheet, without a URL scheme or path. Use the domain registered for Apple Pay.
      *
      * @var string
      */
     public string $context;
 
     /**
-     * The target url to create this apple pay session.
+     * Apple Pay validation URL received as `validationURL` in the browser's `onvalidatemerchant` event.
      *
      * @var string
      */
@@ -107,7 +107,7 @@ class CheckoutsListAvailablePaymentMethodsResponseItem
 class CheckoutsListParams
 {
     /**
-     * Filters the list of checkout resources by the unique reference of the checkout.
+     * Filters checkouts by the merchant-defined `checkout_reference` supplied when creating the checkout. This is separate from the SumUp-generated checkout `id`.
      *
      * @var string|null
      */
@@ -123,14 +123,14 @@ class CheckoutsListParams
 class CheckoutsListAvailablePaymentMethodsParams
 {
     /**
-     * The amount for which the payment methods should be eligible, in major units.
+     * Payment amount in major units, for example `9.99` for EUR 9.99. When filtering by `amount`, also provide `currency`.
      *
      * @var float|null
      */
     public ?float $amount = null;
 
     /**
-     * The currency for which the payment methods should be eligible.
+     * Three-letter ISO 4217 currency code for which the payment methods should be eligible, for example `EUR`.
      *
      * @var string|null
      */
@@ -224,7 +224,7 @@ class Checkouts implements SumUpService
     /**
      * Create an Apple Pay session
      *
-     * @param string $checkoutId Unique identifier of the checkout resource.
+     * @param string $checkoutId SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.
      * @param CheckoutsCreateApplePaySessionRequest|array<string, mixed>|null $body Optional request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -260,7 +260,7 @@ class Checkouts implements SumUpService
     /**
      * Deactivate a checkout
      *
-     * @param string $checkoutId Unique identifier of the checkout resource.
+     * @param string $checkoutId SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\Checkout
@@ -287,7 +287,7 @@ class Checkouts implements SumUpService
     /**
      * Retrieve a checkout
      *
-     * @param string $checkoutId Unique identifier of the checkout resource.
+     * @param string $checkoutId SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\CheckoutSuccess
@@ -393,7 +393,7 @@ class Checkouts implements SumUpService
     /**
      * Process a checkout
      *
-     * @param string $checkoutId Unique identifier of the checkout resource.
+     * @param string $checkoutId SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.
      * @param \SumUp\Types\ProcessCheckout|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
@@ -430,7 +430,7 @@ class Checkouts implements SumUpService
     /**
      * Update a checkout
      *
-     * @param string $checkoutId Unique identifier of the checkout resource.
+     * @param string $checkoutId SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.
      * @param \SumUp\Types\CheckoutUpdateRequest|array<string, mixed> $body Required request payload
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
