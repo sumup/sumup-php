@@ -8061,6 +8061,7 @@
         "enum": [
           "ALELO",
           "AMEX",
+          "BANCOMAT",
           "CONECS",
           "CUP",
           "DINERS",

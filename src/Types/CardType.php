@@ -11,6 +11,7 @@ enum CardType: string
 {
     case ALELO = 'ALELO';
     case AMEX = 'AMEX';
+    case BANCOMAT = 'BANCOMAT';
     case CONECS = 'CONECS';
     case CUP = 'CUP';
     case DINERS = 'DINERS';

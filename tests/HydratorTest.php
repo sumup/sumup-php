@@ -81,6 +81,16 @@ class HydratorTest extends TestCase
         $this->assertSame('https://example.test/2', $response->links[1]->href);
     }
 
+    public function testHydrateBancomatCardType()
+    {
+        $card = Hydrator::hydrate([
+            'type' => 'BANCOMAT',
+        ], CardResponse::class);
+
+        $this->assertInstanceOf(CardResponse::class, $card);
+        $this->assertSame(CardResponseType::BANCOMAT, $card->type);
+    }
+
     public function testHydrateUnknownValueOfEnumWithUnknownCaseFallsBackToUnknown()
     {
         $card = Hydrator::hydrate([
