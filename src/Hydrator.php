@@ -144,6 +144,14 @@ class Hydrator
             if ($enum !== null) {
                 return $enum;
             }
+
+            // The API can return values added after the SDK was generated
+            // (e.g. a new card network). Enums that declare an UNKNOWN case
+            // are meant to absorb them instead of failing the whole response.
+            $unknown = $enumClass::tryFrom('UNKNOWN');
+            if ($unknown !== null) {
+                return $unknown;
+            }
         }
 
         if (method_exists($enumClass, 'from')) {

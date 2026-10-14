@@ -4,6 +4,8 @@ namespace SumUp\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SumUp\Hydrator;
+use SumUp\Types\CardResponse;
+use SumUp\Types\CardResponseType;
 use SumUp\Types\Checkout;
 use SumUp\Types\CheckoutCurrency;
 use SumUp\Types\MandateResponse;
@@ -77,6 +79,18 @@ class HydratorTest extends TestCase
         $this->assertInstanceOf(HydratorLinkFixture::class, $response->links[1]);
         $this->assertSame('https://example.test/1', $response->links[0]->href);
         $this->assertSame('https://example.test/2', $response->links[1]->href);
+    }
+
+    public function testHydrateUnknownValueOfEnumWithUnknownCaseFallsBackToUnknown()
+    {
+        $card = Hydrator::hydrate([
+            'type' => 'SOME_FUTURE_NETWORK',
+            'last_4_digits' => '1234',
+        ], CardResponse::class);
+
+        $this->assertInstanceOf(CardResponse::class, $card);
+        $this->assertSame(CardResponseType::UNKNOWN, $card->type);
+        $this->assertSame('1234', $card->last4Digits);
     }
 
     public function testHydrateInvalidBackedEnumValueThrowsValueError()
