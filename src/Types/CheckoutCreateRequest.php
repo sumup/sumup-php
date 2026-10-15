@@ -26,9 +26,9 @@ class CheckoutCreateRequest
     /**
      * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
-     * @var CheckoutCreateRequestCurrency
+     * @var CheckoutCreateRequestCurrency|string
      */
-    public CheckoutCreateRequestCurrency $currency;
+    public CheckoutCreateRequestCurrency|string $currency;
 
     /**
      * Short unique identifier for the merchant that should receive the payment.
@@ -61,9 +61,9 @@ class CheckoutCreateRequest
     /**
      * Business purpose of the checkout. Use `CHECKOUT` for a standard payment and `SETUP_RECURRING_PAYMENT` when collecting consent and payment details for future recurring charges.
      *
-     * @var CheckoutCreateRequestPurpose|null
+     * @var CheckoutCreateRequestPurpose|string|null
      */
-    public ?CheckoutCreateRequestPurpose $purpose = null;
+    public CheckoutCreateRequestPurpose|string|null $purpose = null;
 
     /**
      * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.

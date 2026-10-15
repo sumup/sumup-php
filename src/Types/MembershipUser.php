@@ -19,9 +19,9 @@ class MembershipUser
     /**
      * Type of the user account.
      *
-     * @var MembershipUserType
+     * @var MembershipUserType|string
      */
-    public MembershipUserType $type;
+    public MembershipUserType|string $type;
 
     /**
      * End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.

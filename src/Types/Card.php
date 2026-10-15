@@ -54,8 +54,8 @@ class Card
     /**
      * Issuing card network of the payment card used for the transaction.
      *
-     * @var CardType
+     * @var CardType|string
      */
-    public CardType $type;
+    public CardType|string $type;
 
 }

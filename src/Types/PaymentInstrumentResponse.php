@@ -26,9 +26,9 @@ class PaymentInstrumentResponse
     /**
      * Type of the payment instrument.
      *
-     * @var PaymentInstrumentResponseType|null
+     * @var PaymentInstrumentResponseType|string|null
      */
-    public ?PaymentInstrumentResponseType $type = null;
+    public PaymentInstrumentResponseType|string|null $type = null;
 
     /**
      * Details of the payment card.

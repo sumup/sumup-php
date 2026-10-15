@@ -19,8 +19,8 @@ class CardResponse
     /**
      * Issuing card network of the payment card used for the transaction.
      *
-     * @var CardResponseType|null
+     * @var CardResponseType|string|null
      */
-    public ?CardResponseType $type = null;
+    public CardResponseType|string|null $type = null;
 
 }

@@ -16,8 +16,8 @@ class BadRequestErrors
     /**
      * Key indicating type of error
      *
-     * @var BadRequestErrorsType
+     * @var BadRequestErrorsType|string
      */
-    public BadRequestErrorsType $type;
+    public BadRequestErrorsType|string $type;
 
 }
