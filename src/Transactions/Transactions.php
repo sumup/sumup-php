@@ -18,7 +18,7 @@ use SumUp\ResponseDecoder;
 class TransactionsRefundRequest
 {
     /**
-     * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
+     * Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.
      *
      * @var float|null
      */
@@ -122,28 +122,28 @@ class TransactionsListParams
     public ?string $transactionCode = null;
 
     /**
-     * Specifies the order in which the returned results are displayed.
+     * Sort direction for the transaction history. Use `ascending` or `descending`; the default is `ascending`.
      *
      * @var string|null
      */
     public ?string $order = null;
 
     /**
-     * Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.
+     * Maximum number of transactions per page. Must be a positive integer. Defaults to `10` when omitted; a page can contain fewer results.
      *
      * @var int|null
      */
     public ?int $limit = null;
 
     /**
-     * Filters the returned results by user email.
+     * Filters transactions by user email. For multiple values, repeat the query parameter, for example `users[]=first@example.com&users[]=second@example.com`.
      *
      * @var string[]|null
      */
     public ?array $usersList = null;
 
     /**
-     * Filters the returned results by the specified list of final statuses of the transactions.
+     * Filters transactions by the listed final statuses. For multiple values, repeat the query parameter, for example `statuses[]=SUCCESSFUL&statuses[]=REFUNDED`.
      *
      * @var string[]|null
      */
@@ -185,7 +185,7 @@ class TransactionsListParams
     public ?string $newestTime = null;
 
     /**
-     * Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).
+     * Pagination reference that returns results before the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `newest_time` when both are provided.
      *
      * @var string|null
      */
@@ -199,7 +199,7 @@ class TransactionsListParams
     public ?string $oldestTime = null;
 
     /**
-     * Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *greater* than the specified value. This parameters supersedes the `oldest_time` parameter (if both are provided in the request).
+     * Pagination reference that returns results after the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `oldest_time` when both are provided.
      *
      * @var string|null
      */

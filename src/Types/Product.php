@@ -31,7 +31,7 @@ class Product
     public ?float $price = null;
 
     /**
-     * VAT rate applied to the product price.
+     * VAT rate as a decimal fraction, for example `0.19` for 19%.
      *
      * @var float|null
      */

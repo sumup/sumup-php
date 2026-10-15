@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Saved customer details.
+ * Saved payer details identified by the `customer_id` supplied by your integration. A customer can have saved payment instruments for subsequent payments.
  */
 class Customer
 {
     /**
-     * Unique identifier of the customer.
+     * Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.
      *
      * @var string
      */

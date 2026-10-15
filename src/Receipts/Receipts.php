@@ -37,7 +37,7 @@ class ReceiptsGetParams
 /**
  * Class Receipts
  *
- * The Receipts model obtains receipt-like details for specific transactions.
+ * Retrieve structured receipt data for a transaction, including payment, merchant, and acquirer details. Use this data to display a receipt in your application. The response is JSON, rather than a rendered receipt document.
  *
  * @package SumUp\Services
  */

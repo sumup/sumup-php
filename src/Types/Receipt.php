@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Receipt details for a transaction.
+ * Structured receipt details for a transaction. The transaction's `amount`, `vat_amount`, and `tip_amount`, as well as event amounts, are returned as decimal strings in major currency units, for example `"10.10"` for EUR 10.10.
  */
 class Receipt
 {
