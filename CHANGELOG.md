@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.1.7](https://github.com/sumup/sumup-php/compare/v0.1.6...v0.1.7) (2026-10-15)
+
+
+### Bug Fixes
+
+* codesamples sync ([96f52c8](https://github.com/sumup/sumup-php/commit/96f52c8419f31308a852f57f73c49bcb08e2d3b1))
+* preserve annotated schemas and handle Guzzle errors ([#129](https://github.com/sumup/sumup-php/issues/129)) ([cae664e](https://github.com/sumup/sumup-php/commit/cae664e942a7f0c8741b072f3cc612f55c3e9d6d))
+
+
+### Chores
+
+* **codegen:** nullable schemas with 3.1.0 specs ([78659ab](https://github.com/sumup/sumup-php/commit/78659ab0f64201cd0fa8997ef9aa659306ae20e1))
+* synced file(s) with sumup/apis ([#114](https://github.com/sumup/sumup-php/issues/114)) ([caebecc](https://github.com/sumup/sumup-php/commit/caebecca695960f42ed575f43f2510a3637f3bce))
+* synced file(s) with sumup/apis ([#119](https://github.com/sumup/sumup-php/issues/119)) ([2bcf9d4](https://github.com/sumup/sumup-php/commit/2bcf9d4fae820c4ae44d7e8044bd0336b0e633f3))
+* use draft releases ([e83e9d9](https://github.com/sumup/sumup-php/commit/e83e9d9a6879c764b0806a4a2df01995eaa16825))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.18 to 3.95.19 ([#111](https://github.com/sumup/sumup-php/issues/111)) ([82f343c](https://github.com/sumup/sumup-php/commit/82f343c71bf416d33489ba9199abfc52caa71796))
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.19 to 3.95.24 ([#116](https://github.com/sumup/sumup-php/issues/116)) ([a1f394f](https://github.com/sumup/sumup-php/commit/a1f394f38ffe73a76470c227f6a32fee05e2b02a))
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.24 to 3.95.27 ([#122](https://github.com/sumup/sumup-php/issues/122)) ([e7bae88](https://github.com/sumup/sumup-php/commit/e7bae887de1e3697b6cfe7cbb2c280103c821e55))
+* **deps:** bump github.com/lmittmann/tint from 1.2.0 to 1.2.1 in /codegen ([#126](https://github.com/sumup/sumup-php/issues/126)) ([11699a2](https://github.com/sumup/sumup-php/commit/11699a28ff2e9bf3a726bb16470ce77f675c2de6))
+* **deps:** bump github.com/pb33f/libopenapi from 0.38.7 to 0.41.3 in /codegen ([#125](https://github.com/sumup/sumup-php/issues/125)) ([5f50a7e](https://github.com/sumup/sumup-php/commit/5f50a7e31201f72456c8881f86549492154cd0fc))
+* **deps:** bump reviewdog/action-actionlint from 1.73.1 to 1.73.2 ([#112](https://github.com/sumup/sumup-php/issues/112)) ([d124dfc](https://github.com/sumup/sumup-php/commit/d124dfc647f38028b9d5f416b21183bd6c7aaf8b))
+* **deps:** bump reviewdog/action-actionlint from 1.73.2 to 1.73.4 ([#115](https://github.com/sumup/sumup-php/issues/115)) ([b7a920a](https://github.com/sumup/sumup-php/commit/b7a920af4a7b203223f04e0fac26a3e57e36e719))
+* **deps:** bump reviewdog/action-actionlint from 1.73.4 to 1.79.1 ([#124](https://github.com/sumup/sumup-php/issues/124)) ([6d6efb2](https://github.com/sumup/sumup-php/commit/6d6efb2541665e1c36dcf4811c1dd2533dc20da2))
+
 ## [0.1.6](https://github.com/sumup/sumup-php/compare/v0.1.5...v0.1.6) (2026-08-19)
 
 
