@@ -80,6 +80,7 @@ func (g *Generator) Load(spec *v3.Document) error {
 		return fmt.Errorf("nil spec")
 	}
 
+	normalizeSchemaAnnotations(spec)
 	g.spec = spec
 	g.tagLookup = make(map[string]*base.Tag)
 	for _, tag := range spec.Tags {
