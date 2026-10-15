@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use SumUp\Hydrator;
 use SumUp\Types\Checkout;
 use SumUp\Types\CheckoutCurrency;
+use SumUp\Types\CardResponseType;
 use SumUp\Types\MandateResponse;
 use SumUp\Types\MandateResponseStatus;
 use SumUp\Types\Receipt;
@@ -79,13 +80,33 @@ class HydratorTest extends TestCase
         $this->assertSame('https://example.test/2', $response->links[1]->href);
     }
 
-    public function testHydrateInvalidBackedEnumValueThrowsValueError()
+    public function testHydrateUnknownBackedEnumValuePreservesScalar()
     {
-        $this->expectException(\ValueError::class);
-
-        Hydrator::hydrate([
-            'currency' => 'NOT_A_REAL_CURRENCY',
+        $checkout = Hydrator::hydrate([
+            'currency' => 'FUTURE_CURRENCY',
         ], Checkout::class);
+
+        $this->assertSame('FUTURE_CURRENCY', $checkout->currency);
+    }
+
+    public function testHydrateNullEnumProperty()
+    {
+        $checkout = Hydrator::hydrate(['currency' => null], Checkout::class);
+
+        $this->assertNull($checkout->currency);
+    }
+
+    public function testHydrateArrayOfOpenEnums()
+    {
+        $response = Hydrator::hydrate([
+            'types' => ['known' => 'VISA', 'instance' => CardResponseType::AMEX, 'new' => 'FUTURE_CARD'],
+        ], HydratorEnumArrayFixture::class);
+
+        $this->assertSame([
+            'known' => CardResponseType::VISA,
+            'instance' => CardResponseType::AMEX,
+            'new' => 'FUTURE_CARD',
+        ], $response->types);
     }
 }
 
@@ -103,4 +124,12 @@ class HydratorLinkFixture
      * @var string|null
      */
     public ?string $href = null;
+}
+
+class HydratorEnumArrayFixture
+{
+    /**
+     * @var \SumUp\Types\CardResponseType[]|string[]|null
+     */
+    public ?array $types = null;
 }

@@ -26,9 +26,9 @@ class ReceiptEvent
     /**
      * Type of the transaction event.
      *
-     * @var ReceiptEventType|null
+     * @var ReceiptEventType|string|null
      */
-    public ?ReceiptEventType $type = null;
+    public ReceiptEventType|string|null $type = null;
 
     /**
      * Status of the transaction event.
@@ -41,9 +41,9 @@ class ReceiptEvent
      * - `SUCCESSFUL`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as `PAID_OUT` or `REFUNDED`.
      * - `FAILED`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.
      *
-     * @var ReceiptEventStatus|null
+     * @var ReceiptEventStatus|string|null
      */
-    public ?ReceiptEventStatus $status = null;
+    public ReceiptEventStatus|string|null $status = null;
 
     /**
      * Amount associated with the transaction event, in major units.

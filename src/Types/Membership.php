@@ -71,9 +71,9 @@ class Membership
     /**
      * The status of the membership.
      *
-     * @var MembershipStatus
+     * @var MembershipStatus|string
      */
-    public MembershipStatus $status;
+    public MembershipStatus|string $status;
 
     /**
      * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.

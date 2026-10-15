@@ -300,7 +300,7 @@ func (g *Generator) buildRequestConstructor(properties []phpProperty) string {
 	buf.WriteString("     * Create request DTO.\n")
 	buf.WriteString("     *\n")
 	for _, prop := range constructorProperties(properties) {
-		fmt.Fprintf(&buf, "     * @param %s $%s\n", g.constructorParamDocType(prop), prop.Name)
+		fmt.Fprintf(&buf, "     * @param %s $%s\n", g.propertyDocType(prop), prop.Name)
 	}
 	buf.WriteString("     */\n")
 	buf.WriteString("    public function __construct(")
@@ -309,7 +309,7 @@ func (g *Generator) buildRequestConstructor(properties []phpProperty) string {
 		buf.WriteString("\n")
 		for idx, prop := range constructorProps {
 			buf.WriteString("        ")
-			buf.WriteString(g.constructorParamType(prop))
+			buf.WriteString(g.propertyTypeHint(prop))
 			buf.WriteString(" $")
 			buf.WriteString(prop.Name)
 			if prop.Optional {
@@ -393,7 +393,7 @@ func requiredProperties(properties []phpProperty) []phpProperty {
 	return result
 }
 
-func (g *Generator) constructorParamDocType(prop phpProperty) string {
+func (g *Generator) propertyDocType(prop phpProperty) string {
 	docType := prop.DocType
 	if docType == "" {
 		docType = "mixed"
@@ -407,7 +407,7 @@ func (g *Generator) constructorParamDocType(prop phpProperty) string {
 	return docType
 }
 
-func (g *Generator) constructorParamType(prop phpProperty) string {
+func (g *Generator) propertyTypeHint(prop phpProperty) string {
 	paramType := prop.Type
 	if paramType == "" {
 		paramType = "mixed"

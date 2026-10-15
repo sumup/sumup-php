@@ -19,8 +19,8 @@ class ReaderDevice
     /**
      * Identifier of the model of the device.
      *
-     * @var ReaderDeviceModel
+     * @var ReaderDeviceModel|string
      */
-    public ReaderDeviceModel $model;
+    public ReaderDeviceModel|string $model;
 
 }

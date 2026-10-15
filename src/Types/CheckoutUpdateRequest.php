@@ -19,9 +19,9 @@ class CheckoutUpdateRequest
     /**
      * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
-     * @var CheckoutUpdateRequestCurrency|null
+     * @var CheckoutUpdateRequestCurrency|string|null
      */
-    public ?CheckoutUpdateRequestCurrency $currency = null;
+    public CheckoutUpdateRequestCurrency|string|null $currency = null;
 
     /**
      * Updated short merchant-defined description shown in SumUp tools and reporting.

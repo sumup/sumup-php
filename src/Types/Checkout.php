@@ -26,9 +26,9 @@ class Checkout
     /**
      * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
-     * @var CheckoutCurrency|null
+     * @var CheckoutCurrency|string|null
      */
-    public ?CheckoutCurrency $currency = null;
+    public CheckoutCurrency|string|null $currency = null;
 
     /**
      * Short unique identifier for the merchant that receives the payment.
@@ -61,9 +61,9 @@ class Checkout
     /**
      * Current high-level state of the checkout. `PENDING` means the checkout exists but is not yet completed, `PAID` means a payment succeeded, `FAILED` means the latest processing attempt failed, and `EXPIRED` means the checkout can no longer be processed.
      *
-     * @var CheckoutStatus|null
+     * @var CheckoutStatus|string|null
      */
-    public ?CheckoutStatus $status = null;
+    public CheckoutStatus|string|null $status = null;
 
     /**
      * The timestamp of when the checkout was created.

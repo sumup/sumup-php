@@ -199,16 +199,16 @@ class TransactionFull
     /**
      * Simple name of the payment type.
      *
-     * @var TransactionFullSimplePaymentType|null
+     * @var TransactionFullSimplePaymentType|string|null
      */
-    public ?TransactionFullSimplePaymentType $simplePaymentType = null;
+    public TransactionFullSimplePaymentType|string|null $simplePaymentType = null;
 
     /**
      * Verification method used for the transaction.
      *
-     * @var TransactionFullVerificationMethod|null
+     * @var TransactionFullVerificationMethod|string|null
      */
-    public ?TransactionFullVerificationMethod $verificationMethod = null;
+    public TransactionFullVerificationMethod|string|null $verificationMethod = null;
 
     /**
      * Details of the payment card.
@@ -241,16 +241,16 @@ class TransactionFull
     /**
      * Payout type for the transaction.
      *
-     * @var TransactionFullPayoutType|null
+     * @var TransactionFullPayoutType|string|null
      */
-    public ?TransactionFullPayoutType $payoutType = null;
+    public TransactionFullPayoutType|string|null $payoutType = null;
 
     /**
      * Whether the transaction was processed as credit or debit.
      *
-     * @var TransactionFullProcessAs|null
+     * @var TransactionFullProcessAs|string|null
      */
-    public ?TransactionFullProcessAs $processAs = null;
+    public TransactionFullProcessAs|string|null $processAs = null;
 
     /**
      * List of products from the merchant's catalogue for which the transaction serves as a payment.
@@ -286,9 +286,9 @@ class TransactionFull
      * - `CHARGEBACK`: The payment was subject to a chargeback.
      * - `NON_COLLECTION`: The amount could not be collected from the merchant after a chargeback or related adjustment.
      *
-     * @var TransactionFullSimpleStatus|null
+     * @var TransactionFullSimpleStatus|string|null
      */
-    public ?TransactionFullSimpleStatus $simpleStatus = null;
+    public TransactionFullSimpleStatus|string|null $simpleStatus = null;
 
     /**
      * List of hyperlinks for accessing related resources.

@@ -33,9 +33,9 @@ class TransactionCheckoutInfo
     /**
      * Entry mode of the payment details.
      *
-     * @var TransactionCheckoutInfoEntryMode|null
+     * @var TransactionCheckoutInfoEntryMode|string|null
      */
-    public ?TransactionCheckoutInfoEntryMode $entryMode = null;
+    public TransactionCheckoutInfoEntryMode|string|null $entryMode = null;
 
     /**
      * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.

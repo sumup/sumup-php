@@ -12,9 +12,9 @@ class MandatePayload
     /**
      * Type of mandate to create for the saved payment instrument.
      *
-     * @var MandatePayloadType
+     * @var MandatePayloadType|string
      */
-    public MandatePayloadType $type;
+    public MandatePayloadType|string $type;
 
     /**
      * Browser or client user agent observed when consent was collected.

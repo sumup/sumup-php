@@ -5,6 +5,7 @@ namespace SumUp;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionUnionType;
 
 /**
  * Hydrates SDK models from associative arrays or stdClass payloads.
@@ -98,6 +99,16 @@ class Hydrator
         }
 
         $type = $property->getType();
+        if ($type instanceof ReflectionUnionType) {
+            foreach ($type->getTypes() as $member) {
+                if ($member instanceof ReflectionNamedType && enum_exists($member->getName())) {
+                    return self::castEnumValue($value, $member->getName());
+                }
+            }
+
+            return $value;
+        }
+
         if (!$type instanceof ReflectionNamedType) {
             return $value;
         }
@@ -144,10 +155,6 @@ class Hydrator
             if ($enum !== null) {
                 return $enum;
             }
-        }
-
-        if (method_exists($enumClass, 'from')) {
-            return $enumClass::from($value);
         }
 
         return $value;
@@ -243,6 +250,10 @@ class Hydrator
             }
         } else {
             $className = ltrim($itemType, '\\');
+        }
+
+        if (enum_exists($className)) {
+            return self::castEnumValue($item, $className);
         }
 
         if (!class_exists($className)) {

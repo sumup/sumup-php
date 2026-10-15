@@ -19,8 +19,8 @@ class PaymentInstrumentResponseCard
     /**
      * Issuing card network of the payment card used for the transaction.
      *
-     * @var PaymentInstrumentResponseCardType|null
+     * @var PaymentInstrumentResponseCardType|string|null
      */
-    public ?PaymentInstrumentResponseCardType $type = null;
+    public PaymentInstrumentResponseCardType|string|null $type = null;
 
 }

@@ -65,6 +65,8 @@ try {
 
 Service methods also accept associative arrays as request payloads. For typed usage, prefer DTOs from `\SumUp\Types\...` with named arguments, or use `TypeName::fromArray([...])` when you already have associative array data.
 
+Enum properties accept both the generated enum and its backing scalar type. Known values are hydrated into enum cases; new values returned by the API are preserved unchanged as scalars so they do not prevent reading the response. Requests also accept these scalar values. When reading an enum property, handle both forms rather than assuming it always has a `value` property. Calling a native enum's `from()` method directly still requires a known value.
+
 ### Providing API Key Programmatically
 
 If you prefer to provide the API key directly in your code instead of using the environment variable:

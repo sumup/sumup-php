@@ -19,9 +19,9 @@ class MandateResponse
     /**
      * Current lifecycle status of the mandate.
      *
-     * @var MandateResponseStatus|null
+     * @var MandateResponseStatus|string|null
      */
-    public ?MandateResponseStatus $status = null;
+    public MandateResponseStatus|string|null $status = null;
 
     /**
      * Short unique identifier for the merchant for which the mandate is valid.
