@@ -17,14 +17,14 @@ class TransactionFull
     public ?string $id = null;
 
     /**
-     * Transaction code returned by the acquirer/processing entity after processing the transaction.
+     * SumUp transaction code, for example `TEENSK4W2K`. Use it to look up the transaction with the `transaction_code` query parameter. This is separate from the transaction's `id` and the card issuer's `auth_code`.
      *
      * @var string|null
      */
     public ?string $transactionCode = null;
 
     /**
-     * Total amount of the transaction.
+     * Total amount of the transaction in major units of `currency`, for example `10.1` for EUR 10.10.
      *
      * @var float|null
      */
@@ -57,7 +57,7 @@ class TransactionFull
     public ?string $status = null;
 
     /**
-     * Payment type used for the transaction.
+     * Payment category recorded on a transaction, for example `POS` for a point-of-sale card payment, `ECOM` for an online card payment, or `RECURRING` for a recurring card payment. These reporting values are separate from the lowercase `payment_type` values used to process checkouts.
      *
      * @var string|null
      */
@@ -78,21 +78,21 @@ class TransactionFull
     public ?string $merchantCode = null;
 
     /**
-     * Amount of the applicable VAT (out of the total transaction amount).
+     * VAT included in the total transaction amount, in major units of the transaction's currency.
      *
      * @var float|null
      */
     public ?float $vatAmount = null;
 
     /**
-     * Amount of the tip (out of the total transaction amount).
+     * Tip included in the total transaction amount, in major units of the transaction's currency.
      *
      * @var float|null
      */
     public ?float $tipAmount = null;
 
     /**
-     * Entry mode of the payment details.
+     * How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.
      *
      * @var string|null
      */
@@ -155,7 +155,7 @@ class TransactionFull
     public ?string $username = null;
 
     /**
-     * Transaction SumUp total fee amount.
+     * Total SumUp transaction fee in major units of the transaction's currency.
      *
      * @var float|null
      */

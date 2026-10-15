@@ -10,7 +10,7 @@ namespace SumUp\Types;
 class PaymentInstrumentResponse
 {
     /**
-     * Unique token identifying the saved payment card for a customer.
+     * Token identifying the customer's saved payment card. Pass it as `token`, together with the associated `customer_id` and `payment_type = card`, when processing a checkout with this instrument.
      *
      * @var string|null
      */

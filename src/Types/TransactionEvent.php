@@ -10,14 +10,18 @@ namespace SumUp\Types;
 class TransactionEvent
 {
     /**
-     * Unique identifier of the transaction event.
+     * Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.
      *
      * @var int|null
      */
     public ?int $id = null;
 
     /**
-     * Type of the transaction event.
+     * Financial event associated with a transaction.
+     * - `PAYOUT`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.
+     * - `REFUND`: Money returned to the payer.
+     * - `CHARGE_BACK`: A reversal of the payment following a chargeback.
+     * - `PAYOUT_DEDUCTION`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.
      *
      * @var TransactionEventEventType|null
      */
@@ -39,7 +43,7 @@ class TransactionEvent
     public ?TransactionEventStatus $status = null;
 
     /**
-     * Amount of the event.
+     * Amount of the event in major units of the associated transaction's currency.
      *
      * @var float|null
      */
@@ -60,7 +64,7 @@ class TransactionEvent
     public ?string $date = null;
 
     /**
-     * Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.
+     * Consecutive number of the installment that is paid. Applicable only to payout events, i.e. `event_type = PAYOUT`.
      *
      * @var int|null
      */

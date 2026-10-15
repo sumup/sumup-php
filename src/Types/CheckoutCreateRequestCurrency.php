@@ -9,7 +9,6 @@ namespace SumUp\Types;
  */
 enum CheckoutCreateRequestCurrency: string
 {
-    case BGN = 'BGN';
     case BRL = 'BRL';
     case CHF = 'CHF';
     case CLP = 'CLP';

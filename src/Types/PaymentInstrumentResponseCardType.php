@@ -11,6 +11,7 @@ enum PaymentInstrumentResponseCardType: string
 {
     case ALELO = 'ALELO';
     case AMEX = 'AMEX';
+    case BANCOMAT = 'BANCOMAT';
     case CONECS = 'CONECS';
     case CUP = 'CUP';
     case DINERS = 'DINERS';
@@ -25,6 +26,7 @@ enum PaymentInstrumentResponseCardType: string
     case MAESTRO = 'MAESTRO';
     case MASTERCARD = 'MASTERCARD';
     case PLUXEE = 'PLUXEE';
+    case SUMUP = 'SUMUP';
     case SWILE = 'SWILE';
     case TICKET = 'TICKET';
     case VISA = 'VISA';
