@@ -4,6 +4,8 @@ namespace SumUp;
 
 use SumUp\Exception\ConfigurationException;
 use SumUp\Exception\SDKException;
+use SumUp\Events\EventNotification;
+use SumUp\Events\EventsHandler;
 use SumUp\HttpClient\CurlClient;
 use SumUp\HttpClient\HttpClientInterface;
 use SumUp\HttpClient\RequestHeaders;
@@ -87,6 +89,32 @@ class SumUp
     public function getDefaultAccessToken(): ?string
     {
         return $this->accessToken;
+    }
+
+    /**
+     * Create a signed event handler. Unknown and unregistered types reach the fallback.
+     *
+     * @param callable(EventNotification): void $fallback
+     */
+    public function eventsHandler(#[\SensitiveParameter] string $secret, callable $fallback): EventsHandler
+    {
+        return new EventsHandler($this, $secret, $fallback);
+    }
+
+    /** Verify and parse the unchanged body and complete signature header value. */
+    public function parseEventNotification(
+        string $body,
+        string $signature,
+        #[\SensitiveParameter] string $secret
+    ): EventNotification {
+        \SumUp\Events\EventSignature::verify($secret, $body, $signature);
+        return $this->parseEventNotificationWithoutVerification($body);
+    }
+
+    /** Parse a previously verified event from trusted storage. Never use on incoming requests. */
+    public function parseEventNotificationWithoutVerification(string $body): EventNotification
+    {
+        return EventNotification::parseWithoutVerification($this, $body);
     }
 
     /**
