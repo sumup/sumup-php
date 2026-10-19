@@ -138,6 +138,42 @@ $options = new \SumUp\HttpClient\RequestOptions(
 $checkout = $sumup->checkouts()->get('checkout-id', $options);
 ```
 
+## Handling Events
+
+Create a handler with your endpoint's signing secret and register typed callbacks:
+
+```php
+use SumUp\Events\EventNotification;
+use SumUp\Events\ReaderCreatedEvent;
+use SumUp\SumUp;
+
+$sumup = new SumUp();
+$events = $sumup->eventsHandler(
+    getenv('SUMUP_EVENT_SECRET'),
+    function (EventNotification $event): void {
+        // Handles unknown event types and known types without a registered callback.
+        error_log('Received ' . $event->type);
+    }
+)->onReaderCreated(function (ReaderCreatedEvent $event): void {
+    $reader = $event->fetchObject(); // Returns a SumUp\Types\Reader, or null for an empty response.
+    error_log('Reader paired: ' . $reader?->id);
+});
+
+// In your HTTP route, pass the unchanged request body and complete signature header.
+$events->handle(
+    file_get_contents('php://input'),
+    $_SERVER['HTTP_X_SUMUP_WEBHOOK_SIGNATURE'] ?? ''
+);
+```
+
+Register callbacks with methods such as `onCheckoutPaid`, `onMemberUpdated`, and `onRoleDeleted`. A second registration for the same type replaces the previous callback. Notifications expose `id`, `type`, `createdAt` (`DateTimeImmutable`), and an `object` reference. `fetchObject($requestOptions)` uses your API client and returns the resource's current state; deleted resources may return an API error. Object URLs must match the configured `base_uri`, and resource fetches disable redirects. If you use a custom HTTP client, configure a matching `base_uri` and honor `RequestOptions::followRedirects`.
+
+Send a 2xx response after handling succeeds. Return 400 for `SumUp\Exception\EventSignatureException` or `EventPayloadException`, and 500 for `EventCallbackException` so processing can be retried. The callback exception retains the original error in `getPrevious()`. Make processing idempotent using the event ID, and configure request body limits in your server. Verification requires a signing timestamp within five minutes of your server's clock.
+
+For parsing without callbacks, use `$sumup->parseEventNotification($body, $signature, $secret)`. To queue deliveries, verify them first with `SumUp\Events\EventSignature::verify($secret, $body, $signature)`, then use `$sumup->parseEventNotificationWithoutVerification($body)` only on previously verified payloads from trusted storage. Unrecognized types produce `SumUp\Events\UnknownEvent`; their `fetchObject()` result is untyped.
+
+These signed notifications are separate from the checkout and reader `return_url` callbacks. See [examples/events.php](examples/events.php) for a complete HTTP endpoint with error handling.
+
 ## Examples
 
 The repository includes runnable examples:
@@ -150,6 +186,8 @@ The repository includes runnable examples:
   Run with: `php examples/custom-http-client.php`
 - `examples/guzzle-http-client.php` - use the built-in Guzzle client.
   Run with: `php examples/guzzle-http-client.php`
+- `examples/events.php` - receive and verify signed events.
+  Run with: `SUMUP_EVENT_SECRET='your-signing-secret' php -S localhost:8080 examples/events.php`
 
 For checkout-related examples, set:
 

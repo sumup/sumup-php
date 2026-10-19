@@ -48,6 +48,7 @@ class FakeHttpClient implements HttpClientInterface
             'url' => $url,
             'body' => $body,
             'headers' => $headers,
+            'options' => $options,
         ];
 
         return $this->response;
