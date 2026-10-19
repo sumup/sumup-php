@@ -14,7 +14,8 @@ interface HttpClientInterface
      * @param string $url         The endpoint to send the request to.
      * @param array<int|string, mixed> $body        The body of the request.
      * @param array<string, string> $headers     The headers of the request.
-     * @param RequestOptions|null $options Optional typed request options.
+     * @param RequestOptions|null $options Optional typed request options. Implementations must
+     * honor followRedirects=false to keep event resource fetches on the configured origin.
      *
      * @return Response
      */

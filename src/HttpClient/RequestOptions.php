@@ -42,6 +42,9 @@ class RequestOptions
      */
     public ?int $retryBackoffMs = null;
 
+    /** Whether to follow redirects. Null keeps the HTTP client's default behavior. */
+    public ?bool $followRedirects = null;
+
     /**
      * @param array<string, string> $headers
      */
@@ -50,12 +53,14 @@ class RequestOptions
         ?int $connectTimeout = null,
         ?int $retries = null,
         ?int $retryBackoffMs = null,
-        array $headers = []
+        array $headers = [],
+        ?bool $followRedirects = null
     ) {
         $this->timeout = $timeout;
         $this->connectTimeout = $connectTimeout;
         $this->retries = $retries;
         $this->retryBackoffMs = $retryBackoffMs;
         $this->headers = $headers;
+        $this->followRedirects = $followRedirects;
     }
 }
