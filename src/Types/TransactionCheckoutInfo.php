@@ -33,9 +33,9 @@ class TransactionCheckoutInfo
     /**
      * How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.
      *
-     * @var TransactionCheckoutInfoEntryMode|null
+     * @var TransactionCheckoutInfoEntryMode|string|null
      */
-    public ?TransactionCheckoutInfoEntryMode $entryMode = null;
+    public TransactionCheckoutInfoEntryMode|string|null $entryMode = null;
 
     /**
      * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.

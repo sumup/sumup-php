@@ -170,23 +170,11 @@ func (g *Generator) renderProperty(prop phpProperty) string {
 		}
 	}
 	b.WriteString("     *\n")
-	docType := prop.DocType
-	if prop.Optional || prop.Nullable {
-		if !strings.Contains(docType, "null") {
-			docType += "|null"
-		}
-	}
+	docType := g.propertyDocType(prop)
 	fmt.Fprintf(&b, "     * @var %s\n", docType)
 	b.WriteString("     */\n")
 
-	propertyType := prop.Type
-	if (prop.Optional || prop.Nullable) && propertyType != "mixed" && !strings.HasPrefix(propertyType, "?") {
-		propertyType = "?" + propertyType
-	}
-
-	if propertyType == "" {
-		propertyType = "mixed"
-	}
+	propertyType := g.propertyTypeHint(prop)
 
 	if prop.Optional {
 		fmt.Fprintf(&b, "    public %s $%s = null;\n\n", propertyType, prop.Name)

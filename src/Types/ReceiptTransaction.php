@@ -117,9 +117,9 @@ class ReceiptTransaction
     /**
      * Whether the transaction was processed as credit or debit.
      *
-     * @var ReceiptTransactionProcessAs|null
+     * @var ReceiptTransactionProcessAs|string|null
      */
-    public ?ReceiptTransactionProcessAs $processAs = null;
+    public ReceiptTransactionProcessAs|string|null $processAs = null;
 
     /**
      * Products associated with the transaction.

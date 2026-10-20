@@ -29,9 +29,9 @@ class CreateReaderCheckoutRequest
      * The card type of the card used for the transaction.
      * Is is required only for some countries (e.g: Brazil).
      *
-     * @var CreateReaderCheckoutRequestCardType|null
+     * @var CreateReaderCheckoutRequestCardType|string|null
      */
-    public ?CreateReaderCheckoutRequestCardType $cardType = null;
+    public CreateReaderCheckoutRequestCardType|string|null $cardType = null;
 
     /**
      * Description of the checkout to be shown in the Merchant Sales

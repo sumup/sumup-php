@@ -23,9 +23,9 @@ class FinancialPayout
     /**
      * High-level payout record category.
      *
-     * @var FinancialPayoutType
+     * @var FinancialPayoutType|string
      */
-    public FinancialPayoutType $type;
+    public FinancialPayoutType|string $type;
 
     /**
      * Amount of the payout or deduction in major units.
@@ -58,9 +58,9 @@ class FinancialPayout
     /**
      * Merchant-facing outcome of the payout record.
      *
-     * @var FinancialPayoutStatus
+     * @var FinancialPayoutStatus|string
      */
-    public FinancialPayoutStatus $status;
+    public FinancialPayoutStatus|string $status;
 
     /**
      * Processor or payout reference associated with the record.

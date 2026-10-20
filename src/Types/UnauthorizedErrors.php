@@ -16,8 +16,8 @@ class UnauthorizedErrors
     /**
      * Key indicating type of error. Present only for typed 401 responses (e.g. invalid token, invalid password). Absent for generic unauthorized responses.
      *
-     * @var UnauthorizedErrorsType|null
+     * @var UnauthorizedErrorsType|string|null
      */
-    public ?UnauthorizedErrorsType $type = null;
+    public UnauthorizedErrorsType|string|null $type = null;
 
 }

@@ -31,9 +31,9 @@ class Reader
      * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
      * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
      *
-     * @var ReaderStatus
+     * @var ReaderStatus|string
      */
-    public ReaderStatus $status;
+    public ReaderStatus|string $status;
 
     /**
      * Information about the underlying physical device.

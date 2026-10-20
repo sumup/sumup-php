@@ -140,6 +140,33 @@ class SumUpTest extends TestCase
         $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
     }
 
+    /**
+     * @dataProvider unknownCardTypes
+     */
+    public function testTransactionWithUnknownCardTypeCanBeRead(string $cardType)
+    {
+        $fakeClient = new FakeHttpClient(new Response(200, [
+            'id' => 'tx-1',
+            'status' => 'SUCCESSFUL',
+            'amount' => 2.0,
+            'currency' => 'EUR',
+            'card' => ['type' => $cardType, 'last_4_digits' => '1234'],
+        ]));
+        $sumup = new SumUp(['client' => $fakeClient, 'access_token' => 'token']);
+
+        $transaction = $sumup->transactions()->get('MERCHANT');
+
+        $this->assertSame('tx-1', $transaction->id);
+        $this->assertSame('SUCCESSFUL', $transaction->status);
+        $this->assertSame($cardType, $transaction->card->type);
+        $this->assertSame('1234', $transaction->card->last4Digits);
+    }
+
+    public static function unknownCardTypes(): array
+    {
+        return [['BANCOMAT'], ['SUMUP'], ['FUTURE_CARD']];
+    }
+
     public function testMagicPropertyAccessIsNotSupported()
     {
         $this->assertFalse(method_exists(SumUp::class, '__get'));

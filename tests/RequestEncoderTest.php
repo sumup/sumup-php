@@ -43,6 +43,31 @@ class RequestEncoderTest extends TestCase
         $this->assertSame('item-1', $encoded['items'][0]['item_id']);
         $this->assertSame('item-2', $encoded['items'][1]['item_id']);
     }
+
+    public function testUnknownEnumValuesSurviveRequestConstructionAndEncoding()
+    {
+        $request = new CheckoutCreateRequest(
+            checkoutReference: 'order-123',
+            amount: 10.0,
+            currency: 'FUTURE_CURRENCY',
+            merchantCode: 'MC123',
+            purpose: 'FUTURE_PURPOSE',
+        );
+        $fromArray = CheckoutCreateRequest::fromArray([
+            'checkout_reference' => 'order-123',
+            'amount' => 10.0,
+            'currency' => 'FUTURE_CURRENCY',
+            'merchant_code' => 'MC123',
+            'purpose' => 'FUTURE_PURPOSE',
+        ]);
+
+        $this->assertSame('FUTURE_CURRENCY', $request->currency);
+        $this->assertSame('FUTURE_PURPOSE', $request->purpose);
+        $encoded = RequestEncoder::encode($request);
+        $this->assertSame('FUTURE_CURRENCY', $encoded['currency']);
+        $this->assertSame('FUTURE_PURPOSE', $encoded['purpose']);
+        $this->assertSame($encoded, RequestEncoder::encode($fromArray));
+    }
 }
 
 class RequestEncoderFixture

@@ -33,8 +33,8 @@ class TransactionMixinHistory
     /**
      * Payout plan of the registered user at the time when the transaction was made.
      *
-     * @var TransactionMixinHistoryPayoutPlan|null
+     * @var TransactionMixinHistoryPayoutPlan|string|null
      */
-    public ?TransactionMixinHistoryPayoutPlan $payoutPlan = null;
+    public TransactionMixinHistoryPayoutPlan|string|null $payoutPlan = null;
 
 }

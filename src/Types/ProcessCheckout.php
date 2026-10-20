@@ -12,9 +12,9 @@ class ProcessCheckout
     /**
      * Payment method used for this processing attempt. It determines which additional request fields are required.
      *
-     * @var ProcessCheckoutPaymentType
+     * @var ProcessCheckoutPaymentType|string
      */
-    public ProcessCheckoutPaymentType $paymentType;
+    public ProcessCheckoutPaymentType|string $paymentType;
 
     /**
      * Number of installments for deferred payments. Available only to merchant users in Brazil.

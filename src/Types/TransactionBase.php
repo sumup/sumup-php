@@ -33,9 +33,9 @@ class TransactionBase
     /**
      * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
      *
-     * @var TransactionBaseCurrency|null
+     * @var TransactionBaseCurrency|string|null
      */
-    public ?TransactionBaseCurrency $currency = null;
+    public TransactionBaseCurrency|string|null $currency = null;
 
     /**
      * The timestamp of when the transaction was created.
@@ -52,16 +52,16 @@ class TransactionBase
      * - `FAILED`: The transaction attempt did not complete successfully.
      * - `REFUNDED`: The transaction was refunded in full or in part.
      *
-     * @var TransactionBaseStatus|null
+     * @var TransactionBaseStatus|string|null
      */
-    public ?TransactionBaseStatus $status = null;
+    public TransactionBaseStatus|string|null $status = null;
 
     /**
      * Payment category recorded on a transaction, for example `POS` for a point-of-sale card payment, `ECOM` for an online card payment, or `RECURRING` for a recurring card payment. These reporting values are separate from the lowercase `payment_type` values used to process checkouts.
      *
-     * @var TransactionBasePaymentType|null
+     * @var TransactionBasePaymentType|string|null
      */
-    public ?TransactionBasePaymentType $paymentType = null;
+    public TransactionBasePaymentType|string|null $paymentType = null;
 
     /**
      * Number of installments for a deferred payment.
