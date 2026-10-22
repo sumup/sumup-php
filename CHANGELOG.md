@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.8](https://github.com/sumup/sumup-php/compare/v0.1.7...v0.1.8) (2026-10-22)
+
+
+### Bug Fixes
+
+* use patched PHP runtimes in workflows ([#139](https://github.com/sumup/sumup-php/issues/139)) ([65b307e](https://github.com/sumup/sumup-php/commit/65b307ec8b31d793b73b14b861125c8499434bd5))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#135](https://github.com/sumup/sumup-php/issues/135)) ([b6878e7](https://github.com/sumup/sumup-php/commit/b6878e7558f7e9e68af21baf0d22dd371140ea78))
+* update create-github-app-token ([a2879b9](https://github.com/sumup/sumup-php/commit/a2879b9a1fabddaf1a1465430aa2213504156c27))
+
+
+### Build System & Dependencies
+
+* **deps:** bump actions/create-github-app-token from 3.2.0 to 3.3.0 ([#131](https://github.com/sumup/sumup-php/issues/131)) ([05f51c6](https://github.com/sumup/sumup-php/commit/05f51c69e491a970df15ca73fad9cd0d397282f8))
+* **deps:** bump github.com/pb33f/libopenapi from 0.41.3 to 0.41.6 in /codegen ([#134](https://github.com/sumup/sumup-php/issues/134)) ([984a7aa](https://github.com/sumup/sumup-php/commit/984a7aac6e84769bc6b8cdbeca31f03c95d9b03d))
+* **deps:** bump reviewdog/action-actionlint from 1.79.1 to 1.80.2 ([#132](https://github.com/sumup/sumup-php/issues/132)) ([9899268](https://github.com/sumup/sumup-php/commit/989926869d5c3c6a6866ffcb1bd0d9423cf0675b))
+
 ## [0.1.7](https://github.com/sumup/sumup-php/compare/v0.1.6...v0.1.7) (2026-10-15)
 
 
