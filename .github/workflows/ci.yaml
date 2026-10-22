@@ -24,7 +24,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.31.0
         with:
-          php-version: '8.4'
+          php-version: '8.4.27'
           extensions: intl
           coverage: none
 
@@ -43,7 +43,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.31.0
         with:
-          php-version: '8.4'
+          php-version: '8.4.27'
           coverage: none
           tools: composer:v2, phpstan
 
@@ -62,7 +62,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.31.0
         with:
-          php-version: '8.4'
+          php-version: '8.4.27'
           coverage: none
           tools: composer:v2
 
@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.2', '8.3', '8.4', '8.5']
+        php: ['8.2.35', '8.3.36', '8.4.27', '8.5.12']
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
