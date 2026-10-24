@@ -7,7 +7,7 @@ namespace SumUp\Types;
 class GetReaderCheckoutResponseData
 {
     /**
-     * Type of the card. Required for some countries
+     * Type of the card, or null when no card type was specified.
      *
      * @var GetReaderCheckoutResponseDataCardType|null
      */
@@ -46,7 +46,7 @@ class GetReaderCheckoutResponseData
      *
      * @var string|null
      */
-    public ?string $paymentFailureReason = null;
+    public ?string $paymentFailureReason;
 
     /**
      * Payment status from payments v2 event
