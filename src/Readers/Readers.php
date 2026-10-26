@@ -387,6 +387,34 @@ class Readers implements SumUpService
     }
 
     /**
+     * Get Reader Settings
+     *
+     * @param string $merchantCode The merchant code of the account that owns the reader.
+     * @param string $readerId The unique identifier of the reader.
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Types\GetReaderSettingsResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function getReaderSettings(string $merchantCode, string $readerId, ?RequestOptions $requestOptions = null): \SumUp\Types\GetReaderSettingsResponse
+    {
+        $path = sprintf('/v0.1/merchants/%s/readers/%s/settings', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
+        $payload = [];
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\GetReaderSettingsResponse::class, [
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'GET', $path);
+    }
+
+    /**
      * Get a Reader Status
      *
      * @param string $merchantCode Merchant Code
@@ -508,6 +536,41 @@ class Readers implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Reader::class, [
             '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+        ], 'PATCH', $path);
+    }
+
+    /**
+     * Update Reader Settings
+     *
+     * @param string $merchantCode The merchant code of the account that owns the reader.
+     * @param string $readerId The unique identifier of the reader.
+     * @param \SumUp\Types\UpdateReaderSettingsRequest|array<string, mixed> $body Required request payload
+     * @param RequestOptions|null $requestOptions Optional typed request options
+     *
+     * @return \SumUp\Types\UpdateReaderSettingsResponse
+     * @throws \SumUp\Exception\ApiException
+     * @throws \SumUp\Exception\UnexpectedApiException
+     * @throws \SumUp\Exception\ConnectionException
+     * @throws \SumUp\Exception\SDKException
+     */
+    public function updateReaderSettings(string $merchantCode, string $readerId, \SumUp\Types\UpdateReaderSettingsRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\UpdateReaderSettingsResponse
+    {
+        $path = sprintf('/v0.1/merchants/%s/readers/%s/settings', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
+        $payload = [];
+        $requestBody = $body;
+        if (is_array($requestBody)) {
+            $requestBody = \SumUp\Types\UpdateReaderSettingsRequest::fromArray($requestBody);
+        }
+        $payload = RequestEncoder::encode($requestBody);
+        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
+
+        $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
+
+        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\UpdateReaderSettingsResponse::class, [
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'PATCH', $path);
     }
 }

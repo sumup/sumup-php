@@ -6,7 +6,7 @@ namespace SumUp\Types;
 
 /**
  * The card type of the card used for the transaction.
- * Is is required only for some countries (e.g: Brazil).
+ * It is required only for some countries (e.g: Brazil).
  *
  */
 enum CreateReaderCheckoutRequestCardType: string
