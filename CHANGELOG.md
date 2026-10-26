@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.1.8](https://github.com/sumup/sumup-php/compare/v0.1.7...v0.1.8) (2026-10-26)
+
+
+### Features
+
+* expose typed Problem details and original error responses ([#141](https://github.com/sumup/sumup-php/issues/141)) ([0c03321](https://github.com/sumup/sumup-php/commit/0c0332144a31bf74542e942dc8380ab2b4a6c0ea))
+
+
+### Bug Fixes
+
+* use patched PHP runtimes in workflows ([#139](https://github.com/sumup/sumup-php/issues/139)) ([65b307e](https://github.com/sumup/sumup-php/commit/65b307ec8b31d793b73b14b861125c8499434bd5))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#135](https://github.com/sumup/sumup-php/issues/135)) ([b6878e7](https://github.com/sumup/sumup-php/commit/b6878e7558f7e9e68af21baf0d22dd371140ea78))
+* synced file(s) with sumup/apis ([#138](https://github.com/sumup/sumup-php/issues/138)) ([0ff3d57](https://github.com/sumup/sumup-php/commit/0ff3d57c93bbd95323851fee6f16eb78f77f7789))
+* update create-github-app-token ([a2879b9](https://github.com/sumup/sumup-php/commit/a2879b9a1fabddaf1a1465430aa2213504156c27))
+
+
+### Build System & Dependencies
+
+* **deps:** bump actions/create-github-app-token from 3.2.0 to 3.3.0 ([#131](https://github.com/sumup/sumup-php/issues/131)) ([05f51c6](https://github.com/sumup/sumup-php/commit/05f51c69e491a970df15ca73fad9cd0d397282f8))
+* **deps:** bump github.com/pb33f/libopenapi from 0.41.3 to 0.41.6 in /codegen ([#134](https://github.com/sumup/sumup-php/issues/134)) ([984a7aa](https://github.com/sumup/sumup-php/commit/984a7aac6e84769bc6b8cdbeca31f03c95d9b03d))
+* **deps:** bump reviewdog/action-actionlint from 1.79.1 to 1.80.2 ([#132](https://github.com/sumup/sumup-php/issues/132)) ([9899268](https://github.com/sumup/sumup-php/commit/989926869d5c3c6a6866ffcb1bd0d9423cf0675b))
+* **deps:** bump reviewdog/action-actionlint from 1.80.2 to 1.80.4 ([#140](https://github.com/sumup/sumup-php/issues/140)) ([c3c9b10](https://github.com/sumup/sumup-php/commit/c3c9b1031c397860f0fb53df98c521c36032b97b))
+* **deps:** bump shivammathur/setup-php from 2.37.2 to 2.40.0 ([#133](https://github.com/sumup/sumup-php/issues/133)) ([972c0ba](https://github.com/sumup/sumup-php/commit/972c0ba8984e7bc6439a8e9405f29685628120cd))
+
 ## [0.1.7](https://github.com/sumup/sumup-php/compare/v0.1.6...v0.1.7) (2026-10-15)
 
 
