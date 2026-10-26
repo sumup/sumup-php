@@ -73,6 +73,23 @@ If you prefer to provide the API key directly in your code instead of using the 
 $sumup = new \SumUp\SumUp('your-api-key-here');
 ```
 
+### Handling errors
+
+API errors expose typed Problem details when available:
+
+```php
+try {
+    $checkout = $sumup->checkouts()->get('your-checkout-id');
+} catch (\SumUp\Exception\ApiException $error) {
+    if (($problem = $error->getProblem()) !== null) {
+        echo $problem->type . ': ' . $problem->detail;
+    }
+}
+```
+
+Use `getResponseBody()` for other error details. `getResponse()` provides the original
+response, including its headers and text through `getHeaders()` and `getRawBody()`.
+
 ### TLS Certificates
 
 The SDK ships with the latest Mozilla CA bundle to prevent `SSL certificate problem: unable to get local issuer certificate` errors on Windows and other environments that do not expose a system-wide trust store. You can override the bundled file by passing the `ca_bundle_path` configuration key:

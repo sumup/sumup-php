@@ -5,6 +5,7 @@ namespace SumUp;
 use SumUp\Exception\ApiException;
 use SumUp\Exception\UnexpectedApiException;
 use SumUp\HttpClient\Response;
+use SumUp\Types\Problem;
 
 /**
  * Converts HTTP responses into SDK models or scalar values.
@@ -38,7 +39,14 @@ class ResponseDecoder
         }
 
         if (self::hasDescriptorForStatus($errorDescriptors, $statusCode)) {
-            $decodedErrorBody = self::decode($response, $errorDescriptors);
+            try {
+                $decodedErrorBody = self::decode($response, $errorDescriptors);
+                if ($decodedErrorBody instanceof Problem && !isset($decodedErrorBody->type)) {
+                    $decodedErrorBody = $response->getBody();
+                }
+            } catch (\TypeError | \ReflectionException | \InvalidArgumentException $exception) {
+                $decodedErrorBody = $response->getBody();
+            }
             $message = self::extractErrorMessage($decodedErrorBody, self::defaultErrorMessage($statusCode));
 
             throw new ApiException(
@@ -46,7 +54,9 @@ class ResponseDecoder
                 $statusCode,
                 $decodedErrorBody,
                 $httpMethod,
-                $path
+                $path,
+                null,
+                $response
             );
         }
 
@@ -60,7 +70,9 @@ class ResponseDecoder
             $httpMethod,
             $path,
             $response->getHeaders(),
-            $response->getRawBody()
+            $response->getRawBody(),
+            null,
+            $response
         );
     }
 
@@ -228,7 +240,7 @@ class ResponseDecoder
      */
     private static function extractErrorMessage($body, string $defaultMessage): string
     {
-        foreach (['message', 'error_message', 'error_description', 'error'] as $key) {
+        foreach (['detail', 'title', 'message', 'error_message', 'error_description', 'error'] as $key) {
             $value = self::readField($body, $key);
             if (is_string($value) && $value !== '') {
                 return $value;

@@ -9,6 +9,7 @@ use SumUp\Types\CheckoutCurrency;
 use SumUp\Types\MandateResponse;
 use SumUp\Types\MandateResponseStatus;
 use SumUp\Types\Receipt;
+use SumUp\Types\Problem;
 
 class HydratorTest extends TestCase
 {
@@ -77,6 +78,18 @@ class HydratorTest extends TestCase
         $this->assertInstanceOf(HydratorLinkFixture::class, $response->links[1]);
         $this->assertSame('https://example.test/1', $response->links[0]->href);
         $this->assertSame('https://example.test/2', $response->links[1]->href);
+    }
+
+    public function testHydrateStringableValue(): void
+    {
+        $value = new class implements \Stringable {
+            public function __toString(): string
+            {
+                return 'about:blank';
+            }
+        };
+        $problem = Hydrator::hydrate(['type' => $value], Problem::class);
+        $this->assertSame('about:blank', $problem->type);
     }
 
     public function testHydrateInvalidBackedEnumValueThrowsValueError()
