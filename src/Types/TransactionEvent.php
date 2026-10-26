@@ -23,9 +23,9 @@ class TransactionEvent
      * - `CHARGE_BACK`: A reversal of the payment following a chargeback.
      * - `PAYOUT_DEDUCTION`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.
      *
-     * @var TransactionEventEventType|null
+     * @var TransactionEventEventType|string|null
      */
-    public ?TransactionEventEventType $eventType = null;
+    public TransactionEventEventType|string|null $eventType = null;
 
     /**
      * Status of the transaction event.
@@ -38,9 +38,9 @@ class TransactionEvent
      * - `SUCCESSFUL`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as `PAID_OUT` or `REFUNDED`.
      * - `FAILED`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.
      *
-     * @var TransactionEventStatus|null
+     * @var TransactionEventStatus|string|null
      */
-    public ?TransactionEventStatus $status = null;
+    public TransactionEventStatus|string|null $status = null;
 
     /**
      * Amount of the event in major units of the associated transaction's currency.

@@ -23,9 +23,9 @@ class StatusResponseData
     /**
      * Type of connection used by the device
      *
-     * @var StatusResponseDataConnectionType|null
+     * @var StatusResponseDataConnectionType|string|null
      */
-    public ?StatusResponseDataConnectionType $connectionType = null;
+    public StatusResponseDataConnectionType|string|null $connectionType = null;
 
     /**
      * Firmware version of the device
@@ -44,15 +44,15 @@ class StatusResponseData
     /**
      * Latest state of the device
      *
-     * @var StatusResponseDataState|null
+     * @var StatusResponseDataState|string|null
      */
-    public ?StatusResponseDataState $state = null;
+    public StatusResponseDataState|string|null $state = null;
 
     /**
      * Status of a device
      *
-     * @var StatusResponseDataStatus
+     * @var StatusResponseDataStatus|string
      */
-    public StatusResponseDataStatus $status;
+    public StatusResponseDataStatus|string $status;
 
 }

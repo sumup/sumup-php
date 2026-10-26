@@ -19,9 +19,9 @@ class CardResponse
     /**
      * Issuing card network of the payment card used for the transaction.
      *
-     * @var CardResponseType|null
+     * @var CardResponseType|string|null
      */
-    public ?CardResponseType $type = null;
+    public CardResponseType|string|null $type = null;
 
     /**
      * Payment Account Reference (PAR) defined by [EMVCo](https://www.emvco.com/emv-technologies/payment-tokenisation/). It links a card's primary account number (PAN) with its affiliated payment tokens, allowing transactions made with the physical card and tokenized versions of that card, such as digital wallets, to be correlated when PAR is available.

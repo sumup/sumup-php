@@ -122,16 +122,16 @@ class TransactionHistory
     /**
      * Type of the transaction for the registered user specified in the `user` property.
      *
-     * @var TransactionHistoryType|null
+     * @var TransactionHistoryType|string|null
      */
-    public ?TransactionHistoryType $type = null;
+    public TransactionHistoryType|string|null $type = null;
 
     /**
      * Issuing card network of the payment card used for the transaction.
      *
-     * @var TransactionHistoryCardType|null
+     * @var TransactionHistoryCardType|string|null
      */
-    public ?TransactionHistoryCardType $cardType = null;
+    public TransactionHistoryCardType|string|null $cardType = null;
 
     /**
      * Payout date (if paid out at once).
@@ -143,9 +143,9 @@ class TransactionHistory
     /**
      * Payout type.
      *
-     * @var TransactionHistoryPayoutType|null
+     * @var TransactionHistoryPayoutType|string|null
      */
-    public ?TransactionHistoryPayoutType $payoutType = null;
+    public TransactionHistoryPayoutType|string|null $payoutType = null;
 
     /**
      * Total amount refunded for this transaction, in major units of the transaction's currency.

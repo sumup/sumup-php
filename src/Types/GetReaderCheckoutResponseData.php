@@ -9,9 +9,9 @@ class GetReaderCheckoutResponseData
     /**
      * Type of the card. Required for some countries
      *
-     * @var GetReaderCheckoutResponseDataCardType|null
+     * @var GetReaderCheckoutResponseDataCardType|string|null
      */
-    public ?GetReaderCheckoutResponseDataCardType $cardType;
+    public GetReaderCheckoutResponseDataCardType|string|null $cardType;
 
     /**
      * Unique identifier for the checkout
@@ -58,9 +58,9 @@ class GetReaderCheckoutResponseData
     /**
      * Type of the payment. Required for some countries
      *
-     * @var GetReaderCheckoutResponseDataPaymentType
+     * @var GetReaderCheckoutResponseDataPaymentType|string
      */
-    public GetReaderCheckoutResponseDataPaymentType $paymentType;
+    public GetReaderCheckoutResponseDataPaymentType|string $paymentType;
 
     /**
      * Reader firmware version
@@ -79,9 +79,9 @@ class GetReaderCheckoutResponseData
     /**
      * Current status of the checkout
      *
-     * @var GetReaderCheckoutResponseDataStatus
+     * @var GetReaderCheckoutResponseDataStatus|string
      */
-    public GetReaderCheckoutResponseDataStatus $status;
+    public GetReaderCheckoutResponseDataStatus|string $status;
 
     /**
      * Amount structure.
