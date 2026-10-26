@@ -112,7 +112,7 @@ class Hydrator
                 case 'bool':
                     return (bool) $value;
                 case 'string':
-                    if (!is_scalar($value)) {
+                    if (!is_scalar($value) && !($value instanceof \Stringable)) {
                         throw new \InvalidArgumentException('Expected a scalar value for ' . $property->getName());
                     }
                     return (string) $value;
