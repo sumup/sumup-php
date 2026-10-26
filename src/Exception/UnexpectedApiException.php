@@ -22,9 +22,10 @@ class UnexpectedApiException extends ApiException
         ?string $path = null,
         ?array $headers = null,
         ?string $rawResponseBody = null,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
+        ?\SumUp\HttpClient\Response $response = null
     ) {
-        parent::__construct($message, $statusCode, $responseBody, $httpMethod, $path, $previous);
+        parent::__construct($message, $statusCode, $responseBody, $httpMethod, $path, $previous, $response);
         $this->rawResponseBody = $rawResponseBody;
         $this->errorEnvelope = new ErrorEnvelope(
             $statusCode,

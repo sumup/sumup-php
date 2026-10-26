@@ -38,7 +38,11 @@ class ResponseDecoder
         }
 
         if (self::hasDescriptorForStatus($errorDescriptors, $statusCode)) {
-            $decodedErrorBody = self::decode($response, $errorDescriptors);
+            try {
+                $decodedErrorBody = self::decode($response, $errorDescriptors);
+            } catch (\TypeError | \ReflectionException | \InvalidArgumentException $exception) {
+                $decodedErrorBody = $response->getBody();
+            }
             $message = self::extractErrorMessage($decodedErrorBody, self::defaultErrorMessage($statusCode));
 
             throw new ApiException(
@@ -46,7 +50,9 @@ class ResponseDecoder
                 $statusCode,
                 $decodedErrorBody,
                 $httpMethod,
-                $path
+                $path,
+                null,
+                $response
             );
         }
 
@@ -60,7 +66,9 @@ class ResponseDecoder
             $httpMethod,
             $path,
             $response->getHeaders(),
-            $response->getRawBody()
+            $response->getRawBody(),
+            null,
+            $response
         );
     }
 

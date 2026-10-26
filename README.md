@@ -169,3 +169,20 @@ For information about the license see the [license](https://github.com/sumup/sum
 ## Contact Us
 
 If you have found a bug or you lack some functionality please [open an issue](https://github.com/sumup/sumup-php/issues/new). If you have other issues when integrating with SumUp's API you can send an email to [integration@sumup.com](mailto:integration@sumup.com).
+
+## Problem details
+
+API errors expose typed Problem details when available:
+
+```php
+try {
+    $checkout = $sumup->checkouts()->get('your-checkout-id');
+} catch (\SumUp\Exception\ApiException $error) {
+    if (($problem = $error->getProblem()) !== null) {
+        echo $problem->type . ': ' . $problem->detail;
+    }
+}
+```
+
+Use `getResponseBody()` for other error details. `getResponse()` provides the original
+response, including its headers and text through `getHeaders()` and `getRawBody()`.

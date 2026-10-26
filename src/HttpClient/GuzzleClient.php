@@ -114,7 +114,7 @@ class GuzzleClient implements HttpClientInterface
             // Guzzle 8 exposes getResponse() only on response-bearing exceptions.
             $response = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
             if (!$response instanceof \Psr\Http\Message\ResponseInterface) {
-                throw new ConnectionException($exception->getMessage(), $exception->getCode());
+                throw new ConnectionException($exception->getMessage(), $exception->getCode(), null, $exception);
             }
         }
 
