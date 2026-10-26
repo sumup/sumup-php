@@ -14,8 +14,8 @@ class CreateReaderCheckoutResponseData
     public ?string $checkoutId = null;
 
     /**
-     * The client transaction ID is a unique identifier for the transaction that is generated for the client.
-     * It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+     * Unique identifier for the transaction associated with this checkout.
+     * Use this value to match the checkout with payment events and transaction records.
      *
      * @var string
      */
