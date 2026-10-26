@@ -112,6 +112,9 @@ class Hydrator
                 case 'bool':
                     return (bool) $value;
                 case 'string':
+                    if (!is_scalar($value)) {
+                        throw new \InvalidArgumentException('Expected a scalar value for ' . $property->getName());
+                    }
                     return (string) $value;
                 case 'array':
                     return self::castArrayValue($value, $property);

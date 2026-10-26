@@ -20,20 +20,33 @@ final class ProblemExceptionTest extends TestCase
             self::assertInstanceOf(Problem::class, $error->getProblem());
             self::assertSame($error->getResponseBody(), $error->getProblem());
             self::assertSame('Invalid amount', $error->getProblem()->detail);
+            self::assertSame('Invalid amount', $error->getMessage());
             self::assertSame($response, $error->getResponse());
         }
     }
 
     public function testInvalidProblemRemainsAnApiError(): void
     {
-        $body = ['type' => null];
-        $response = new Response(400, $body);
+        foreach ([['type' => null], ['detail' => 'Token expired'], ['type' => []]] as $body) {
+            $response = new Response(400, $body);
+            try {
+                ResponseDecoder::decodeOrThrow($response, null, ['400' => ['type' => 'class', 'class' => Problem::class]]);
+                self::fail('Expected API error');
+            } catch (ApiException $error) {
+                self::assertNull($error->getProblem());
+                self::assertSame($body, $error->getResponseBody());
+            }
+        }
+    }
+
+    public function testProblemTitleIsUsedWhenDetailIsMissing(): void
+    {
+        $response = new Response(401, ['type' => 'about:blank', 'title' => 'Unauthorized']);
         try {
-            ResponseDecoder::decodeOrThrow($response, null, ['400' => ['type' => 'class', 'class' => Problem::class]]);
+            ResponseDecoder::decodeOrThrow($response, null, Problem::class);
             self::fail('Expected API error');
         } catch (ApiException $error) {
-            self::assertNull($error->getProblem());
-            self::assertSame($body, $error->getResponseBody());
+            self::assertSame('Unauthorized', $error->getMessage());
         }
     }
 
