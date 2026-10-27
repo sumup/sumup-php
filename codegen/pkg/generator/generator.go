@@ -56,6 +56,8 @@ type Generator struct {
 
 	// requestClassNames tracks schema classes used as OpenAPI request bodies.
 	requestClassNames map[string]struct{}
+
+	events []eventDefinition
 }
 
 type enumDefinition struct {
@@ -90,7 +92,16 @@ func (g *Generator) Load(spec *v3.Document) error {
 		g.tagLookup[normalizeTagKey(tag.Name)] = tag
 	}
 
+	events, err := g.collectEvents()
+	if err != nil {
+		return err
+	}
+	g.events = events
 	usage := g.collectSchemaUsage()
+	for _, event := range events {
+		schema := spec.Components.Schemas.GetOrZero(event.SchemaName)
+		g.collectSchemaUsageFromSchema(schema, nil, usage, make(map[*base.SchemaProxy]struct{}), event.ObjectType)
+	}
 	g.schemasByTag, g.schemaNamespaces = g.assignSchemasToTags(usage)
 	g.operationsByTag = g.collectOperations()
 	g.collectRequestClassNames()
@@ -145,6 +156,9 @@ func (g *Generator) Build() error {
 	// }
 
 	if err := g.writeApiVersion(); err != nil {
+		return err
+	}
+	if err := g.writeEvents(); err != nil {
 		return err
 	}
 
