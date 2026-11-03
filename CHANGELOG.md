@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/sumup/sumup-php/compare/v0.1.8...v0.1.9) (2026-11-03)
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#142](https://github.com/sumup/sumup-php/issues/142)) ([169a6cb](https://github.com/sumup/sumup-php/commit/169a6cb0fbbf898bf7341ef9b3343848ae1a73ef))
+
 ## [0.1.8](https://github.com/sumup/sumup-php/compare/v0.1.7...v0.1.8) (2026-10-26)
 
 
