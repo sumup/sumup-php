@@ -42,14 +42,7 @@ class Person
     public ?string $familyName = null;
 
     /**
-     * Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
-     *
-     * @var string|null
-     */
-    public ?string $middleName = null;
-
-    /**
-     * The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+     * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
      *
      * @var string|null
      */
@@ -63,14 +56,14 @@ class Person
     public ?array $relationships = null;
 
     /**
-     * Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.
      *
      * @var Ownership|null
      */
     public ?Ownership $ownership = null;
 
     /**
-     * The address of the individual.
+     * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
+     * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
      *
      * @var Address|null
      */
@@ -84,7 +77,9 @@ class Person
     public ?array $identifiers = null;
 
     /**
-     * The Alpha-2 ISO code of the country where the Person is a citizen.
+     * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+     * country code. This definition users `oneOf` with a two-character string
+     * type to allow for support of future countries in client code.
      *
      * @var string|null
      */
