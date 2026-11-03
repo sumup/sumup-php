@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace SumUp\Types;
 
-/**
- * Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.
- *
- */
 class Ownership
 {
     /**

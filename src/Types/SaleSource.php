@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SumUp\Types;
+
+/**
+ * Information about the source of the sale.
+ */
+class SaleSource
+{
+    /**
+     * The sale_channel is field that indicates the channel through
+     * which the sale was made. For example, if the sale was made in the merchant app,
+     * the sale_channel could be POS. If the sale was made on a kiosk, the
+     * sale_channel is KIOSK.
+     * *Accepted values:* ["POS", "KIOSK", "ONLINE_STORE", "SOLO", "ORDER_AND_PAY", "INVOICE", "BOOKINGS", "ORDER_AGGREGATOR", "SUBSCRIPTIONS", "UNKNOWN"].
+     *
+     * @var string
+     */
+    public string $channel;
+
+    /**
+     * The sub_channel is an optional field that can be used to provide more
+     * information about the sale_channel. For example, if the sale_channel is
+     * ONLINE_PAYMENTS, the sub_channel could be "WIX" or "QR_CODE" or "WOOCOMMERCE".
+     *
+     * @var string|null
+     */
+    public ?string $subChannel = null;
+
+    /**
+     * An external reference ID for connecting orders/sales between products
+     *
+     * @var string|null
+     */
+    public ?string $externalId = null;
+
+    /**
+     * An external reference ID for the sub-channel.
+     * For example, when channel is BOOKINGS and sub_channel is POS,
+     * this can hold the OMS order ID while external_id holds the appointment ID.
+     *
+     * @var string|null
+     */
+    public ?string $externalSubChannelId = null;
+
+}
