@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.10](https://github.com/sumup/sumup-php/compare/v0.1.9...v0.1.10) (2026-11-05)
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#147](https://github.com/sumup/sumup-php/issues/147)) ([61f27f0](https://github.com/sumup/sumup-php/commit/61f27f062b5a7ad5d5898fb1a32119ef85a8c75d))
+
+
+### Build System & Dependencies
+
+* **deps:** bump github.com/pb33f/libopenapi from 0.41.6 to 0.41.8 in /codegen ([#143](https://github.com/sumup/sumup-php/issues/143)) ([e361ddb](https://github.com/sumup/sumup-php/commit/e361ddb6e7a173f1d434851c7661be399595ff83))
+* **deps:** bump reviewdog/action-actionlint from 1.80.4 to 1.80.8 ([#144](https://github.com/sumup/sumup-php/issues/144)) ([0cc42ea](https://github.com/sumup/sumup-php/commit/0cc42ea776fca3af959a00d3902ecc8c900a7371))
+
 ## [0.1.9](https://github.com/sumup/sumup-php/compare/v0.1.8...v0.1.9) (2026-11-03)
 
 
