@@ -149,11 +149,9 @@ func (g *Generator) Build() error {
 
 	slog.Info("models generated", slog.Int("tags", len(tagKeys)))
 
-	// Skip SumUp class generation to avoid breaking existing code
-	// TODO: Fix Authorization service dependency before re-enabling
-	// if err := g.writeSumUpClass(); err != nil {
-	// 	return err
-	// }
+	if err := g.writeServiceAccessors(); err != nil {
+		return err
+	}
 
 	if err := g.writeApiVersion(); err != nil {
 		return err

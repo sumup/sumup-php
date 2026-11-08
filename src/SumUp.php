@@ -11,16 +11,6 @@ use SumUp\HttpClient\HttpClientInterface;
 use SumUp\HttpClient\RequestHeaders;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\HttpClient\Response;
-use SumUp\Services\Checkouts;
-use SumUp\Services\Customers;
-use SumUp\Services\Members;
-use SumUp\Services\Memberships;
-use SumUp\Services\Merchants;
-use SumUp\Services\Payouts;
-use SumUp\Services\Readers;
-use SumUp\Services\Receipts;
-use SumUp\Services\Roles;
-use SumUp\Services\Transactions;
 
 /**
  * Class SumUp
@@ -30,6 +20,8 @@ use SumUp\Services\Transactions;
  */
 class SumUp
 {
+    use ServiceAccessors;
+
     /**
      * The access token for API authentication.
      *
@@ -205,105 +197,5 @@ class SumUp
         $config['custom_headers'] = $headers;
 
         return $config;
-    }
-
-    /**
-     * Access the Checkouts API endpoints.
-     *
-     * @return Checkouts
-     */
-    public function checkouts(): Checkouts
-    {
-        return new Checkouts($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Customers API endpoints.
-     *
-     * @return Customers
-     */
-    public function customers(): Customers
-    {
-        return new Customers($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Members API endpoints.
-     *
-     * @return Members
-     */
-    public function members(): Members
-    {
-        return new Members($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Memberships API endpoints.
-     *
-     * @return Memberships
-     */
-    public function memberships(): Memberships
-    {
-        return new Memberships($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Merchants API endpoints.
-     *
-     * @return Merchants
-     */
-    public function merchants(): Merchants
-    {
-        return new Merchants($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Payouts API endpoints.
-     *
-     * @return Payouts
-     */
-    public function payouts(): Payouts
-    {
-        return new Payouts($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Readers API endpoints.
-     *
-     * @return Readers
-     */
-    public function readers(): Readers
-    {
-        return new Readers($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Receipts API endpoints.
-     *
-     * @return Receipts
-     */
-    public function receipts(): Receipts
-    {
-        return new Receipts($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Roles API endpoints.
-     *
-     * @return Roles
-     */
-    public function roles(): Roles
-    {
-        return new Roles($this->client, $this->resolveAccessToken());
-    }
-
-    /**
-     * Access the Transactions API endpoints.
-     *
-     * @return Transactions
-     */
-    public function transactions(): Transactions
-    {
-        return new Transactions($this->client, $this->resolveAccessToken());
     }
 }

@@ -81,4 +81,4 @@ class CheckoutRequest { /* ... */ }
 
 #### Autoloading
 
-Generated files with multiple classes and enums are added to the `classmap` in `composer.json` to ensure proper autoloading.
+Composer's `classmap` covers `src/`, including generated files with multiple classes and enums. The generator also writes `src/ServiceAccessors.php`, which provides the API group methods used by `SumUp`. Adding an API group to the specification therefore adds its client accessor and autoloading without a manual registration step.
