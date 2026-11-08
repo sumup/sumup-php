@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Checkout;
 
-/** A checkouts.updated notification. Fetch its object to retrieve the latest Checkout. */
+/**
+ * Sent when a checkout snapshot is published, including creation and payment status updates. Fetch the checkout to inspect its current status. This is not a guarantee that every checkout mutation produces a notification.
+ *
+ * A checkouts.updated notification. Fetch its object to retrieve the latest Checkout.
+ */
 final class CheckoutUpdatedEvent extends EventNotification
 {
     public const TYPE = 'checkouts.updated';

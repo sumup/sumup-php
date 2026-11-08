@@ -19,6 +19,7 @@ const webhookSpec = `{
   "webhooks": {
     "widgets.created": {"post": {
       "operationId": "WidgetCreatedWebhook",
+      "description": "Sent when a widget is created.\nFetch the widget to read its current state.",
       "x-object": {"$ref": "#/components/schemas/Widget"},
       "responses": {"2XX": {"description": "Accepted"}}
     }}
@@ -44,7 +45,7 @@ func TestGenerateEvents(t *testing.T) {
 		t.Fatal(err)
 	}
 	for file, snippets := range map[string][]string{
-		"Events/WidgetCreatedEvent.php": {"const TYPE = 'widgets.created'", "fetchObject(?RequestOptions $options = null): ?Widget", "Widget::class"},
+		"Events/WidgetCreatedEvent.php": {" * Sent when a widget is created.\n * Fetch the widget to read its current state.", "const TYPE = 'widgets.created'", "fetchObject(?RequestOptions $options = null): ?Widget", "Widget::class"},
 		"Events/EventFactory.php":       {"WidgetCreatedEvent::TYPE => new WidgetCreatedEvent", "new UnknownEvent"},
 		"Events/EventsHandler.php":      {"callable(WidgetCreatedEvent): void", "function onWidgetCreated(callable $callback): self"},
 		"Types/Widget.php":              {"class Widget", "public ?string $id"},

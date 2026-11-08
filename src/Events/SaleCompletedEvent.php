@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Sale;
 
-/** A sales.completed notification. Fetch its object to retrieve the latest Sale. */
+/**
+ * Sent once per sale when its completion is observed: the sale is closed and has been fully paid. The event created_at is the sale's recorded completion time, rather than the time the notification is delivered. A delayed notification may arrive after subsequent updates, refunds, or chargebacks. Fetch the current sale using object.url with an access token that has the sales.read scope. The sale may briefly be unavailable while the Sales API catches up; retry fetching it after a 404 response. Automatic retries and manual redelivery may deliver the same event more than once; deduplicate by event id.
+ *
+ * A sales.completed notification. Fetch its object to retrieve the latest Sale.
+ */
 final class SaleCompletedEvent extends EventNotification
 {
     public const TYPE = 'sales.completed';

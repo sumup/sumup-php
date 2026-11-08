@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Sale;
 
-/** A sales.updated notification. Fetch its object to retrieve the latest Sale. */
+/**
+ * Sent when a closed, fully paid sale is published or updated, including subsequent refunds and chargebacks. The first notification can occur when the sale becomes fully paid and closed. Fetch the current sale using object.url with an access token that has the sales.read scope. The sale may briefly be unavailable while the Sales API catches up; retry fetching it after a 404 response. Notifications contain the sale identity rather than a snapshot, and delivery order is not guaranteed.
+ *
+ * A sales.updated notification. Fetch its object to retrieve the latest Sale.
+ */
 final class SaleUpdatedEvent extends EventNotification
 {
     public const TYPE = 'sales.updated';

@@ -9,7 +9,15 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\{{.ObjectType}};
 
-/** A {{.Type}} notification. Fetch its object to retrieve the latest {{.ObjectType}}. */
+/**
+{{- if .Description}}
+{{- range .Description}}
+ *{{if .}} {{.}}{{end}}
+{{- end}}
+ *
+{{- end}}
+ * A {{.Type}} notification. Fetch its object to retrieve the latest {{.ObjectType}}.
+ */
 final class {{.Name}} extends EventNotification
 {
     public const TYPE = '{{.Type}}';

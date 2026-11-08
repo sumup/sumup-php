@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Reader;
 
-/** A readers.created notification. Fetch its object to retrieve the latest Reader. */
+/**
+ * Sent when a reader is paired to a merchant account and becomes available through the Readers API.
+ *
+ * A readers.created notification. Fetch its object to retrieve the latest Reader.
+ */
 final class ReaderCreatedEvent extends EventNotification
 {
     public const TYPE = 'readers.created';

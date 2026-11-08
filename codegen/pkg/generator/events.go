@@ -19,11 +19,12 @@ import (
 var eventTemplates embed.FS
 
 type eventDefinition struct {
-	Name       string
-	Type       string
-	ObjectType string
-	SchemaName string
-	Method     string
+	Description []string
+	Name        string
+	Type        string
+	ObjectType  string
+	SchemaName  string
+	Method      string
 }
 
 func (g *Generator) collectEvents() ([]eventDefinition, error) {
@@ -49,12 +50,17 @@ func (g *Generator) collectEvents() ([]eventDefinition, error) {
 		if schema == nil || !schemaShouldGenerateClass(schema) {
 			return nil, fmt.Errorf("webhook %q has missing or unsupported object schema %q", eventType, schemaName)
 		}
+		var description []string
+		if text := strings.TrimSpace(item.Post.Description); text != "" {
+			description = strings.Split(strings.ReplaceAll(text, "*/", "* /"), "\n")
+		}
 		events = append(events, eventDefinition{
-			Name:       name + "Event",
-			Type:       eventType,
-			ObjectType: strcase.ToCamel(strings.NewReplacer(".", "_", "-", "_").Replace(schemaName)),
-			SchemaName: schemaName,
-			Method:     "on" + name,
+			Name:        name + "Event",
+			Description: description,
+			Type:        eventType,
+			ObjectType:  strcase.ToCamel(strings.NewReplacer(".", "_", "-", "_").Replace(schemaName)),
+			SchemaName:  schemaName,
+			Method:      "on" + name,
 		})
 	}
 	slices.SortFunc(events, func(a, b eventDefinition) int { return strings.Compare(a.Type, b.Type) })

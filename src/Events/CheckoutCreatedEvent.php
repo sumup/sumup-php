@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Checkout;
 
-/** A checkouts.created notification. Fetch its object to retrieve the latest Checkout. */
+/**
+ * Sent once when a checkout is first observed in the checkout snapshot stream, even if it is already paid, failed, or expired. The event timestamp is the original checkout creation time.
+ *
+ * A checkouts.created notification. Fetch its object to retrieve the latest Checkout.
+ */
 final class CheckoutCreatedEvent extends EventNotification
 {
     public const TYPE = 'checkouts.created';
