@@ -83,6 +83,9 @@ class CurlClient implements HttpClientInterface
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($ch, CURLOPT_URL, $requestUrl);
+            if ($options?->followRedirects !== null) {
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $options->followRedirects);
+            }
             curl_setopt($ch, CURLOPT_HTTPHEADER, $this->formatHeaders($reqHeaders));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, true);

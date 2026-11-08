@@ -12,11 +12,11 @@
 
 ## Overview
 
-This repository contains the open source PHP SDK that allows you to integrate quickly with the SumUp's [API](https://developer.sumup.com/rest-api) endpoints.
+Use the SumUp PHP SDK to create checkouts, manage card readers, and access the [SumUp API](https://developer.sumup.com/rest-api). Requires PHP 8.2 or later and the cURL extension.
 
 ## Installation
 
-The SumUp PHP SDK can be installed with [Composer](https://getcomposer.org/). Run the following command:
+Install with [Composer](https://getcomposer.org/):
 
 ```bash
 composer require sumup/sumup-php
@@ -24,50 +24,34 @@ composer require sumup/sumup-php
 
 ## Basic Usage
 
-Before using the SDK, set the `SUMUP_API_KEY` environment variable with your API key. The SDK will automatically use this key for authentication.
+Set your API key:
 
 ```bash
 export SUMUP_API_KEY='your-api-key-here'
 ```
 
-Then create checkouts and use other API endpoints:
+Create a checkout:
 
 ```php
-try {
-    // SDK automatically uses SUMUP_API_KEY environment variable
-    $sumup = new \SumUp\SumUp();
+require 'vendor/autoload.php';
 
-    $request = new \SumUp\Types\CheckoutCreateRequest(
-        checkoutReference: 'your-checkout-ref',
-        amount: 10.00,
-        currency: 'EUR', // or CheckoutCreateRequestCurrency::EUR
-        merchantCode: 'YOUR-MERCHANT-CODE',
-    );
+$sumup = new \SumUp\SumUp();
+$checkout = $sumup->checkouts()->create(new \SumUp\Types\CheckoutCreateRequest(
+    checkoutReference: 'your-checkout-ref',
+    amount: 10.00,
+    currency: 'EUR',
+    merchantCode: 'YOUR-MERCHANT-CODE',
+));
 
-    $checkout = $sumup->checkouts()->create($request);
-
-    $checkoutId = $checkout->id;
-    // Pass the $checkoutId to the front-end to be processed
-} catch (\SumUp\Exception\ApiException $e) {
-    echo 'Expected API error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
-    // Body is decoded according to the OpenAPI error schema for that endpoint/status.
-    var_dump($e->getResponseBody());
-} catch (\SumUp\Exception\UnexpectedApiException $e) {
-    echo 'Unexpected API error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
-    // Body did not match an OpenAPI-described error shape.
-    // Use the normalized envelope for stable logging/handling.
-    var_dump($e->getErrorEnvelope()->toArray());
-} catch (\SumUp\Exception\SDKException $e) {
-    echo 'SumUp SDK error (status ' . $e->getStatusCode() . '): ' . $e->getMessage();
-    // Covers connection/configuration and other non-API failures.
-}
+// Pass the checkout ID to your frontend to collect payment.
+$checkoutId = $checkout->id;
 ```
 
-Service methods also accept associative arrays as request payloads. For typed usage, prefer DTOs from `\SumUp\Types\...` with named arguments, or use `TypeName::fromArray([...])` when you already have associative array data.
+Request methods also accept associative arrays. Use classes from `\SumUp\Types` for autocomplete and type checking, or `TypeName::fromArray($data)` to create a request from an array.
 
 ### Providing API Key Programmatically
 
-If you prefer to provide the API key directly in your code instead of using the environment variable:
+The SDK reads `SUMUP_API_KEY` automatically. You can also pass an API key when creating the client:
 
 ```php
 $sumup = new \SumUp\SumUp('your-api-key-here');
@@ -75,24 +59,23 @@ $sumup = new \SumUp\SumUp('your-api-key-here');
 
 ### Handling errors
 
-API errors expose typed Problem details when available:
+Catch `ApiException` for API errors and `SDKException` for connection or configuration errors:
 
 ```php
 try {
     $checkout = $sumup->checkouts()->get('your-checkout-id');
 } catch (\SumUp\Exception\ApiException $error) {
-    if (($problem = $error->getProblem()) !== null) {
-        echo $problem->type . ': ' . $problem->detail;
-    }
+    echo $error->getStatusCode() . ': ' . $error->getMessage();
+} catch (\SumUp\Exception\SDKException $error) {
+    echo $error->getMessage();
 }
 ```
 
-Use `getResponseBody()` for other error details. `getResponse()` provides the original
-response, including its headers and text through `getHeaders()` and `getRawBody()`.
+Use `getProblem()` for error details such as `type` and `detail` when available, or `getResponseBody()` for the full response body. API errors also provide `getResponse()` to access response headers and text.
 
 ### TLS Certificates
 
-The SDK ships with the latest Mozilla CA bundle to prevent `SSL certificate problem: unable to get local issuer certificate` errors on Windows and other environments that do not expose a system-wide trust store. You can override the bundled file by passing the `ca_bundle_path` configuration key:
+The SDK includes a CA certificate bundle for HTTPS requests. To use your own certificates, set `ca_bundle_path`:
 
 ```php
 $sumup = new \SumUp\SumUp([
@@ -100,33 +83,21 @@ $sumup = new \SumUp\SumUp([
 ]);
 ```
 
-If not provided, the bundled `resources/ca-bundle.crt` file is used automatically by the cURL HTTP client.
-
 ### Custom HTTP Client
 
-The SDK allows you to use a custom HTTP client for making requests. By default, the SDK uses cURL, but you can provide your own implementation:
+To use another HTTP library or add request logging, pass a client that implements `SumUp\HttpClient\HttpClientInterface`:
 
 ```php
-// Create your custom HTTP client that implements HttpClientInterface
-$customClient = new YourCustomHttpClient();
-
-// Pass it to the SDK (uses SUMUP_API_KEY environment variable)
 $sumup = new \SumUp\SumUp([
-    'client' => $customClient,
-]);
-
-// Or provide API key explicitly
-$sumup = new \SumUp\SumUp([
-    'api_key' => 'your-api-key-here',
-    'client' => $customClient,
+    'client' => new YourCustomHttpClient(),
 ]);
 ```
 
-This is useful for adding logging, retry logic, or using a different HTTP library. See `examples/custom-http-client.php` for a complete example. If you prefer Guzzle, check `examples/guzzle-http-client.php` (requires `guzzlehttp/guzzle`).
+See [the custom HTTP client example](examples/custom-http-client.php) for a complete implementation.
 
 ### Guzzle HTTP Client (Optional)
 
-If you want to use Guzzle, the SDK ships with a built-in client that does not add a hard dependency. Install Guzzle and pass the client into the SDK:
+To use Guzzle, install it and pass a `GuzzleClient` to the SDK:
 
 ```bash
 composer require guzzlehttp/guzzle
@@ -142,7 +113,7 @@ $sumup = new \SumUp\SumUp([
 
 ### Request Options
 
-Service methods accept typed request options via `\SumUp\HttpClient\RequestOptions`:
+Set timeouts and retries for individual requests:
 
 ```php
 $options = new \SumUp\HttpClient\RequestOptions(
@@ -154,6 +125,42 @@ $options = new \SumUp\HttpClient\RequestOptions(
 
 $checkout = $sumup->checkouts()->get('checkout-id', $options);
 ```
+
+## Handling Events
+
+Set `SUMUP_EVENT_SECRET` to your event destination's signing secret and register callbacks for the events you need:
+
+```php
+use SumUp\Events\EventNotification;
+use SumUp\Events\ReaderCreatedEvent;
+use SumUp\SumUp;
+
+$sumup = new SumUp();
+$events = $sumup->eventsHandler(
+    getenv('SUMUP_EVENT_SECRET'),
+    function (EventNotification $event): void {
+        // Handles events without a registered callback.
+        error_log('Unhandled event: ' . $event->type);
+    }
+)->onReaderCreated(function (ReaderCreatedEvent $event): void {
+    $reader = $event->fetchObject();
+    error_log('Reader paired: ' . $reader?->id);
+});
+
+// In your HTTP route, pass the original body and signature header.
+$events->handle(
+    file_get_contents('php://input'),
+    $_SERVER['HTTP_X_SUMUP_WEBHOOK_SIGNATURE'] ?? ''
+);
+```
+
+The handler verifies the signature before running callbacks. `fetchObject()` retrieves the resource's current state using your API credentials.
+
+Return a 2xx response after processing succeeds. Return 400 for `EventSignatureException` or `EventPayloadException`, and 500 for `EventCallbackException` so processing can be retried. Deliveries may repeat; use `$event->id` to avoid processing the same event twice.
+
+For queued processing, verify the delivery before storing it. In your worker, use `parseEventNotificationWithoutVerification($body)` and `dispatch($event)` only for previously verified events from trusted storage.
+
+These events are separate from checkout and reader `return_url` callbacks. See [the events example](examples/events.php) for a complete HTTP endpoint and error handling.
 
 ## Examples
 
@@ -167,6 +174,8 @@ The repository includes runnable examples:
   Run with: `php examples/custom-http-client.php`
 - `examples/guzzle-http-client.php` - use the built-in Guzzle client.
   Run with: `php examples/guzzle-http-client.php`
+- `examples/events.php` - receive and verify signed events.
+  Run with: `SUMUP_EVENT_SECRET='your-signing-secret' php -S localhost:8080 examples/events.php`
 
 For checkout-related examples, set:
 
@@ -177,12 +186,12 @@ export SUMUP_MERCHANT_CODE='your-merchant-code'
 
 ## API Reference
 
-For a full list of available services and methods, explore the service files under `src/*/*.php` (for example `src/Checkouts/Checkouts.php`) or check the inline documentation in the code.
+See the [SumUp API reference](https://developer.sumup.com/rest-api) for available endpoints, request parameters, and response details.
 
 ## License
 
-For information about the license see the [license](https://github.com/sumup/sumup-php/blob/master/LICENSE.md) file.
+Licensed under [Apache 2.0](LICENSE).
 
 ## Contact Us
 
-If you have found a bug or you lack some functionality please [open an issue](https://github.com/sumup/sumup-php/issues/new). If you have other issues when integrating with SumUp's API you can send an email to [integration@sumup.com](mailto:integration@sumup.com).
+For bugs and feature requests, [open an issue](https://github.com/sumup/sumup-php/issues/new). For integration help, contact [integration@sumup.com](mailto:integration@sumup.com).

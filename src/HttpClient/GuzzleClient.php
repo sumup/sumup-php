@@ -95,6 +95,9 @@ class GuzzleClient implements HttpClientInterface
         ]);
 
         $requestParams = ['headers' => $reqHeaders];
+        if ($options?->followRedirects !== null) {
+            $requestParams['allow_redirects'] = $options->followRedirects;
+        }
 
         if (!empty($body)) {
             $requestParams['json'] = $body;
