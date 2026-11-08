@@ -140,6 +140,22 @@ class SumUpTest extends TestCase
         $this->assertInstanceOf(\SumUp\Services\Checkouts::class, $checkouts);
     }
 
+    public function testSalesAndTokensUseTheConfiguredClientAndCurrentToken(): void
+    {
+        $http = new FakeHttpClient(new Response(200, []));
+        $sumup = new SumUp(['client' => $http, 'api_key' => 'original-key']);
+        $sumup->setDefaultAccessToken('updated-key');
+
+        $sumup->sales()->getSaleV10('merchant', 'sale');
+        $sumup->tokens()->create('merchant', ['actions' => ['sales.read']]);
+
+        $requests = $http->getRequests();
+        $this->assertCount(2, $requests);
+        $this->assertSame('/v1.0/merchants/merchant/sales/sale', $requests[0]['url']);
+        $this->assertSame('Bearer updated-key', $requests[0]['headers']['Authorization']);
+        $this->assertSame('Bearer updated-key', $requests[1]['headers']['Authorization']);
+    }
+
     public function testMagicPropertyAccessIsNotSupported()
     {
         $this->assertFalse(method_exists(SumUp::class, '__get'));
