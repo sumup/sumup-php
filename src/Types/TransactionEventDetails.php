@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * High-level transaction event details.
+ * Detailed information about a transaction event.
  */
-class Event
+class TransactionEventDetails
 {
     /**
      * Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.
@@ -17,22 +17,15 @@ class Event
     public ?int $id = null;
 
     /**
-     * Unique identifier of the transaction.
-     *
-     * @var string|null
-     */
-    public ?string $transactionId = null;
-
-    /**
      * Financial event associated with a transaction.
      * - `PAYOUT`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.
      * - `REFUND`: Money returned to the payer.
      * - `CHARGE_BACK`: A reversal of the payment following a chargeback.
      * - `PAYOUT_DEDUCTION`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.
      *
-     * @var EventType|null
+     * @var TransactionEventDetailsEventType|null
      */
-    public ?EventType $type = null;
+    public ?TransactionEventDetailsEventType $eventType = null;
 
     /**
      * Status of the transaction event.
@@ -45,50 +38,43 @@ class Event
      * - `SUCCESSFUL`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as `PAID_OUT` or `REFUNDED`.
      * - `FAILED`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.
      *
-     * @var EventStatus|null
+     * @var TransactionEventDetailsStatus|null
      */
-    public ?EventStatus $status = null;
+    public ?TransactionEventDetailsStatus $status = null;
 
     /**
-     * Amount associated with the transaction event, in major units.
+     * Amount of the event in major units of the associated transaction's currency.
      *
      * @var float|null
      */
     public ?float $amount = null;
 
     /**
-     * The timestamp of when the transaction event occurred.
+     * Date when the transaction event is due to occur.
      *
      * @var string|null
      */
-    public ?string $timestamp = null;
+    public ?string $dueDate = null;
 
     /**
-     * Fee associated with the transaction event, in major units.
+     * Date when the transaction event occurred.
      *
-     * @var float|null
+     * @var string|null
      */
-    public ?float $feeAmount = null;
+    public ?string $date = null;
 
     /**
-     * Consecutive number of the installment associated with the event.
+     * Consecutive number of the installment that is paid. Applicable only to payout events, i.e. `event_type = PAYOUT`.
      *
      * @var int|null
      */
     public ?int $installmentNumber = null;
 
     /**
-     * Amount deducted from the merchant for the event, in major units.
+     * Date and time of the transaction event.
      *
-     * @var float|null
+     * @var string|null
      */
-    public ?float $deductedAmount = null;
-
-    /**
-     * Fee deducted from the merchant for the event, in major units.
-     *
-     * @var float|null
-     */
-    public ?float $deductedFeeAmount = null;
+    public ?string $timestamp = null;
 
 }

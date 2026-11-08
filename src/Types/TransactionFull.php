@@ -269,7 +269,7 @@ class TransactionFull
     /**
      * Detailed list of events related to the transaction.
      *
-     * @var TransactionEvent[]|null
+     * @var TransactionEventDetails[]|null
      */
     public ?array $transactionEvents = null;
 
@@ -300,7 +300,7 @@ class TransactionFull
     /**
      * Compact list of events related to the transaction.
      *
-     * @var Event[]|null
+     * @var TransactionEvent[]|null
      */
     public ?array $events = null;
 

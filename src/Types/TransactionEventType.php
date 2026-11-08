@@ -12,7 +12,7 @@ namespace SumUp\Types;
  * - `CHARGE_BACK`: A reversal of the payment following a chargeback.
  * - `PAYOUT_DEDUCTION`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.
  */
-enum EventType: string
+enum TransactionEventType: string
 {
     case PAYOUT = 'PAYOUT';
     case CHARGE_BACK = 'CHARGE_BACK';
