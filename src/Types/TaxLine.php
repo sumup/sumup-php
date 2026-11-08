@@ -36,24 +36,24 @@ class TaxLine
      * Net amount before applying the tax.
      * The value of the amount in minor units of the currency according to the Sale.currency.scale.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $netAmount;
+    public int $netAmount;
 
     /**
      * Gross amount after applying the tax.
      * The value of the amount in minor units of the currency according to the Sale.currency.scale.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $grossAmount;
+    public int $grossAmount;
 
     /**
      * Amount of tax.
      * The value of the amount in minor units of the currency according to the Sale.currency.scale.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $taxAmount;
+    public int $taxAmount;
 
 }

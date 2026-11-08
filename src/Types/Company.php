@@ -34,16 +34,16 @@ class Company
     /**
      * The company's primary address.
      *
-     * @var Address|null
+     * @var MerchantsAddress|null
      */
-    public ?Address $address = null;
+    public ?MerchantsAddress $address = null;
 
     /**
      * A trading address is where your suppliers, banks or customers send you correspondence to. Trading address can be different to the company's registered address (`address`).
      *
-     * @var Address|null
+     * @var MerchantsAddress|null
      */
-    public ?Address $tradingAddress = null;
+    public ?MerchantsAddress $tradingAddress = null;
 
     /**
      * A list of country-specific company identifiers.
@@ -67,7 +67,8 @@ class Company
     public ?string $website = null;
 
     /**
-     * Object attributes that are modifiable only by SumUp applications.
+     * Object metadata which should only be writable for internal applications, and readable by all clients.
+     * **Warning**: Updating Attributes will overwrite the existing data. Make sure to always include the complete JSON object.
      *
      * @var array<string, mixed>|null
      */

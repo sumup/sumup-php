@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * The company's primary address.
  */
-class Address
+class MerchantsAddress
 {
     /**
      *

@@ -30,11 +30,11 @@ class Sale
     public ?string $userId = null;
 
     /**
-     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
+     * The currency of the sale.
      *
-     * @var SaleCurrency
+     * @var SalesActivityCurrency
      */
-    public SaleCurrency $currency;
+    public SalesActivityCurrency $currency;
 
     /**
      * Human-readable name of the sale (not unique, not the sale id).

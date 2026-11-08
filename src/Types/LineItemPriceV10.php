@@ -26,16 +26,16 @@ class LineItemPriceV10
     /**
      * The net amount (including modifiers if applied). It does NOT include discounts.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalNetAmount;
+    public int $totalNetAmount;
 
     /**
      * The gross amount (including modifiers if applied). It does NOT include discounts.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalGrossAmount;
+    public int $totalGrossAmount;
 
     /**
      * Taxes applied on top of the net amount resulting in the gross amount.
@@ -55,16 +55,16 @@ class LineItemPriceV10
     /**
      * The final net amount including discounts and modifiers. Equals `total_net_amount` if no discounts apply.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalNetAmountFinal;
+    public int $totalNetAmountFinal;
 
     /**
      * The final gross amount including discounts, modifiers and taxes. Equals `total_gross_amount` if no discounts apply.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalGrossAmountFinal;
+    public int $totalGrossAmountFinal;
 
     /**
      * Taxes applied on top of `total_net_amount_final` resulting in `total_gross_amount_final`. Equals `taxes` if no discounts apply.

@@ -40,7 +40,7 @@ class BusinessProfile
     public ?string $email = null;
 
     /**
-     * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+     * A public phone number that customers can call.
      *
      * @var string|null
      */
@@ -50,9 +50,9 @@ class BusinessProfile
      * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
      * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
      *
-     * @var Address|null
+     * @var MerchantsAddress|null
      */
-    public ?Address $address = null;
+    public ?MerchantsAddress $address = null;
 
     /**
      * Settings used to apply the Merchant's branding to email receipts, invoices, checkouts, and other products.
