@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Member;
 
-/** A members.created notification. Fetch its object to retrieve the latest Member. */
+/**
+ * Sent when a member is created, invited, or accepts an invitation for a merchant account.
+ *
+ * A members.created notification. Fetch its object to retrieve the latest Member.
+ */
 final class MemberCreatedEvent extends EventNotification
 {
     public const TYPE = 'members.created';

@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Checkout;
 
-/** A checkouts.expired notification. Fetch its object to retrieve the latest Checkout. */
+/**
+ * Sent once when a checkout is first observed with status EXPIRED. Expiry or deactivation without an upstream snapshot cannot produce this event. Later EXPIRED snapshots do not emit another expired event.
+ *
+ * A checkouts.expired notification. Fetch its object to retrieve the latest Checkout.
+ */
 final class CheckoutExpiredEvent extends EventNotification
 {
     public const TYPE = 'checkouts.expired';

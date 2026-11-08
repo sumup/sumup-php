@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Member;
 
-/** A members.deleted notification. Fetch its object to retrieve the latest Member. */
+/**
+ * Sent when a member is deleted from a merchant account.
+ *
+ * A members.deleted notification. Fetch its object to retrieve the latest Member.
+ */
 final class MemberDeletedEvent extends EventNotification
 {
     public const TYPE = 'members.deleted';

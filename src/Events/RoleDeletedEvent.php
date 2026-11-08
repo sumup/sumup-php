@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Role;
 
-/** A roles.deleted notification. Fetch its object to retrieve the latest Role. */
+/**
+ * Sent when a role is deleted for a merchant account.
+ *
+ * A roles.deleted notification. Fetch its object to retrieve the latest Role.
+ */
 final class RoleDeletedEvent extends EventNotification
 {
     public const TYPE = 'roles.deleted';

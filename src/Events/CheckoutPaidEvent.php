@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Checkout;
 
-/** A checkouts.paid notification. Fetch its object to retrieve the latest Checkout. */
+/**
+ * Sent once when a checkout is first observed with status PAID. Later PAID snapshots do not emit another paid event. The timestamp is the snapshot update time, not necessarily the payment completion time.
+ *
+ * A checkouts.paid notification. Fetch its object to retrieve the latest Checkout.
+ */
 final class CheckoutPaidEvent extends EventNotification
 {
     public const TYPE = 'checkouts.paid';

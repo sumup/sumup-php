@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Member;
 
-/** A members.updated notification. Fetch its object to retrieve the latest Member. */
+/**
+ * Sent when a member is updated, disabled, rejected, or expires for a merchant account.
+ *
+ * A members.updated notification. Fetch its object to retrieve the latest Member.
+ */
 final class MemberUpdatedEvent extends EventNotification
 {
     public const TYPE = 'members.updated';

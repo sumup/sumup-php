@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Role;
 
-/** A roles.updated notification. Fetch its object to retrieve the latest Role. */
+/**
+ * Sent when a role is updated for a merchant account.
+ *
+ * A roles.updated notification. Fetch its object to retrieve the latest Role.
+ */
 final class RoleUpdatedEvent extends EventNotification
 {
     public const TYPE = 'roles.updated';

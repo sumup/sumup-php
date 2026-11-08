@@ -9,7 +9,11 @@ use SumUp\Exception\EventObjectException;
 use SumUp\HttpClient\RequestOptions;
 use SumUp\Types\Checkout;
 
-/** A checkouts.failed notification. Fetch its object to retrieve the latest Checkout. */
+/**
+ * Sent once when a checkout is first observed with status FAILED. A failed checkout can subsequently be retried and paid. Later FAILED snapshots do not emit another failed event.
+ *
+ * A checkouts.failed notification. Fetch its object to retrieve the latest Checkout.
+ */
 final class CheckoutFailedEvent extends EventNotification
 {
     public const TYPE = 'checkouts.failed';
