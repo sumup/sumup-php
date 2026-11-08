@@ -48,20 +48,20 @@ class SaleSearchItem
     public SaleSearchItemTaxMode $taxMode;
 
     /**
-     * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
+     * The currency of the sale.
      *
-     * @var SaleSearchItemCurrency
+     * @var SalesActivityCurrency
      */
-    public SaleSearchItemCurrency $currency;
+    public SalesActivityCurrency $currency;
 
     /**
      * Final sale gross total after discounts and taxes, excluding tips.
      * Same value as `Sale.price.gross_amount`, in minor units according to `currency.scale`.
      * Payment amounts include tips and can therefore differ from this total.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalAmount;
+    public int $totalAmount;
 
     /**
      * Instant when the sale was created.

@@ -22,16 +22,16 @@ class ModifierItem
     /**
      * The net amount (including modifiers if applied). It does NOT include discounts.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalNetAmount;
+    public int $totalNetAmount;
 
     /**
      * The gross amount (including modifiers if applied). It does NOT include discounts.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $totalGrossAmount;
+    public int $totalGrossAmount;
 
     /**
      * Taxes applied on top of net amount resulting in gross amount.

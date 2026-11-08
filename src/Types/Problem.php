@@ -8,6 +8,7 @@ namespace SumUp\Types;
  * A RFC 9457 problem details object.
  *
  * Additional properties specific to the problem type may be present.
+ *
  */
 class Problem
 {

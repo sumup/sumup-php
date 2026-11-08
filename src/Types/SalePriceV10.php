@@ -18,9 +18,9 @@ class SalePriceV10
      * after cart-level discounts (tips excluded).
      * In minor units according to `Sale.currency.scale`.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $netAmount;
+    public int $netAmount;
 
     /**
      * Final gross total for the sale: sum of `items[].price.total_gross_amount_final`
@@ -28,9 +28,9 @@ class SalePriceV10
      * Same value as search `total_amount`, in minor units according to `Sale.currency.scale`.
      * Payment amounts include tips and can therefore differ from this gross total.
      *
-     * @var mixed
+     * @var int
      */
-    public mixed $grossAmount;
+    public int $grossAmount;
 
     /**
      * Discounts applied at cart level. Item-level discounts remain on
