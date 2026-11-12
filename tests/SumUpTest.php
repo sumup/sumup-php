@@ -146,7 +146,7 @@ class SumUpTest extends TestCase
         $sumup = new SumUp(['client' => $http, 'api_key' => 'original-key']);
         $sumup->setDefaultAccessToken('updated-key');
 
-        $sumup->sales()->getSaleV10('merchant', 'sale');
+        $sumup->sales()->get('merchant', 'sale');
         $sumup->tokens()->create('merchant', ['actions' => ['sales.read']]);
 
         $requests = $http->getRequests();
