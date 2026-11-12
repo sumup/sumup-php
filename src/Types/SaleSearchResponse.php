@@ -16,7 +16,8 @@ class SaleSearchResponse
     public array $items;
 
     /**
-     * Opaque token for the next page of search results.
+     * Opaque token for the next page. Pass it as `pagination_token` in the next search
+     * request body with the same filters. Omitted when no further page is available.
      *
      * @var string|null
      */

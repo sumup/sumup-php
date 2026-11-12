@@ -92,18 +92,18 @@ class TransactionFull
     public ?float $tipAmount = null;
 
     /**
-     * How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.
-     *
-     * @var string|null
-     */
-    public ?string $entryMode = null;
-
-    /**
      * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
      *
      * @var string|null
      */
     public ?string $authCode = null;
+
+    /**
+     * How the payment details were captured, for example `chip` or `contactless` for card-present payments and `customer entry` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `apple pay` or `blik`.
+     *
+     * @var string|null
+     */
+    public ?string $entryMode = null;
 
     /**
      * Short description of the payment. The value is taken from the `description` property of the related checkout resource.
