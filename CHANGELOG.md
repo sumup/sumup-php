@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.1.10](https://github.com/sumup/sumup-php/compare/v0.1.9...v0.1.10) (2026-11-12)
+
+
+### Features
+
+* **sdk:** events ([#137](https://github.com/sumup/sumup-php/issues/137)) ([ccfdabf](https://github.com/sumup/sumup-php/commit/ccfdabf1a2264a89353f2725ceaef61f1f03fb8a))
+
+
+### Bug Fixes
+
+* **codegen:** generate service accessors ([#152](https://github.com/sumup/sumup-php/issues/152)) ([9511c44](https://github.com/sumup/sumup-php/commit/9511c444cfb247b533a7bdbfcbc83259aed7620c))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#147](https://github.com/sumup/sumup-php/issues/147)) ([61f27f0](https://github.com/sumup/sumup-php/commit/61f27f062b5a7ad5d5898fb1a32119ef85a8c75d))
+* synced file(s) with sumup/apis ([#150](https://github.com/sumup/sumup-php/issues/150)) ([063055f](https://github.com/sumup/sumup-php/commit/063055f70f1d7f5425e6b168144c7f7cf685c4ad))
+* synced file(s) with sumup/apis ([#151](https://github.com/sumup/sumup-php/issues/151)) ([5b100d6](https://github.com/sumup/sumup-php/commit/5b100d69c8c5e95f740a929d0aae2cd54dbe5e23))
+* synced file(s) with sumup/apis ([#154](https://github.com/sumup/sumup-php/issues/154)) ([94b4d3b](https://github.com/sumup/sumup-php/commit/94b4d3bdb434db8a714422bb003741446f5b46de))
+
+
+### Documentation
+
+* **events:** include API descriptions in event PHPDoc ([#153](https://github.com/sumup/sumup-php/issues/153)) ([2ec9a1c](https://github.com/sumup/sumup-php/commit/2ec9a1c88e7eead5f93f1760e95773dbf5bee93e))
+
+
+### Build System & Dependencies
+
+* **deps:** bump github.com/pb33f/libopenapi from 0.41.6 to 0.41.8 in /codegen ([#143](https://github.com/sumup/sumup-php/issues/143)) ([e361ddb](https://github.com/sumup/sumup-php/commit/e361ddb6e7a173f1d434851c7661be399595ff83))
+* **deps:** bump github.com/pb33f/libopenapi from 0.41.8 to 0.42.3 in /codegen ([#148](https://github.com/sumup/sumup-php/issues/148)) ([d8cb815](https://github.com/sumup/sumup-php/commit/d8cb815acc3ea069620a0e093c059573bcdb2ebb))
+* **deps:** bump reviewdog/action-actionlint from 1.80.4 to 1.80.8 ([#144](https://github.com/sumup/sumup-php/issues/144)) ([0cc42ea](https://github.com/sumup/sumup-php/commit/0cc42ea776fca3af959a00d3902ecc8c900a7371))
+* **deps:** bump reviewdog/action-actionlint from 1.80.8 to 1.81.1 ([#149](https://github.com/sumup/sumup-php/issues/149)) ([74b2b71](https://github.com/sumup/sumup-php/commit/74b2b7129b783a328b4b4a54051d3910ebe94bb9))
+
 ## [0.1.9](https://github.com/sumup/sumup-php/compare/v0.1.8...v0.1.9) (2026-11-03)
 
 
