@@ -13,17 +13,16 @@ use SumUp\RequestEncoder;
 use SumUp\ResponseDecoder;
 
 /**
- * Query parameters for SalesListSalesV10Params.
+ * Query parameters for SalesListParams.
  *
  * @package SumUp\Services
  */
-class SalesListSalesV10Params
+class SalesListParams
 {
     /**
-     * Pagination token for subsequent requests. Should only be set by clients if they have
-     * received a token in the previous response, and this request is an immediate follow-up
-     * request to that response to load the subsequent page. Clients should treat this as an
-     * opaque token and should not attempt to parse it in any way.
+     * Opaque token from the previous list response. Omit it on the first request. To load
+     * the next page, pass the returned token unchanged. Not interchangeable with tokens
+     * from `POST /sales/search`.
      *
      * @var string|null
      */
@@ -41,7 +40,12 @@ class SalesListSalesV10Params
 /**
  * Class Sales
  *
- * Operations related to reading sales data.
+ * Read a merchant's fully-paid, closed sales, including item lines, taxes, discounts, and payments.
+ *
+ * List sales to retrieve full `Sale` objects, or search by date, payment status, and sales channel
+ * to retrieve summaries. Use a summary's `id` to get the full sale.
+ *
+ * Amounts are expressed in minor units according to each sale's `currency.scale`.
  *
  * @package SumUp\Services
  */
@@ -74,7 +78,7 @@ class Sales implements SumUpService
     }
 
     /**
-     * Gets a sale
+     * Get a sale
      *
      * @param string $merchantCode The merchant code.
      * @param string $saleId The sale ID.
@@ -86,7 +90,7 @@ class Sales implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function getSaleV10(string $merchantCode, string $saleId, ?RequestOptions $requestOptions = null): \SumUp\Types\Sale
+    public function get(string $merchantCode, string $saleId, ?RequestOptions $requestOptions = null): \SumUp\Types\Sale
     {
         $path = sprintf('/v1.0/merchants/%s/sales/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $saleId));
         $payload = [];
@@ -103,10 +107,10 @@ class Sales implements SumUpService
     }
 
     /**
-     * Lists sales
+     * List sales
      *
      * @param string $merchantCode The merchant code.
-     * @param SalesListSalesV10Params|null $queryParams Optional query string parameters
+     * @param SalesListParams|null $queryParams Optional query string parameters
      * @param RequestOptions|null $requestOptions Optional typed request options
      *
      * @return \SumUp\Types\SalePage
@@ -115,7 +119,7 @@ class Sales implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function listSalesV10(string $merchantCode, ?SalesListSalesV10Params $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\SalePage
+    public function list(string $merchantCode, ?SalesListParams $queryParams = null, ?RequestOptions $requestOptions = null): \SumUp\Types\SalePage
     {
         $path = sprintf('/v1.0/merchants/%s/sales', rawurlencode((string) $merchantCode));
         if ($queryParams !== null) {
@@ -147,7 +151,7 @@ class Sales implements SumUpService
     }
 
     /**
-     * Searches sales
+     * Search sales
      *
      * @param string $merchantCode The merchant code.
      * @param \SumUp\Types\SaleSearchRequest|array<string, mixed> $body Required request payload
@@ -159,7 +163,7 @@ class Sales implements SumUpService
      * @throws \SumUp\Exception\ConnectionException
      * @throws \SumUp\Exception\SDKException
      */
-    public function searchSalesV10(string $merchantCode, \SumUp\Types\SaleSearchRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\SaleSearchResponse
+    public function search(string $merchantCode, \SumUp\Types\SaleSearchRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\SaleSearchResponse
     {
         $path = sprintf('/v1.0/merchants/%s/sales/search', rawurlencode((string) $merchantCode));
         $payload = [];

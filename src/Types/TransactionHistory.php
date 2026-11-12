@@ -71,6 +71,13 @@ class TransactionHistory
     public ?int $installmentsCount = null;
 
     /**
+     * How the payment details were captured, for example `chip` or `contactless` for card-present payments and `customer entry` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `apple pay` or `blik`.
+     *
+     * @var string|null
+     */
+    public ?string $entryMode = null;
+
+    /**
      * Short description of the payment. The value is taken from the `description` property of the related checkout resource.
      *
      * @var string|null
