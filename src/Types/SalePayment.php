@@ -10,7 +10,7 @@ namespace SumUp\Types;
  * Acquirer/processing cost is not on this object. Merchant-charged fees (shipping, service
  * charge, etc.) appear as `type: "FEE"` item lines in `Sale.items`.
  */
-class PublicPaymentV10
+class SalePayment
 {
     /**
      * Payment method on public sales read API v1.0.
@@ -51,9 +51,9 @@ class PublicPaymentV10
     /**
      * The status of the payment.
      *
-     * @var PublicPaymentV10Status
+     * @var SalePaymentStatus
      */
-    public PublicPaymentV10Status $status;
+    public SalePaymentStatus $status;
 
     /**
      * Alternative payment method type when `method` is `apm`.
@@ -69,9 +69,9 @@ class PublicPaymentV10
     /**
      * Card brand, credit/debit processing type, and last four digits.
      *
-     * @var PublicCardV10|null
+     * @var SalePaymentCard|null
      */
-    public ?PublicCardV10 $card = null;
+    public ?SalePaymentCard $card = null;
 
     /**
      * Gift card used for this payment. Present when `method` is `gift_card` and the gift card
@@ -79,9 +79,9 @@ class PublicPaymentV10
      * Gift card IDs use the format "GC" followed by 9 alphanumeric characters
      * (e.g. GCZ3NTMB1V).
      *
-     * @var PublicGiftCardPayment|null
+     * @var SaleGiftCardPayment|null
      */
-    public ?PublicGiftCardPayment $giftCard = null;
+    public ?SaleGiftCardPayment $giftCard = null;
 
     /**
      * UTC date-time when SumUp recorded this payment’s exposed `status` (successful, failed,

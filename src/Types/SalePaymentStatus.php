@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * The status of the payment.
  */
-enum PublicPaymentV10Status: string
+enum SalePaymentStatus: string
 {
     case FAILED = 'FAILED';
     case SUCCESSFUL = 'SUCCESSFUL';

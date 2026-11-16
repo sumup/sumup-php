@@ -8,7 +8,7 @@ namespace SumUp\Types;
  * Credit or debit processing choice, not brand or funding.
  * `unknown` when unavailable; prepaid/voucher are not processing types.
  */
-enum PublicCardV10Type: string
+enum SalePaymentCardType: string
 {
     case CREDIT = 'credit';
     case DEBIT = 'debit';

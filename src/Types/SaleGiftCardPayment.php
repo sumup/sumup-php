@@ -10,7 +10,7 @@ namespace SumUp\Types;
  * Gift card IDs use the format "GC" followed by 9 alphanumeric characters
  * (e.g. GCZ3NTMB1V).
  */
-class PublicGiftCardPayment
+class SaleGiftCardPayment
 {
     /**
      * Gift card identifier. Format "GC" followed by 9 alphanumeric characters

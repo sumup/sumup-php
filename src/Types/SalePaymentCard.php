@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * Card brand, credit/debit processing type, and last four digits.
  */
-class PublicCardV10
+class SalePaymentCard
 {
     /**
      * The brand of the card.
@@ -23,9 +23,9 @@ class PublicCardV10
      * Credit or debit processing choice, not brand or funding.
      * `unknown` when unavailable; prepaid/voucher are not processing types.
      *
-     * @var PublicCardV10Type
+     * @var SalePaymentCardType
      */
-    public PublicCardV10Type $type;
+    public SalePaymentCardType $type;
 
     /**
      * The last 4 digits of the card used for the payment.

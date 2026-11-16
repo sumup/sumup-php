@@ -8,14 +8,14 @@ namespace SumUp\Types;
  * Outward identifiers and links for a line, kept in one place rather than scattered
  * per item type.
  */
-class ItemReferencesV10
+class SaleItemReferences
 {
     /**
      * The source of the catalog the line originates from.
      *
-     * @var ItemReferencesV10CatalogSource|null
+     * @var SaleItemReferencesCatalogSource|null
      */
-    public ?ItemReferencesV10CatalogSource $catalogSource = null;
+    public ?SaleItemReferencesCatalogSource $catalogSource = null;
 
     /**
      * Reference to the backing catalog entity (item variant, deposit, ...),

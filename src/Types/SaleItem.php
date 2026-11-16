@@ -12,7 +12,7 @@ namespace SumUp\Types;
  * Type-specific data is in `features`. There is no per-type object and no discriminator,
  * so a new item type does not change this schema.
  */
-class SaleLineItemV10
+class SaleItem
 {
     /**
      * Stable identifier of the line within the sale. Used for linking (e.g. deposits).
@@ -26,7 +26,7 @@ class SaleLineItemV10
      * Known values: `CATALOG`, `DEPOSIT`, `GIFT_CARD`, `CUSTOM`, `FEE`.
      * `FEE` lines represent merchant-charged fees on the sale (e.g. shipping, service
      * charge, surcharge, cancellation). They participate in sale totals like any other
-     * line; type-specific data is carried in `features` (see `Feature` for the
+     * line; type-specific data is carried in `features` (see `SaleItemFeature` for the
      * conventional feature keys).
      * This is intentionally an open string, NOT a closed enum: new values are added
      * over time as pure data and consumers MUST tolerate unknown values, rendering the
@@ -61,9 +61,9 @@ class SaleLineItemV10
     /**
      * The type of service for this line.
      *
-     * @var SaleLineItemV10ServiceType|null
+     * @var SaleItemServiceType|null
      */
-    public ?SaleLineItemV10ServiceType $serviceType = null;
+    public ?SaleItemServiceType $serviceType = null;
 
     /**
      * Optional free-text note attached to the line, visible on receipts.
@@ -79,15 +79,15 @@ class SaleLineItemV10
      * Totals and tax amounts can be negative for return-like operations (for example
      * a deposit with `operation_type` = `RETURN`).
      *
-     * @var LineItemPriceV10
+     * @var SaleItemPrice
      */
-    public LineItemPriceV10 $price;
+    public SaleItemPrice $price;
 
     /**
      * Categories the line belongs to. A shared optional structure available to any
      * line; not a per-type field.
      *
-     * @var CategoryV10[]|null
+     * @var SaleItemCategory[]|null
      */
     public ?array $categories = null;
 
@@ -103,15 +103,15 @@ class SaleLineItemV10
      * Outward identifiers and links for a line, kept in one place rather than scattered
      * per item type.
      *
-     * @var ItemReferencesV10|null
+     * @var SaleItemReferences|null
      */
-    public ?ItemReferencesV10 $references = null;
+    public ?SaleItemReferences $references = null;
 
     /**
      * Named, typed, type-specific data. New item types add their data here as
-     * features instead of new schema variants. See `Feature` for per-type examples.
+     * features instead of new schema variants. See `SaleItemFeature` for per-type examples.
      *
-     * @var FeatureV10[]|null
+     * @var SaleItemFeature[]|null
      */
     public ?array $features = null;
 

@@ -8,7 +8,7 @@ namespace SumUp\Types;
  * The data type of a feature value. The wire `value` is always a string and is parsed
  * according to this type.
  */
-enum FeatureV10ValueType: string
+enum SaleItemFeatureValueType: string
 {
     case TEXT = 'TEXT';
     case INTEGER = 'INTEGER';

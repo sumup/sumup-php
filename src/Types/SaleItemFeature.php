@@ -31,7 +31,7 @@ namespace SumUp\Types;
  * `tracking_reference` (shipping); `card_type`, `scheme` (surcharge);
  * `policy_id` (cancellation)
  */
-class FeatureV10
+class SaleItemFeature
 {
     /**
      * The feature name/key.
@@ -44,9 +44,9 @@ class FeatureV10
      * The data type of a feature value. The wire `value` is always a string and is parsed
      * according to this type.
      *
-     * @var FeatureV10ValueType
+     * @var SaleItemFeatureValueType
      */
-    public FeatureV10ValueType $valueType;
+    public SaleItemFeatureValueType $valueType;
 
     /**
      * The feature value in canonical string form, to be parsed per `value_type`
