@@ -99,10 +99,10 @@ class Sales implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Sale::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '403' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '412' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '412' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -143,10 +143,10 @@ class Sales implements SumUpService
         $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\SalePage::class, [
-            '400' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '403' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '412' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '412' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'GET', $path);
     }
 
@@ -177,10 +177,10 @@ class Sales implements SumUpService
         $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
 
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\SaleSearchResponse::class, [
-            '400' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '403' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
-            '412' => ['type' => 'class', 'class' => \SumUp\Types\ProblemV10::class],
+            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
+            '412' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'POST', $path);
     }
 }

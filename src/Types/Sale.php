@@ -9,7 +9,7 @@ namespace SumUp\Types;
  *
  * Non-finalised sales are never returned; only fully-paid sales.
  *
- * Item lines are `SaleLineItem`. Merchant fees appear as `type: "FEE"` lines; extra fee data
+ * Item lines are `SaleItem`. Merchant fees appear as `type: "FEE"` lines; extra fee data
  * is in `features`.
  */
 class Sale
@@ -54,19 +54,19 @@ class Sale
      * The lines sold in this sale, in the order they were added to the cart.
      * Includes merchant fees (`type: "FEE"`) when present; fee details are in `features`.
      *
-     * @var SaleLineItemV10[]
+     * @var SaleItem[]
      */
     public array $items;
 
     /**
-     * Sale-level pricing aggregate, parallel to `LineItemPrice` on each `SaleLineItem`.
+     * Sale-level pricing aggregate, parallel to `SaleItemPrice` on each `SaleItem`.
      * Line-level breakdown (unit price, line discounts, per-line taxes) lives on
      * `items[].price`. This object holds the rolled-up totals and cart-level
      * adjustments that consumers use for receipts and payment reconciliation.
      *
-     * @var SalePriceV10
+     * @var SaleTotals
      */
-    public SalePriceV10 $price;
+    public SaleTotals $price;
 
     /**
      * The tax mode used by merchant for displaying prices and calculating taxes:
@@ -90,7 +90,7 @@ class Sale
     /**
      * Payments on this sale, in the order they were recorded.
      *
-     * @var PublicPaymentV10[]
+     * @var SalePayment[]
      */
     public array $payments;
 

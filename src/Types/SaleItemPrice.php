@@ -13,7 +13,7 @@ namespace SumUp\Types;
  * Totals and tax amounts can be negative for return-like operations (for example
  * a deposit with `operation_type` = `RETURN`).
  */
-class LineItemPriceV10
+class SaleItemPrice
 {
     /**
      * The price of a single unit. If the tax_mode is GROSS it includes taxes,

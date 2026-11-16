@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * A category a line belongs to.
  */
-class CategoryV10
+class SaleItemCategory
 {
     /**
      * The category id. Usually a UUID, but not always (legacy cases).

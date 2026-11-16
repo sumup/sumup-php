@@ -7,7 +7,7 @@ namespace SumUp\Types;
 /**
  * The source of the catalog the line originates from.
  */
-enum ItemReferencesV10CatalogSource: string
+enum SaleItemReferencesCatalogSource: string
 {
     case SUMUP = 'SUMUP';
     case EXTERNAL = 'EXTERNAL';
