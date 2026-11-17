@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.11](https://github.com/sumup/sumup-php/compare/v0.1.10...v0.1.11) (2026-11-17)
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#158](https://github.com/sumup/sumup-php/issues/158)) ([4218ea1](https://github.com/sumup/sumup-php/commit/4218ea14ad41657947951d10119636171234ae77))
+* synced file(s) with sumup/apis ([#160](https://github.com/sumup/sumup-php/issues/160)) ([215a73b](https://github.com/sumup/sumup-php/commit/215a73b84c8d435f1c29075658efec07b9c1b296))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.27 to 3.95.30 ([#155](https://github.com/sumup/sumup-php/issues/155)) ([3eff62c](https://github.com/sumup/sumup-php/commit/3eff62ce2731e2825846e5261a7edbf4b91a0675))
+* **deps:** bump github.com/pb33f/libopenapi from 0.42.3 to 0.42.4 in /codegen ([#156](https://github.com/sumup/sumup-php/issues/156)) ([87d0368](https://github.com/sumup/sumup-php/commit/87d036864f55cbc5890388daa367c7fba0207d33))
+* **deps:** bump reviewdog/action-actionlint from 1.81.1 to 1.84.0 ([#157](https://github.com/sumup/sumup-php/issues/157)) ([4f5e04a](https://github.com/sumup/sumup-php/commit/4f5e04ad0e7cce591e1671267f684e2a4733efaa))
+
 ## [0.1.10](https://github.com/sumup/sumup-php/compare/v0.1.9...v0.1.10) (2026-11-12)
 
 
