@@ -18,19 +18,19 @@ use SumUp\ResponseDecoder;
 class TransactionsRefundRequest
 {
     /**
-     * Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.
+     * Amount to refund in minor units of the transaction's currency, for example `500` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.
      *
-     * @var float|null
+     * @var int|null
      */
-    public ?float $amount = null;
+    public ?int $amount = null;
 
     /**
      * Create request DTO.
      *
-     * @param float|null $amount
+     * @param int|null $amount
      */
     public function __construct(
-        ?float $amount = null
+        ?int $amount = null
     ) {
         \SumUp\Hydrator::hydrate([
             'amount' => $amount,
