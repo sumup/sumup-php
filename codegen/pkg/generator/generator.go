@@ -47,6 +47,7 @@ type Generator struct {
 	schemaNamespaces map[string]string
 
 	operationsByTag map[string][]*operation
+	resourceParents map[string]resourceParent
 
 	// enumsByTag maps normalized tag names to enums they own.
 	enumsByTag map[string][]enumDefinition
@@ -84,6 +85,15 @@ func (g *Generator) Load(spec *v3.Document) error {
 
 	normalizeSchemaAnnotations(spec)
 	g.spec = spec
+	parents, err := readResourceParents(spec)
+	if err != nil {
+		return err
+	}
+	g.resourceParents = make(map[string]resourceParent, len(parents))
+	for tag, parent := range parents {
+		parent.tag = normalizeTagKey(parent.tag)
+		g.resourceParents[normalizeTagKey(tag)] = parent
+	}
 	g.tagLookup = make(map[string]*base.Tag)
 	for _, tag := range spec.Tags {
 		if tag == nil {

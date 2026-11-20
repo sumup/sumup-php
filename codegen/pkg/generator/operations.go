@@ -105,9 +105,18 @@ func (g *Generator) collectOperations() map[string][]*operation {
 				continue
 			}
 
+			seen := map[string]bool{}
 			for _, tag := range op.Tags {
-				tagKey := normalizeTagKey(tag)
-				result[tagKey] = append(result[tagKey], built)
+				for owner := normalizeTagKey(tag); owner != ""; owner = g.resourceParents[owner].tag {
+					if seen[owner] {
+						continue
+					}
+					seen[owner] = true
+					// Service emission rewrites inline response and body names in place.
+					serviceOperation := *built
+					serviceOperation.Responses = cloneOperationResponses(built.Responses)
+					result[owner] = append(result[owner], &serviceOperation)
+				}
 			}
 		}
 	}
@@ -119,6 +128,25 @@ func (g *Generator) collectOperations() map[string][]*operation {
 	}
 
 	return result
+}
+
+func cloneOperationResponses(responses []*operationResponse) []*operationResponse {
+	clones := make([]*operationResponse, 0, len(responses))
+	for _, response := range responses {
+		copy := *response
+		copy.Type = cloneResponseType(response.Type)
+		clones = append(clones, &copy)
+	}
+	return clones
+}
+
+func cloneResponseType(response *responseType) *responseType {
+	if response == nil {
+		return nil
+	}
+	copy := *response
+	copy.ArrayItems = cloneResponseType(response.ArrayItems)
+	return &copy
 }
 
 func (g *Generator) buildOperation(method, path string, op *v3.Operation, params []*v3.Parameter) (*operation, error) {

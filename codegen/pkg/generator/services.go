@@ -1,7 +1,9 @@
 package generator
 
 import (
+	"cmp"
 	"fmt"
+	"maps"
 	"regexp"
 	"strings"
 
@@ -130,9 +132,19 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("        $this->client = $client;\n")
 	buf.WriteString("        $this->accessToken = $accessToken;\n")
 	buf.WriteString("    }\n\n")
+	for _, child := range slices.Sorted(maps.Keys(g.resourceParents)) {
+		parent := g.resourceParents[child]
+		if parent.tag != tagKey || !g.shouldIncludeService(child, g.operationsByTag[child]) {
+			continue
+		}
+		childClass := g.displayTagName(child)
+		fmt.Fprintf(&buf, "    public function %s(): %s\n    {\n        return new %s($this->client, $this->accessToken);\n    }\n\n", phpPropertyName(parent.label), childClass, childClass)
+	}
 
+	methodNames := g.nestedMethodNames(tagKey)
 	for idx, op := range operations {
-		buf.WriteString(g.renderServiceMethod(className, op))
+		name := op.methodName()
+		buf.WriteString(g.renderServiceMethod(className, op, cmp.Or(methodNames[name], name)))
 		if idx < len(operations)-1 {
 			buf.WriteString("\n")
 		}
@@ -185,10 +197,8 @@ func renameInlineResponseType(rt *responseType, inlineName string) {
 	}
 }
 
-func (g *Generator) renderServiceMethod(serviceClass string, op *operation) string {
+func (g *Generator) renderServiceMethod(serviceClass string, op *operation, methodName string) string {
 	var buf strings.Builder
-
-	methodName := op.methodName()
 	if methodName == "" {
 		methodName = "call"
 	}
