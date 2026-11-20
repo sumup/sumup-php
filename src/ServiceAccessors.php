@@ -9,7 +9,9 @@ use SumUp\Services\Members;
 use SumUp\Services\Memberships;
 use SumUp\Services\Merchants;
 use SumUp\Services\Payouts;
+use SumUp\Services\ReaderCheckouts;
 use SumUp\Services\Readers;
+use SumUp\Services\ReaderSettings;
 use SumUp\Services\Receipts;
 use SumUp\Services\Roles;
 use SumUp\Services\Sales;
@@ -68,11 +70,27 @@ trait ServiceAccessors
     }
 
     /**
+     * Access the ReaderCheckouts API endpoints.
+     */
+    public function readerCheckouts(): ReaderCheckouts
+    {
+        return new ReaderCheckouts($this->client, $this->resolveAccessToken());
+    }
+
+    /**
      * Access the Readers API endpoints.
      */
     public function readers(): Readers
     {
         return new Readers($this->client, $this->resolveAccessToken());
+    }
+
+    /**
+     * Access the ReaderSettings API endpoints.
+     */
+    public function readerSettings(): ReaderSettings
+    {
+        return new ReaderSettings($this->client, $this->resolveAccessToken());
     }
 
     /**
