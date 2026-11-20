@@ -3,7 +3,9 @@ package generator
 import (
 	"cmp"
 	"fmt"
+	"strings"
 
+	"github.com/iancoleman/strcase"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
@@ -64,4 +66,49 @@ func (g *Generator) resourcePath(tag string) string {
 		return g.resourcePath(parent.tag) + "()->" + phpPropertyName(parent.label)
 	}
 	return phpPropertyName(g.displayTagName(tag))
+}
+
+// scopedMethodNames removes a resource suffix when the shorter name is unambiguous.
+func scopedMethodNames(names []string, suffixes ...string) map[string]string {
+	original := make(map[string]bool, len(names))
+	proposed := make(map[string]string, len(names))
+	counts := make(map[string]int, len(names))
+	for _, name := range names {
+		original[name] = true
+		short := unqualifiedMethodName(name, suffixes)
+		proposed[name] = short
+		counts[short]++
+	}
+	for name, short := range proposed {
+		if original[short] || counts[short] > 1 {
+			delete(proposed, name)
+		}
+	}
+	return proposed
+}
+
+func unqualifiedMethodName(name string, suffixes []string) string {
+	for _, suffix := range suffixes {
+		for _, ending := range []string{suffix, strings.TrimSuffix(suffix, "s")} {
+			if ending != "" {
+				if short, found := strings.CutSuffix(name, ending); found && short != "" {
+					return short
+				}
+			}
+		}
+	}
+	return name
+}
+
+func (g *Generator) nestedMethodNames(tag string) map[string]string {
+	parent := g.resourceParents[tag]
+	if parent.tag == "" {
+		return nil
+	}
+	ops := g.operationsByTag[tag]
+	names := make([]string, 0, len(ops))
+	for _, op := range ops {
+		names = append(names, op.methodName())
+	}
+	return scopedMethodNames(names, g.displayTagName(tag), strcase.ToCamel(parent.label))
 }

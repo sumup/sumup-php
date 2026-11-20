@@ -317,7 +317,13 @@ func (g *Generator) renderSample(
 		body.WriteString(phpPropertyName(serviceClass))
 	}
 	body.WriteString("()->")
-	body.WriteString(built.methodName())
+	methodName := built.methodName()
+	if len(specOperation.Tags) > 0 {
+		if short := g.nestedMethodNames(normalizeTagKey(specOperation.Tags[0]))[methodName]; short != "" {
+			methodName = short
+		}
+	}
+	body.WriteString(methodName)
 	body.WriteString("(")
 	if len(args) > 0 {
 		body.WriteString("\n")

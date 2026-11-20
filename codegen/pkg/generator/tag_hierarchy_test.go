@@ -56,6 +56,13 @@ components: {schemas: {}}
 	if err != nil {
 		t.Fatal(err)
 	}
+	child, err := os.ReadFile(filepath.Join(out, "ReaderCheckouts", "ReaderCheckouts.php"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(child), "function create(") {
+		t.Error("expected create on ReaderCheckouts")
+	}
 	for _, snippet := range []string{"function checkouts(): ReaderCheckouts", "function createReaderCheckout("} {
 		if !strings.Contains(string(data), snippet) {
 			t.Errorf("missing %q from Readers client", snippet)
