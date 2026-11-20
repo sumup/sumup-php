@@ -15,6 +15,9 @@ import (
 func (g *Generator) writeServiceAccessors() error {
 	var services []string
 	for _, tagKey := range slices.Sorted(maps.Keys(g.operationsByTag)) {
+		if g.resourceParents[tagKey].tag != "" {
+			continue
+		}
 		if g.shouldIncludeService(tagKey, g.operationsByTag[tagKey]) {
 			services = append(services, g.displayTagName(tagKey))
 		}
