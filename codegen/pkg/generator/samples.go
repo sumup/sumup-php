@@ -311,11 +311,7 @@ func (g *Generator) renderSample(
 	}
 
 	body.WriteString("\n$result = $sumup->")
-	if len(specOperation.Tags) > 0 {
-		body.WriteString(g.resourcePath(normalizeTagKey(specOperation.Tags[0])))
-	} else {
-		body.WriteString(phpPropertyName(serviceClass))
-	}
+	body.WriteString(g.resourcePath(normalizeTagKey(specOperation.Tags[0])))
 	body.WriteString("()->")
 	body.WriteString(built.methodName())
 	body.WriteString("(")

@@ -107,15 +107,20 @@ func (g *Generator) collectOperations() map[string][]*operation {
 
 			seen := map[string]bool{}
 			for _, tag := range op.Tags {
-				for owner := normalizeTagKey(tag); owner != ""; owner = g.resourceParents[owner].tag {
-					if seen[owner] {
-						continue
+				key := normalizeTagKey(tag)
+				if seen[key] {
+					continue
+				}
+				seen[key] = true
+				// Service emission rewrites inline response and body names in place.
+				serviceOperation := *built
+				serviceOperation.Responses = cloneOperationResponses(built.Responses)
+				result[key] = append(result[key], &serviceOperation)
+				for parent := g.resourceParents[key].tag; parent != ""; parent = g.resourceParents[parent].tag {
+					if _, exists := result[parent]; exists {
+						break
 					}
-					seen[owner] = true
-					// Service emission rewrites inline response and body names in place.
-					serviceOperation := *built
-					serviceOperation.Responses = cloneOperationResponses(built.Responses)
-					result[owner] = append(result[owner], &serviceOperation)
+					result[parent] = nil
 				}
 			}
 		}

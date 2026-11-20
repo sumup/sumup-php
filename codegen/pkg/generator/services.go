@@ -133,7 +133,7 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("    }\n\n")
 	for _, child := range slices.Sorted(maps.Keys(g.resourceParents)) {
 		parent := g.resourceParents[child]
-		if parent.tag != tagKey || !g.shouldIncludeService(child, g.operationsByTag[child]) {
+		if parent.tag != tagKey || !g.shouldIncludeService(child) {
 			continue
 		}
 		childClass := g.displayTagName(child)

@@ -44,16 +44,18 @@ func readResourceParents(doc *v3.Document) (map[string]resourceParent, error) {
 		if labels[group.Name] == "" {
 			continue
 		}
+		parent := normalizeTagKey(group.Name)
 		for _, child := range group.Tags {
-			if child == group.Name || labels[child] == "" || parents[child].tag != "" {
+			key := normalizeTagKey(child)
+			if child == group.Name || labels[child] == "" || parents[key].tag != "" {
 				continue
 			}
-			for ancestor := group.Name; ancestor != ""; ancestor = parents[ancestor].tag {
-				if ancestor == child {
+			for ancestor := parent; ancestor != ""; ancestor = parents[ancestor].tag {
+				if ancestor == key {
 					return nil, fmt.Errorf("tag hierarchy contains a cycle at %s", child)
 				}
 			}
-			parents[child] = resourceParent{tag: group.Name, label: labels[child]}
+			parents[key] = resourceParent{tag: parent, label: labels[child]}
 		}
 	}
 	return parents, nil

@@ -32,6 +32,7 @@ paths:
     post:
       operationId: CreateReaderCheckout
       tags: [ReaderCheckouts]
+      x-codegen: {method_name: create}
       responses:
         '204': {description: OK}
 components: {schemas: {}}
@@ -56,9 +57,41 @@ components: {schemas: {}}
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, snippet := range []string{"function checkouts(): ReaderCheckouts", "function createReaderCheckout("} {
+	for _, snippet := range []string{"function checkouts(): ReaderCheckouts", "function listReaders("} {
 		if !strings.Contains(string(data), snippet) {
 			t.Errorf("missing %q from Readers client", snippet)
 		}
+	}
+
+	if strings.Contains(string(data), "function create(") {
+		t.Error("checkout operation is only available on the nested client")
+	}
+	child, err := os.ReadFile(filepath.Join(out, "ReaderCheckouts", "ReaderCheckouts.php"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(child), "function create(") {
+		t.Error("missing annotated create method on nested client")
+	}
+}
+
+func TestResourceParentCycleAfterNormalization(t *testing.T) {
+	t.Parallel()
+	doc, err := libopenapi.NewDocument([]byte(`
+openapi: 3.1.0
+info: {title: Test, version: 1.0.0}
+paths: {}
+tags: [{name: A}, {name: B}, {name: a}]
+x-tagGroups: [{name: A, tags: [B]}, {name: B, tags: [a]}]
+`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	model, err := doc.BuildV3Model()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := readResourceParents(&model.Model); err == nil {
+		t.Fatal("expected a cycle error for the normalized resource tags")
 	}
 }

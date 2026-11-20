@@ -18,7 +18,7 @@ func (g *Generator) writeServiceAccessors() error {
 		if g.resourceParents[tagKey].tag != "" {
 			continue
 		}
-		if g.shouldIncludeService(tagKey, g.operationsByTag[tagKey]) {
+		if g.shouldIncludeService(tagKey) {
 			services = append(services, g.displayTagName(tagKey))
 		}
 	}
