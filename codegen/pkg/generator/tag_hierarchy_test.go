@@ -1,11 +1,12 @@
 package generator
 
 import (
-	"github.com/pb33f/libopenapi"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/pb33f/libopenapi"
 )
 
 func TestNestedReaderResources(t *testing.T) {
