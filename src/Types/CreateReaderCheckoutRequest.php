@@ -89,9 +89,9 @@ class CreateReaderCheckoutRequest
     public ?int $tipTimeout = null;
 
     /**
-     * Amount structure.
-     * The amount is represented as an integer value altogether with the currency and the minor unit.
-     * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+     * Amount to charge in minor units. Use the decimal places for the currency.
+     * CLP, COP, and HUF use zero decimal places.
+     * For example, send `1234` for EUR 12.34 or `1000` for CLP 1000.
      *
      * @var CreateReaderCheckoutRequestTotalAmount
      */
