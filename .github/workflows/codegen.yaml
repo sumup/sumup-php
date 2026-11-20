@@ -62,7 +62,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2.40.0
         with:
-          php-version: '8.2.35'
+          php-version: '8.2.36'
           coverage: none
 
       - name: Run tests
@@ -81,7 +81,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2.40.0
         with:
-          php-version: '8.2.35'
+          php-version: '8.2.36'
           coverage: none
           tools: composer:v2
 
