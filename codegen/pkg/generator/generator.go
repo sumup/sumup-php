@@ -47,6 +47,7 @@ type Generator struct {
 	schemaNamespaces map[string]string
 
 	operationsByTag map[string][]*operation
+	resourceParents map[string]resourceParent
 
 	// enumsByTag maps normalized tag names to enums they own.
 	enumsByTag map[string][]enumDefinition
@@ -84,6 +85,11 @@ func (g *Generator) Load(spec *v3.Document) error {
 
 	normalizeSchemaAnnotations(spec)
 	g.spec = spec
+	parents, err := readResourceParents(spec)
+	if err != nil {
+		return err
+	}
+	g.resourceParents = parents
 	g.tagLookup = make(map[string]*base.Tag)
 	for _, tag := range spec.Tags {
 		if tag == nil {
@@ -131,7 +137,7 @@ func (g *Generator) Build() error {
 		schemas := g.schemasByTag[tagKey]
 		operations := g.operationsByTag[tagKey]
 
-		if len(schemas) == 0 && len(operations) == 0 {
+		if len(schemas) == 0 && !g.shouldIncludeService(tagKey) {
 			continue
 		}
 
@@ -166,7 +172,7 @@ func (g *Generator) Build() error {
 func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, operations []*operation) error {
 	tagName := g.displayTagName(tagKey)
 	namespace := g.namespaceForTag(tagKey)
-	includeService := g.shouldIncludeService(tagKey, operations)
+	includeService := g.shouldIncludeService(tagKey)
 
 	dir := filepath.Join(g.cfg.Out, tagName)
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
@@ -589,8 +595,9 @@ func (g *Generator) buildPHPEnum(enum enumDefinition) string {
 	return buf.String()
 }
 
-func (g *Generator) shouldIncludeService(tagKey string, operations []*operation) bool {
-	return tagKey != sharedTagKey && tagKey != typesTagKey && len(operations) > 0
+func (g *Generator) shouldIncludeService(tagKey string) bool {
+	_, exists := g.operationsByTag[tagKey]
+	return exists && tagKey != sharedTagKey && tagKey != typesTagKey
 }
 
 func (g *Generator) collectEnums() (map[string][]enumDefinition, map[string]string) {

@@ -26,7 +26,11 @@ func (g *Generator) collectSchemaUsage() map[string]*schemaUsage {
 		for method, op := range pathItem.GetOperations().FromOldest() {
 			opTags := make([]string, 0, len(op.Tags))
 			for _, tag := range op.Tags {
-				opTags = append(opTags, normalizeTagKey(tag))
+				owner := normalizeTagKey(tag)
+				for g.resourceParents[owner].tag != "" {
+					owner = g.resourceParents[owner].tag
+				}
+				opTags = append(opTags, owner)
 			}
 
 			g.collectSchemaUsageInResponse(op, opTags, usage)

@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+	"maps"
 	"regexp"
 	"strings"
 
@@ -130,6 +131,14 @@ func (g *Generator) buildServiceBlock(tagKey string, operations []*operation) st
 	buf.WriteString("        $this->client = $client;\n")
 	buf.WriteString("        $this->accessToken = $accessToken;\n")
 	buf.WriteString("    }\n\n")
+	for _, child := range slices.Sorted(maps.Keys(g.resourceParents)) {
+		parent := g.resourceParents[child]
+		if parent.tag != tagKey || !g.shouldIncludeService(child) {
+			continue
+		}
+		childClass := g.displayTagName(child)
+		fmt.Fprintf(&buf, "    public function %s(): %s\n    {\n        return new %s($this->client, $this->accessToken);\n    }\n\n", phpPropertyName(parent.label), childClass, childClass)
+	}
 
 	for idx, op := range operations {
 		buf.WriteString(g.renderServiceMethod(className, op))
