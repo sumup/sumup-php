@@ -3,6 +3,7 @@ package generator
 import (
 	"cmp"
 	"fmt"
+	"path/filepath"
 
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
@@ -66,4 +67,11 @@ func (g *Generator) resourcePath(tag string) string {
 		return g.resourcePath(parent.tag) + "()->" + phpPropertyName(parent.label)
 	}
 	return phpPropertyName(g.displayTagName(tag))
+}
+
+func (g *Generator) tagDirectory(tag string) string {
+	if parent := g.resourceParents[tag]; parent.tag != "" {
+		return filepath.Join(g.tagDirectory(parent.tag), sanitizeTagName(parent.label))
+	}
+	return filepath.Join(g.cfg.Out, g.displayTagName(tag))
 }

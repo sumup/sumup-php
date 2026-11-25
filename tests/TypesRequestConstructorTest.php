@@ -70,7 +70,6 @@ class TypesRequestConstructorTest extends TestCase
             ],
             'total_amount' => [
                 'currency' => 'EUR',
-                'minor_unit' => 2,
                 'value' => 100,
             ],
         ]);
@@ -85,7 +84,6 @@ class TypesRequestConstructorTest extends TestCase
 
         $this->assertInstanceOf(CreateReaderCheckoutRequestTotalAmount::class, $request->totalAmount);
         $this->assertSame('EUR', $request->totalAmount->currency);
-        $this->assertSame(2, $request->totalAmount->minorUnit);
         $this->assertSame(100, $request->totalAmount->value);
     }
 

@@ -46,6 +46,14 @@ components: {schemas: {}}
 	}
 
 	out := t.TempDir()
+	oldDir := filepath.Join(out, "ReaderCheckouts")
+	oldFile := filepath.Join(oldDir, "ReaderCheckouts.php")
+	if err := os.Mkdir(oldDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(oldFile, []byte("<?php"), 0o644); err != nil {
+		t.Fatal(err)
+	}
 	generator := New(Config{Out: out})
 	if err := generator.Load(&model.Model); err != nil {
 		t.Fatal(err)
@@ -66,12 +74,15 @@ components: {schemas: {}}
 	if strings.Contains(string(data), "function create(") {
 		t.Error("checkout operation is only available on the nested client")
 	}
-	child, err := os.ReadFile(filepath.Join(out, "ReaderCheckouts", "ReaderCheckouts.php"))
+	child, err := os.ReadFile(filepath.Join(out, "Readers", "Checkouts", "ReaderCheckouts.php"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(child), "function create(") {
 		t.Error("missing annotated create method on nested client")
+	}
+	if _, err := os.Stat(oldFile); !os.IsNotExist(err) {
+		t.Errorf("expected the old flat file to be removed, got %v", err)
 	}
 }
 

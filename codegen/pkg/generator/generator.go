@@ -174,7 +174,7 @@ func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, ope
 	namespace := g.namespaceForTag(tagKey)
 	includeService := g.shouldIncludeService(tagKey)
 
-	dir := filepath.Join(g.cfg.Out, tagName)
+	dir := g.tagDirectory(tagKey)
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 		return fmt.Errorf("create tag directory: %w", err)
 	}
@@ -230,6 +230,14 @@ func (g *Generator) writeTagFile(tagKey string, schemas []*base.SchemaProxy, ope
 
 	if _, err := f.Write(buf.Bytes()); err != nil {
 		return fmt.Errorf("write file %q: %w", filename, err)
+	}
+
+	if g.resourceParents[tagKey].tag != "" {
+		// The old file declares the same classes and would also be scanned by Composer.
+		oldFilename := filepath.Join(g.cfg.Out, tagName, tagName+".php")
+		if err := os.Remove(oldFilename); err != nil && !os.IsNotExist(err) {
+			return fmt.Errorf("remove flat tag file %q: %w", oldFilename, err)
+		}
 	}
 
 	if includeService {
