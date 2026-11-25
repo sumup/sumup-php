@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.12](https://github.com/sumup/sumup-php/compare/v0.1.11...v0.1.12) (2026-11-25)
+
+
+### Features
+
+* **codegen:** support nested SDK resources ([#163](https://github.com/sumup/sumup-php/issues/163)) ([fc41beb](https://github.com/sumup/sumup-php/commit/fc41beb0e0a65e6df20002fabc6d27442b4bf2f5))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#162](https://github.com/sumup/sumup-php/issues/162)) ([50ee7a4](https://github.com/sumup/sumup-php/commit/50ee7a49a685f752fca328f4a32730cb32d02193))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** update friendsofphp/php-cs-fixer requirement from 3.95.30 to 3.95.32 ([#165](https://github.com/sumup/sumup-php/issues/165)) ([7017ba1](https://github.com/sumup/sumup-php/commit/7017ba1c1d84469d08b56c9723a2c86702c54ce3))
+* **deps:** bump actions/setup-go from 7.0.0 to 7.1.0 ([#166](https://github.com/sumup/sumup-php/issues/166)) ([c7f3a78](https://github.com/sumup/sumup-php/commit/c7f3a7840072bcaf4d40b3a7dfefe96cc2914709))
+* **deps:** bump github.com/pb33f/libopenapi from 0.42.4 to 0.42.5 in /codegen ([#167](https://github.com/sumup/sumup-php/issues/167)) ([a8ca1e2](https://github.com/sumup/sumup-php/commit/a8ca1e2851a73a21538bb0e2c7dc60176ae67eac))
+* **deps:** bump reviewdog/action-actionlint from 1.84.0 to 1.84.1 ([#164](https://github.com/sumup/sumup-php/issues/164)) ([a703572](https://github.com/sumup/sumup-php/commit/a703572e1f8133341e6c469734850b24e9d7c53c))
+
 ## [0.1.11](https://github.com/sumup/sumup-php/compare/v0.1.10...v0.1.11) (2026-11-17)
 
 
