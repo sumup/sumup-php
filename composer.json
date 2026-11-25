@@ -42,6 +42,7 @@
 		"guzzlehttp/guzzle": "Use SumUp\\\\HttpClient\\\\GuzzleClient for a Guzzle-based HTTP client."
 	},
 	"autoload": {
+		"files": ["src/ResourceTypeAliases.php"],
 		"psr-4": {
 			"SumUp\\": "src/"
 		},

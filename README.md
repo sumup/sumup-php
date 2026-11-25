@@ -184,6 +184,9 @@ export SUMUP_API_KEY='your-api-key-here'
 export SUMUP_MERCHANT_CODE='your-merchant-code'
 ```
 
+Reader checkout and settings DTOs are also available under
+`SumUp\Types\Readers\Checkouts` and `SumUp\Types\Readers\Settings`.
+
 ## API Reference
 
 See the [SumUp API reference](https://developer.sumup.com/rest-api) for available endpoints, request parameters, and response details.
