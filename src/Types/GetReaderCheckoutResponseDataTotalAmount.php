@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SumUp\Types;
 
 /**
- * Amount structure.
+ * The checkout amount. The value uses two decimal places, even for currencies
+ * such as CLP that use zero decimal places in the create request.
  *
- * The amount is represented as an integer value altogether with the currency and the minor unit.
- *
- * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+ * For example, EUR 10.00 is returned as `1000` and CLP 1000 as `100000`.
  *
  */
 class GetReaderCheckoutResponseDataTotalAmount
@@ -20,14 +19,6 @@ class GetReaderCheckoutResponseDataTotalAmount
      * @var string
      */
     public string $currency;
-
-    /**
-     * The minor units of the currency.
-     * It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
-     *
-     * @var int
-     */
-    public int $minorUnit;
 
     /**
      * Integer value of the amount.
