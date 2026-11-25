@@ -46,8 +46,9 @@ type Generator struct {
 	// schemaNamespaces tracks where a schema is defined so we can reference it.
 	schemaNamespaces map[string]string
 
-	operationsByTag map[string][]*operation
-	resourceParents map[string]resourceParent
+	operationsByTag     map[string][]*operation
+	resourceParents     map[string]resourceParent
+	resourceSchemaUsage map[string]*schemaUsage
 
 	// enumsByTag maps normalized tag names to enums they own.
 	enumsByTag map[string][]enumDefinition
@@ -109,6 +110,7 @@ func (g *Generator) Load(spec *v3.Document) error {
 		g.collectSchemaUsageFromSchema(schema, nil, usage, make(map[*base.SchemaProxy]struct{}), event.ObjectType)
 	}
 	g.schemasByTag, g.schemaNamespaces = g.assignSchemasToTags(usage)
+	g.resourceSchemaUsage = usage
 	g.operationsByTag = g.collectOperations()
 	g.collectRequestClassNames()
 	g.enumsByTag, g.enumNamespaces = g.collectEnums()
@@ -155,6 +157,9 @@ func (g *Generator) Build() error {
 
 	slog.Info("models generated", slog.Int("tags", len(tagKeys)))
 
+	if err := g.writeResourceTypeAliases(); err != nil {
+		return err
+	}
 	if err := g.writeServiceAccessors(); err != nil {
 		return err
 	}
