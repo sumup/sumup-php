@@ -84,9 +84,9 @@ class GetReaderCheckoutResponseData
     public GetReaderCheckoutResponseDataStatus $status;
 
     /**
-     * Amount structure.
-     * The amount is represented as an integer value altogether with the currency and the minor unit.
-     * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+     * The checkout amount. The value uses two decimal places, even for currencies
+     * such as CLP that use zero decimal places in the create request.
+     * For example, EUR 10.00 is returned as `1000` and CLP 1000 as `100000`.
      *
      * @var GetReaderCheckoutResponseDataTotalAmount
      */

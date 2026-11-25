@@ -87,24 +87,6 @@ class ReadersCreateRequest
 
 }
 
-/**
- * Request payload for ReadersTerminateCheckoutRequest.
- *
- * @package SumUp\Services
- */
-class ReadersTerminateCheckoutRequest
-{
-    /**
-     * Create request DTO from an associative array.
-     *
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self();
-    }
-}
-
 class ReadersUpdateRequest
 {
     /**
@@ -197,6 +179,16 @@ class Readers implements SumUpService
         $this->accessToken = $accessToken;
     }
 
+    public function checkouts(): ReaderCheckouts
+    {
+        return new ReaderCheckouts($this->client, $this->accessToken);
+    }
+
+    public function settings(): ReaderSettings
+    {
+        return new ReaderSettings($this->client, $this->accessToken);
+    }
+
     /**
      * Create a Reader
      *
@@ -229,43 +221,6 @@ class Readers implements SumUpService
             '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '409' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'POST', $path);
-    }
-
-    /**
-     * Create a Reader Checkout
-     *
-     * @param string $merchantCode Merchant Code
-     * @param string $readerId The unique identifier of the Reader
-     * @param \SumUp\Types\CreateReaderCheckoutRequest|array<string, mixed> $body Required request payload
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\CreateReaderCheckoutResponse
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function createCheckout(string $merchantCode, string $readerId, \SumUp\Types\CreateReaderCheckoutRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\CreateReaderCheckoutResponse
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
-        $payload = [];
-        $requestBody = $body;
-        if (is_array($requestBody)) {
-            $requestBody = \SumUp\Types\CreateReaderCheckoutRequest::fromArray($requestBody);
-        }
-        $payload = RequestEncoder::encode($requestBody);
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, [
-            '201' => ['type' => 'class', 'class' => \SumUp\Types\CreateReaderCheckoutResponse::class],
-        ], [
-            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'POST', $path);
     }
 
@@ -359,62 +314,6 @@ class Readers implements SumUpService
     }
 
     /**
-     * Get a Reader Checkout
-     *
-     * @param string $merchantCode Merchant Code
-     * @param string $readerId The unique identifier of the Reader
-     * @param string $checkoutId The unique identifier of the Checkout
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\GetReaderCheckoutResponse
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function getCheckout(string $merchantCode, string $readerId, string $checkoutId, ?RequestOptions $requestOptions = null): \SumUp\Types\GetReaderCheckoutResponse
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s/checkout/%s', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId), rawurlencode((string) $checkoutId));
-        $payload = [];
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\GetReaderCheckoutResponse::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'GET', $path);
-    }
-
-    /**
-     * Get Reader Settings
-     *
-     * @param string $merchantCode The merchant code of the account that owns the reader.
-     * @param string $readerId The unique identifier of the reader.
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\GetReaderSettingsResponse
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function getReaderSettings(string $merchantCode, string $readerId, ?RequestOptions $requestOptions = null): \SumUp\Types\GetReaderSettingsResponse
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s/settings', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
-        $payload = [];
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('GET', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\GetReaderSettingsResponse::class, [
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'GET', $path);
-    }
-
-    /**
      * Get a Reader Status
      *
      * @param string $merchantCode Merchant Code
@@ -468,45 +367,6 @@ class Readers implements SumUpService
     }
 
     /**
-     * Terminate a Reader Checkout
-     *
-     * @param string $merchantCode Merchant Code
-     * @param string $readerId The unique identifier of the Reader
-     * @param ReadersTerminateCheckoutRequest|array<string, mixed>|null $body Optional request payload
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return null
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function terminateCheckout(string $merchantCode, string $readerId, ReadersTerminateCheckoutRequest|array|null $body = null, ?RequestOptions $requestOptions = null): null
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s/terminate', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
-        $payload = [];
-        if ($body !== null) {
-            $requestBody = $body;
-            if (is_array($requestBody)) {
-                $requestBody = ReadersTerminateCheckoutRequest::fromArray($requestBody);
-            }
-            $payload = RequestEncoder::encode($requestBody);
-        }
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('POST', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, [
-            '202' => ['type' => 'void'],
-        ], [
-            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'POST', $path);
-    }
-
-    /**
      * Update a Reader
      *
      * @param string $merchantCode Short unique identifier for the merchant.
@@ -536,41 +396,6 @@ class Readers implements SumUpService
         return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\Reader::class, [
             '403' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
             '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-        ], 'PATCH', $path);
-    }
-
-    /**
-     * Update Reader Settings
-     *
-     * @param string $merchantCode The merchant code of the account that owns the reader.
-     * @param string $readerId The unique identifier of the reader.
-     * @param \SumUp\Types\UpdateReaderSettingsRequest|array<string, mixed> $body Required request payload
-     * @param RequestOptions|null $requestOptions Optional typed request options
-     *
-     * @return \SumUp\Types\UpdateReaderSettingsResponse
-     * @throws \SumUp\Exception\ApiException
-     * @throws \SumUp\Exception\UnexpectedApiException
-     * @throws \SumUp\Exception\ConnectionException
-     * @throws \SumUp\Exception\SDKException
-     */
-    public function updateReaderSettings(string $merchantCode, string $readerId, \SumUp\Types\UpdateReaderSettingsRequest|array $body, ?RequestOptions $requestOptions = null): \SumUp\Types\UpdateReaderSettingsResponse
-    {
-        $path = sprintf('/v0.1/merchants/%s/readers/%s/settings', rawurlencode((string) $merchantCode), rawurlencode((string) $readerId));
-        $payload = [];
-        $requestBody = $body;
-        if (is_array($requestBody)) {
-            $requestBody = \SumUp\Types\UpdateReaderSettingsRequest::fromArray($requestBody);
-        }
-        $payload = RequestEncoder::encode($requestBody);
-        $headers = RequestHeaders::build($this->accessToken, $requestOptions);
-
-        $response = $this->client->send('PATCH', $path, $payload, $headers, $requestOptions);
-
-        return ResponseDecoder::decodeOrThrow($response, \SumUp\Types\UpdateReaderSettingsResponse::class, [
-            '400' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '401' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '404' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
-            '422' => ['type' => 'class', 'class' => \SumUp\Types\Problem::class],
         ], 'PATCH', $path);
     }
 }

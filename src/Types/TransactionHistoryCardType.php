@@ -12,6 +12,7 @@ enum TransactionHistoryCardType: string
     case ALELO = 'ALELO';
     case AMEX = 'AMEX';
     case BANCOMAT = 'BANCOMAT';
+    case CARNET = 'CARNET';
     case CONECS = 'CONECS';
     case CUP = 'CUP';
     case DINERS = 'DINERS';
